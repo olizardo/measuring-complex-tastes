@@ -172,7 +172,13 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `bd62f47` (2026-10-07) — worked example
+- Last Overleaf sync: commit `bab5c64` (2026-10-07) — adopted author's web
+  edits `8e4233f` (eq:decomp combinatorial sentence and worked-example
+  combinatorial sentence converted to footnotes; new MCA rare-category
+  sentence citing rouanet2000geometric-a44; dim-2 paragraph rewordings);
+  darker fig-categories, sequential age ramp for fig-individuals, caption
+  note, dim-3 preview sentence, \label{sec:contrib}, script 03 updates.
+  Previous sync `bd62f47` (2026-10-07) — worked example
   (fig-worked-example + sec:strategy paragraph) and script 04 updates pushed;
   author's sec:who rewording ("geometric measuring of complex tastes")
   adopted locally. Previous sync `1a3ca58` (2026-10-07) — regression
