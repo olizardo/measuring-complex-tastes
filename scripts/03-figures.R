@@ -10,6 +10,16 @@ dir.create("manuscript/figures", showWarnings = FALSE, recursive = TRUE)
 
 theme_set(theme_minimal(base_size = 10))
 
+# genre stem -> readable name (used in figures and tables)
+gshort <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
+            "country", "blueg", "folk", "hymgos", "latspsal", "raphiphop",
+            "blurb", "reggae", "toppop", "controck", "indalt", "danclub", "hvymtl")
+genres <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
+            "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
+            "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
+            "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
+            "Dance/Club", "Heavy Metal")
+
 # --- Figure 1: scree plot ----------------------------------------------------
 eig <- as.data.frame(res$eig[, ])
 names(eig) <- c("lambda", "pct", "cum")
@@ -33,14 +43,16 @@ mfa_dat <- readRDS("data/mfa_input.rds")
 df0 <- readRDS("data/ssi2012_cleaned.rds")
 df0[] <- lapply(df0, function(x) if (haven::is.labelled(x)) haven::zap_labels(x) else x)
 d0 <- df0[as.integer(rownames(mfa_dat)), ]
-age4 <- cut(d0$age, breaks = c(-Inf, 4, 7, 10, Inf),
-            labels = c("18-29", "30-44", "45-59", "60+"))
-ind$age4 <- factor(age4, levels = c("18-29", "30-44", "45-59", "60+"))
-p2 <- ggplot(ind, aes(dim2, dim3, color = age4)) +
+age6 <- cut(d0$age, breaks = c(-Inf, 4, 6, 8, 10, 12, Inf),
+            labels = c("18-29", "30-39", "40-49", "50-59", "60-69", "70+"))
+ind$age6 <- factor(age6, levels = c("18-29", "30-39", "40-49", "50-59",
+                                    "60-69", "70+"))
+ind <- ind[!is.na(ind$age6), ]  # drop single missing-age respondent
+p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_point(alpha = 0.25, size = 0.6) +
-  scale_color_brewer(palette = "OrRd", na.value = "grey70") +
+  scale_color_brewer(palette = "Dark2") +
   labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
        title = "Individual factor map (dimensions 2-3)",
        subtitle = "Points: respondents, colored by age group") +
@@ -48,15 +60,16 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age4)) +
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Figure 3: category map ---------------------------------------------------
-cc <- as.data.frame(res$quali.var$coord[, 1:2])
-names(cc) <- c("dim1", "dim2")
+cc <- as.data.frame(res$quali.var$coord[, 2:3])
+names(cc) <- c("dim2", "dim3")
 cc$name <- rownames(cc)
 cc$modality <- ifelse(grepl("^pref_", cc$name), "Preference",
                  ifelse(grepl("^cons_", cc$name), "Consumption", "Evaluation"))
 cc$yes <- grepl("_1$", cc$name)
-cc$genre <- sub("^(pref|cons|eval)_", "", cc$name)
+cc$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc$name)),
+                         gshort)]
 # "no" categories shown in light grey for reference
-p3 <- ggplot(cc, aes(dim1, dim2)) +
+p3 <- ggplot(cc, aes(dim2, dim3)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_point(data = subset(cc, !yes), color = "grey80", size = 0.9) +
@@ -69,7 +82,7 @@ p3 <- ggplot(cc, aes(dim1, dim2)) +
   scale_color_manual(values = c(Preference = "#0072B2",
                                 Consumption = "#D55E00",
                                 Evaluation = "#009E73")) +
-  labs(x = "Dimension 1", y = "Dimension 2",
+  labs(x = "Dimension 2", y = "Dimension 3",
        color = "Modality",
        title = "Category map: 'yes' categories by taste modality",
        subtitle = "Grey points: 'no' categories") +
@@ -86,6 +99,7 @@ rvdf <- data.frame(
   rv = as.vector(rv))
 rvdf$g1 <- factor(rvdf$g1, levels = c("Preference", "Consumption", "Evaluation"))
 rvdf$g2 <- factor(rvdf$g2, levels = rev(c("Preference", "Consumption", "Evaluation")))
+rvdf <- rvdf[rvdf$g1 != rvdf$g2, ]  # omit the unit diagonal
 p5 <- ggplot(rvdf, aes(g1, g2, fill = rv)) +
   geom_tile(color = "white") +
   geom_text(aes(label = sprintf("%.2f", rv)), size = 3.2) +
@@ -146,14 +160,6 @@ glines <- c(glines, "\\bottomrule", "\\end{tabular}")
 writeLines(glines, "manuscript/tables/tab-groups.tex")
 
 # genre-level yes rates
-genres <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
-            "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
-            "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
-            "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
-            "Dance/Club", "Heavy Metal")
-gshort <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
-            "country", "blueg", "folk", "hymgos", "latspsal", "raphiphop",
-            "blurb", "reggae", "toppop", "controck", "indalt", "danclub", "hvymtl")
 md <- mfa_dat_raw <- readRDS("data/mfa_input.rds")
 rates <- sapply(gshort, function(g) c(
   pref = mean(md[[paste0("pref_", g)]]),

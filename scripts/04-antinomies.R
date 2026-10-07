@@ -156,17 +156,49 @@ p6 <- ggplot(mc, aes(type, mean, fill = complex)) +
         legend.position = "top")
 ggsave("manuscript/figures/fig-configurations.pdf", p6, width = 5.5, height = 3.6)
 
-# figure: individual map dim 2 x dim 3, colored by total complex tastes
-p7 <- ggplot(ant, aes(F2, F3, color = n_complex)) +
+# figure: individual map dim 2 x dim 3, colored by geometric score W1
+p7 <- ggplot(ant, aes(F2, F3, color = W1)) +
   geom_point(size = 0.7, alpha = 0.5) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  scale_color_viridis_c(option = "viridis", name = "Complex\ntastes") +
+  scale_color_viridis_c(option = "viridis",
+                        name = expression(Complex-taste~score~W[1])) +
   labs(x = "Dimension 2 (highbrow vs popular)", y = "Dimension 3 (status valuation)",
-       title = "Individual map by number of complex tastes") +
+       title = "Individual map by complex-taste score") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
+
+# figure: worked example — partial points of the example respondent (dims 1 & 3)
+# chosen as the highest-W3 respondent holding guilty-pleasure, taste-pose,
+# and distant-praise configurations (original data row 1333)
+ex <- which(rownames(ant) == "1333")
+exd <- data.frame(
+  modality = factor(c("Preference", "Consumption", "Evaluation", "Global"),
+                    levels = c("Preference", "Consumption", "Evaluation", "Global")),
+  d1 = c(P[ex, 1], C[ex, 1], V[ex, 1], F[ex, 1]),
+  d3 = c(P[ex, 3], C[ex, 3], V[ex, 3], F[ex, 3]))
+segex <- data.frame(x = exd$d1[1:3], y = exd$d3[1:3],
+                    xend = exd$d1[4], yend = exd$d3[4])
+pex <- ggplot(exd, aes(d1, d3, color = modality, shape = modality)) +
+  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend),
+               linetype = "dashed", color = "grey55", linewidth = 0.4,
+               inherit.aes = FALSE, show.legend = FALSE) +
+  geom_point(size = 3.4, show.legend = FALSE) +
+  geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
+                  show.legend = FALSE, box.padding = 0.6,
+                  point.padding = 0.4, seed = 3) +
+  scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
+                                Evaluation = "#009E73", Global = "black")) +
+  scale_shape_manual(values = c(Preference = 16, Consumption = 17,
+                                Evaluation = 15, Global = 18)) +
+  labs(x = "Dimension 1 (general affirmation)",
+       y = "Dimension 3 (status valuation)") +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank())
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 4.8, height = 4.2)
 
 saveRDS(list(ant = ant, type_counts = type_counts),
         "output/antinomy_scores.rds")
