@@ -172,7 +172,14 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `bab5c64` (2026-10-07) — adopted author's web
+- Last Overleaf sync: commit `6a7d1cb` (2026-10-07) — author's web rewrite of
+  the Analytic Strategy opening (two paragraphs restructured into three:
+  explicit data-table description, MCA step spelled out, RV/Lg/group-
+  contribution sentences reworded); adopted locally, nothing to push
+  (local tree was clean at `bab5c64`). Author text kept as-is including
+  apparent typos ("----" for "---", "a give genre", missing period after
+  the e.g. parenthetical) — flagged to user 2026-10-07. Previous sync
+  `bab5c64` (2026-10-07) — adopted author's web
   edits `8e4233f` (eq:decomp combinatorial sentence and worked-example
   combinatorial sentence converted to footnotes; new MCA rare-category
   sentence citing rouanet2000geometric-a44; dim-2 paragraph rewordings);
