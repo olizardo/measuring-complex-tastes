@@ -6,7 +6,7 @@
 # Coding decisions (per author):
 #   preference : like = 1; dislike / neither / not familiar = 0
 #   consumption: listened = 1 (as collected)
-#   evaluation : typical fan is college grad OR middle class OR upper class = 1
+#   evaluation : typical fan is college grad AND (middle OR upper class) = 1
 # Sample: complete cases on all 60 variables ("valid respondents")
 
 library(dplyr)
@@ -31,10 +31,12 @@ cons <- setNames(as.data.frame(lapply(df[lis_raw], function(x) as.integer(x))),
                  paste0("cons_", genres))
 
 # --- evaluation: typical fan is high status ---------------------------------
-# high status = college graduate OR middle class OR upper class
+# high status = college graduate AND (middle class OR upper class)
 status_raw <- paste0(rep(genres, each = 3), rep(c("grad", "mc", "uc"), times = 20))
 eval_high <- lapply(genres, function(g) {
-  as.integer(rowSums(df[, paste0(g, c("grad", "mc", "uc"))], na.rm = TRUE) > 0)
+  grad <- df[[paste0(g, "grad")]] == 1
+  clas <- rowSums(df[, paste0(g, c("mc", "uc"))], na.rm = TRUE) > 0
+  as.integer(grad & clas)
 })
 eval_high <- setNames(as.data.frame(eval_high), paste0("eval_", genres))
 # propagate item-level missingness (fan vars share the same 2 missing rows)

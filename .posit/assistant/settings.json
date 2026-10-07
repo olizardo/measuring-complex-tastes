@@ -1,0 +1,12 @@
+{
+  "permission": {
+    "bash": {
+      "cp *": "allow",
+      "cd *": "allow",
+      "git add *": "allow",
+      "git commit *": "allow",
+      "timeout *": "allow",
+      "tail *": "allow"
+    }
+  }
+}
