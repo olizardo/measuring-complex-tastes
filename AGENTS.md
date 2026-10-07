@@ -49,6 +49,10 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    (tab-groups) is kept and the group-contributions figure was dropped as
    redundant. `manuscript/main.tex` is stored reflowed, one
    paragraph-per-line.
+6. Dimension 4 was explored (category and individual maps) and deliberately
+   left out of the manuscript: consumption-heavy, categories near the
+   origin, weak social anchoring — no clean reading. Figures use dims 2–3
+   only.
 
 ## Pipeline (run in order, from project root)
 

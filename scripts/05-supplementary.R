@@ -77,14 +77,13 @@ res <- MFA(mfa2,
 saveRDS(res, "output/mfa_results_sup.rds")
 
 # --- category coordinates (barycenters of members' individual coordinates) ------
-coord <- res$ind$coord[, 1:4]
+coord <- res$ind$coord[, 1:3]
 cc <- do.call(rbind, lapply(names(sup), function(v) {
   g <- sup[[v]]
   data.frame(variable = v, category = levels(g),
              d1 = tapply(coord[, 1], g, mean),
              d2 = tapply(coord[, 2], g, mean),
              d3 = tapply(coord[, 3], g, mean),
-             d4 = tapply(coord[, 4], g, mean),
              n = as.integer(table(g)))
 }))
 cc <- cc[cc$category != "Missing" & cc$n > 0, ]
@@ -110,31 +109,21 @@ cat("\n== Supplementary category coordinates (dims 1-3) ==\n")
 print(cbind(cc[, c("variable", "category", "n")],
              round(cc[, c("d1", "d2", "d3")], 2)), row.names = FALSE)
 
-# --- figure: supplementary category barycenters, dims 2-4 -----------------------
+# --- figure: supplementary category barycenters, dims 2-3 ----------------------
 pal <- setNames(RColorBrewer::brewer.pal(8, "Set1"), names(sup))
-plsup <- list(c("d2", "d3", "Dimension 2", "Dimension 3"),
-              c("d2", "d4", "Dimension 2", "Dimension 4"),
-              c("d3", "d4", "Dimension 3", "Dimension 4"))
-sup_long <- do.call(rbind, lapply(plsup, function(p)
-  data.frame(panel = paste(p[3], "vs", p[4]),
-             x = cc[[p[1]]], y = cc[[p[2]]],
-             variable = cc$variable, category = cc$category)))
-sup_long$panel <- factor(sup_long$panel,
-                         levels = sapply(plsup, function(p) paste(p[3], "vs", p[4])))
-p8 <- ggplot(sup_long, aes(x, y)) +
-  facet_wrap(~panel, scales = "free") +
+p8 <- ggplot(cc, aes(d2, d3, color = variable)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(aes(color = variable), size = 2.2) +
-  geom_text_repel(aes(label = category, color = variable), size = 2.5,
+  geom_point(size = 2.2) +
+  geom_text_repel(aes(label = category), size = 2.5,
                   segment.color = NA, max.overlaps = 20, show.legend = FALSE) +
   scale_color_manual(values = pal, name = "Variable") +
-  labs(x = NULL, y = NULL,
+  labs(x = "Dimension 2", y = "Dimension 3",
        title = "Supplementary demographic categories in the MFA space",
        subtitle = "Category barycenters; axes cover the category coordinates only") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "top")
-ggsave("manuscript/figures/fig-supplementary.pdf", p8, width = 9, height = 3.6)
+ggsave("manuscript/figures/fig-supplementary.pdf", p8, width = 6, height = 4.4)
 
 # --- LaTeX tables ---------------------------------------------------------------
 el <- c("gender" = "Gender", "race" = "Race/ethnicity", "age4" = "Age",

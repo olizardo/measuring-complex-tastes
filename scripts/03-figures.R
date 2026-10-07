@@ -26,9 +26,9 @@ p1 <- ggplot(eig, aes(factor(dim), lambda, group = 1)) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-scree.pdf", p1, width = 5, height = 3.4)
 
-# --- Figure 2: individual factor maps (dims 2-3, 2-4), colored by age ---------
-ind <- as.data.frame(res$ind$coord[, 2:4])
-names(ind) <- c("dim2", "dim3", "dim4")
+# --- Figure 2: individual factor map (dims 2-3), colored by age ----------------
+ind <- as.data.frame(res$ind$coord[, 2:3])
+names(ind) <- c("dim2", "dim3")
 mfa_dat <- readRDS("data/mfa_input.rds")
 df0 <- readRDS("data/ssi2012_cleaned.rds")
 df0[] <- lapply(df0, function(x) if (haven::is.labelled(x)) haven::zap_labels(x) else x)
@@ -36,24 +36,16 @@ d0 <- df0[as.integer(rownames(mfa_dat)), ]
 age4 <- cut(d0$age, breaks = c(-Inf, 4, 7, 10, Inf),
             labels = c("18-29", "30-44", "45-59", "60+"))
 ind$age4 <- factor(age4, levels = c("18-29", "30-44", "45-59", "60+"))
-pairs_ind <- list(c("dim2", "dim3", "Dimension 2", "Dimension 3"),
-                  c("dim2", "dim4", "Dimension 2", "Dimension 4"))
-indl <- do.call(rbind, lapply(pairs_ind, function(p)
-  data.frame(panel = paste(p[3], "vs", p[4]),
-             x = ind[[p[1]]], y = ind[[p[2]]], age4 = ind$age4)))
-indl$panel <- factor(indl$panel,
-                     levels = sapply(pairs_ind, function(p) paste(p[3], "vs", p[4])))
-p2 <- ggplot(indl, aes(x, y, color = age4)) +
-  facet_wrap(~panel, scales = "free") +
+p2 <- ggplot(ind, aes(dim2, dim3, color = age4)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_point(alpha = 0.25, size = 0.6) +
   scale_color_brewer(palette = "OrRd", na.value = "grey70") +
-  labs(x = NULL, y = NULL, color = "Age group",
-       title = "Individual factor maps (dimensions 2-3 and 2-4)",
+  labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
+       title = "Individual factor map (dimensions 2-3)",
        subtitle = "Points: respondents, colored by age group") +
   theme(panel.grid.minor = element_blank())
-ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 7, height = 3.6)
+ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Figure 3: category map ---------------------------------------------------
 cc <- as.data.frame(res$quali.var$coord[, 1:2])
