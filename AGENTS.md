@@ -152,9 +152,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `a5810e4` (2026-10-07) — carries the reflow,
-  complex-tastes terminology, figure redesigns, and script updates. Local
-  `main` beyond that is gitlink bookkeeping only.
+- Last Overleaf sync: commit `bdfe7c5` (2026-10-07) — our `a5810e4` (reflow,
+  complex-tastes terminology, figure redesigns, script updates) plus the
+  author's one-line intro edit, adopted locally. Pushes to Overleaf get
+  rejected whenever a web edit lands after our pull — always re-pull first.
 
 ## Paper state & remaining steps
 
