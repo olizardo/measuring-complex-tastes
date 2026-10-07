@@ -68,25 +68,6 @@ p3 <- ggplot(cc, aes(dim1, dim2)) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
 
-# --- Figure 4: group contributions by dimension --------------------------------
-gc <- as.data.frame(res$group$contrib[, 1:3])
-gc$group <- rownames(gc)
-gcl <- reshape(gc, direction = "long", varying = 1:3, v.names = "contrib",
-               times = paste0("Dim ", 1:3), timevar = "dim", idvar = "group")
-gcl$dim <- factor(gcl$dim, levels = paste0("Dim ", 1:3))
-gcl$group <- factor(gcl$group, levels = c("Preference", "Consumption", "Evaluation"))
-p4 <- ggplot(gcl, aes(dim, contrib, fill = group)) +
-  geom_col(position = position_dodge(), color = "grey30", linewidth = 0.2) +
-  scale_fill_manual(values = c(Preference = "#0072B2",
-                               Consumption = "#D55E00",
-                               Evaluation = "#009E73")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-  labs(x = NULL, y = "Contribution to dimension (%)", fill = "Modality",
-       title = "Group contributions to the first three MFA dimensions") +
-  theme(panel.grid.minor = element_blank(),
-        legend.position = "top")
-ggsave("manuscript/figures/fig-group-contrib.pdf", p4, width = 5, height = 3.4)
-
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
 rv <- res$group$RV
 rv <- rv[c("Preference", "Consumption", "Evaluation"),

@@ -44,6 +44,11 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    the author's request. Old-coding results are in git history; a robustness
    footnote comparing both codings is a planned addition.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
+5. Terminology (author preference): the manuscript says "complex tastes,"
+   not "antinomies"; $W_s(i)$ is the "complex-taste score." Table 3
+   (tab-groups) is kept and the group-contributions figure was dropped as
+   redundant. `manuscript/main.tex` is stored reflowed, one
+   paragraph-per-line.
 
 ## Pipeline (run in order, from project root)
 
@@ -51,7 +56,7 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 |---|---|---|
 | `scripts/01-prepare-mfa-data.R` | `data/mfa_input.rds` | builds 60 binary cols (pref_/cons_/eval_ prefixes) |
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
-| `scripts/03-figures.R` | 5 figs + 4 LaTeX tables | scree, individuals, category map, group contribs, RV heatmap; tab-eigen/rv/groups/genre-rates |
+| `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
 | `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, tab-antinomy | W scores, pairwise disagreements, Ma's 8 configs |
 | `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4 |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |

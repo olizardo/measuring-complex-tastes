@@ -127,7 +127,7 @@ labs <- c("Simple taste ($+++$)", "Guilty pleasure ($++-$)",
 fmt <- function(x) gsub("-", "$-$", sprintf("%.2f", x))
 tl <- c(
   "\\begin{tabular}{lcccccc}", "\\toprule",
-  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Antinomy scores} \\\\",
+  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Complex-taste scores} \\\\",
   "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}",
   " & Dim 1 & Dim 2 & Dim 3 & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
 for (i in seq_len(nrow(cm))) {
