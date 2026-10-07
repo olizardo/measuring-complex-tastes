@@ -168,7 +168,11 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `1a3ca58` (2026-10-07) — regression subsection
+- Last Overleaf sync: commit `bd62f47` (2026-10-07) — worked example
+  (fig-worked-example + sec:strategy paragraph) and script 04 updates pushed;
+  author's sec:who rewording ("geometric measuring of complex tastes")
+  adopted locally. Previous sync `1a3ca58` (2026-10-07) — regression
+  subsection
   `sec:who` ("Who Has Complex Tastes?") + tab-regression + scripts 05/07.
   Previous sync `060b5cb` same day: restructure: section
   4.4 leads with the geometric measure, combinatorial material moved to
