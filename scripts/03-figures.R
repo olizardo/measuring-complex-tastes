@@ -51,8 +51,10 @@ ind <- ind[!is.na(ind$age6), ]  # drop single missing-age respondent
 p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(alpha = 0.25, size = 0.6) +
-  scale_color_brewer(palette = "Dark2") +
+  geom_point(alpha = 0.4, size = 0.75) +
+  # sequential dark-blue ramp: age is ordinal, ramp makes the dim-2 gradient visible
+  scale_color_manual(values = setNames(
+    colorRampPalette(c("#6BAED6", "#08306B"))(6), levels(ind$age6))) +
   labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
        title = "Individual factor map (dimensions 2-3)",
        subtitle = "Points: respondents, colored by age group") +
@@ -72,16 +74,16 @@ cc$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc$name)),
 p3 <- ggplot(cc, aes(dim2, dim3)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cc, !yes), color = "grey80", size = 0.9) +
-  geom_point(data = subset(cc, yes), aes(color = modality), size = 1.5,
+  geom_point(data = subset(cc, !yes), color = "grey65", size = 1) +
+  geom_point(data = subset(cc, yes), aes(color = modality), size = 1.8,
              alpha = 0.9) +
   ggrepel::geom_text_repel(data = subset(cc, yes),
-                           aes(label = genre, color = modality), size = 2.4,
+                           aes(label = genre, color = modality), size = 2.6,
                            segment.color = NA, max.overlaps = 25,
                            show.legend = FALSE) +
-  scale_color_manual(values = c(Preference = "#0072B2",
-                                Consumption = "#D55E00",
-                                Evaluation = "#009E73")) +
+  scale_color_manual(values = c(Preference = "#08519C",
+                                Consumption = "#A63603",
+                                Evaluation = "#006D2C")) +
   labs(x = "Dimension 2", y = "Dimension 3",
        color = "Modality",
        title = "Category map: 'yes' categories by taste modality",

@@ -70,8 +70,12 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    replaces the earlier four-group `age4`). Supplementary figure legend
    uses readable variable names (Dark2 palette, no legend title, legend at
    bottom) — also author-requested, 2026-10-07. fig-individuals uses a
-   discrete Dark2 palette and drops the single missing-age respondent (no
-   NA legend entry), 2026-10-07. fig-antinomy-map recolored by the
+   sequential dark-blue ramp by age (`colorRampPalette(c("#6BAED6",
+   "#08306B"))(6)`, alpha 0.4, size 0.75; author request 2026-10-07,
+   replacing the earlier discrete Dark2 — discrete hues were illegible in
+   the overplotted cloud). fig-categories darkened (no-points grey65,
+   yes-points size 1.8, darker Okabe–Ito derivatives #08519C/#A63603/
+   #006D2C), author request 2026-10-07. fig-antinomy-map recolored by the
    geometric W1 score (was: combinatorial n_complex count), 2026-10-07.
 
 ## Pipeline (run in order, from project root)
