@@ -16,8 +16,9 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 - Key geometric device: each individual has one *partial point* per group;
   global point = mean of partials. Per dimension s:
   `sum_h F_sh^2 = H*F_s^2 + W_s`, where `W_s` (within-individual dispersion of
-  partial points) is the **antinomy score**. Pairwise squared partial-point
-  distances sum to H*W_s.
+  partial points) is the **antinomy score** (manuscript language:
+  **complex-taste score** — see coding decision 5). Pairwise squared
+  partial-point distances sum to H*W_s.
 
 ## Data
 
@@ -48,11 +49,19 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    not "antinomies"; $W_s(i)$ is the "complex-taste score." Table 3
    (tab-groups) is kept and the group-contributions figure was dropped as
    redundant. `manuscript/main.tex` is stored reflowed, one
-   paragraph-per-line.
+   paragraph-per-line. Modality phrasing is "preference, engagement, and
+   evaluation" — not "feeling, doing, praising"; Ma's configuration names
+   (guilty pleasure, distant praise, taste pose, …) are kept as-is.
 6. Dimension 4 was explored (category and individual maps) and deliberately
    left out of the manuscript: consumption-heavy, categories near the
    origin, weak social anchoring — no clean reading. Figures use dims 2–3
    only.
+7. Figure designs (current): individual factor map = single dims-2–3 panel,
+   points colored by age group (referenced from the dim-2 paragraph with a
+   pointer to the social-sources section); supplementary figure =
+   demographic category barycenters ONLY on dims 2–3, no respondent cloud,
+   axes spanning the category coordinates (the cloud otherwise compresses
+   the barycenters near the origin); category map unchanged (dims 1–2).
 
 ## Pipeline (run in order, from project root)
 
@@ -143,6 +152,9 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
+- Last Overleaf sync: commit `a5810e4` (2026-10-07) — carries the reflow,
+  complex-tastes terminology, figure redesigns, and script updates. Local
+  `main` beyond that is gitlink bookkeeping only.
 
 ## Paper state & remaining steps
 
