@@ -178,7 +178,8 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   contribution sentences reworded); adopted locally, nothing to push
   (local tree was clean at `bab5c64`). Author text kept as-is including
   apparent typos ("----" for "---", "a give genre", missing period after
-  the e.g. parenthetical) — flagged to user 2026-10-07. Previous sync
+  the e.g. parenthetical) — flagged to user 2026-10-07, then fixed and
+  pushed as `5e0afd7` (user request). Previous sync
   `bab5c64` (2026-10-07) — adopted author's web
   edits `8e4233f` (eq:decomp combinatorial sentence and worked-example
   combinatorial sentence converted to footnotes; new MCA rare-category
