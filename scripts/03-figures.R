@@ -142,24 +142,44 @@ for (i in seq_len(nrow(rvm))) {
 rlines <- c(rlines, "\\bottomrule", "\\end{tabular}")
 writeLines(rlines, "manuscript/tables/tab-rv.tex")
 
-# group structure: weight, contributions, Lg with MFA
-w <- sapply(res$separate.analyses, function(a) a$eig[1, 1])
+# group structure: separate first eigenvalue, balancing weight, contributions, Lg with MFA
+lam1g <- sapply(res$separate.analyses, function(a) a$eig[1, 1])
+w <- 1 / lam1g
 gcont <- res$group$contrib[1:3, 1:3]
 gLg <- res$group$Lg[1:3, "MFA"]
 gnames <- c("Preference", "Consumption", "Evaluation")
 glines <- c(
-  "\\begin{tabular}{lccccc}", "\\toprule",
-  " & & \\multicolumn{3}{c}{Contributions (\\%)} & \\\\",
-  "\\cmidrule(lr){3-5}",
-  "Group & Weight & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
+  "\\begin{tabular}{lcccccc}", "\\toprule",
+  " & & & \\multicolumn{3}{c}{Contributions (\\%)} & \\\\",
+  "\\cmidrule(lr){4-6}",
+  "Group & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
   "\\midrule")
 for (i in 1:3) {
-  glines <- c(glines, paste0(gnames[i], " & ", sprintf("%.3f", w[i]), " & ",
+  glines <- c(glines, paste0(gnames[i], " & ",
+    sprintf("%.3f", lam1g[i]), " & ", sprintf("%.3f", w[i]), " & ",
     paste(sprintf("%.1f", gcont[i, ]), collapse = " & "), " & ",
     sprintf("%.2f", gLg[i]), " \\\\"))
 }
 glines <- c(glines, "\\bottomrule", "\\end{tabular}")
 writeLines(glines, "manuscript/tables/tab-groups.tex")
+
+# partial axes: correlations between each group's separate-analysis axes
+# and the global dimensions (cor of individual coordinates on the two axes)
+global <- res$ind$coord[, 1:3, drop = FALSE]
+plines <- c(
+  "\\begin{tabular}{lccc}", "\\toprule",
+  "Partial axis & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+for (h in 1:3) {
+  sep <- res$separate.analyses[[h]]$ind$coord[, 1:3, drop = FALSE]
+  pcax <- cor(sep, global)
+  for (s in 1:3) {
+    plines <- c(plines, paste0(gnames[h], " axis ", s, " & ",
+      paste(sprintf("%.2f", pcax[s, ]), collapse = " & "), " \\\\"))
+  }
+  if (h < 3) plines <- c(plines, "\\addlinespace")
+}
+plines <- c(plines, "\\bottomrule", "\\end{tabular}")
+writeLines(plines, "manuscript/tables/tab-partial-axes.tex")
 
 # genre-level yes rates
 md <- mfa_dat_raw <- readRDS("data/mfa_input.rds")

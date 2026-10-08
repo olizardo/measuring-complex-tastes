@@ -118,6 +118,13 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   original df indices, NOT sequential positions; which.max(ant$W3) returns
   a position whose rowname differs (365 vs 380). Index P/C/V/F, md, and
   type_counts by position; ant by the same position.
+- **MFA group weighting (verified 2026-10-08 from res$global.pca$call$col.w)**:
+  FactoMineR's global per-column weight is `(1−p_j)/(J·λ1g)` (category mass
+  p_j, J=20, λ1g = separate MCA first eigenvalue 0.200/0.155/0.484). The
+  group-level balancing factor is exactly 1/λ1g (weight sums 5.004/6.452/
+  2.064); each group's max axial inertia in the global metric ≈ 1. The λ1s
+  are NOT the weights — the original tab-groups "Weight" column and §4.3
+  text mislabeled them; fixed 2026-10-08.
 
 ## Current headline results (conjunctive coding)
 
@@ -134,6 +141,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   - Dim 3 = status valuation: all 20 eval "yes" categories on one side
     (mean −0.63); positive pole = consecrated-genre consumption
     (opera +0.90, reggae +0.65). Eval contributes 40.6% to dim 3.
+- **Partial axes** (correlations of each group's separate-analysis axes with
+  the global dims; tab-partial-axes, added 2026-10-08): dim 1 = consensus
+  (pref/cons/eval ax1: 0.79/0.81/0.60); dim 2 carried by pref ax2 (−0.89)
+  and cons ax2 (+0.89), no eval axis close; dim 3 = eval ax1 (−0.60, also
+  +0.60 on dim 1) plus pref ax3 (+0.57) and cons ax3 (+0.60) — evaluation-
+  led but not evaluation-alone.
 - Social anchoring (supplementary η²): dim 2 ← age 0.35 (six groups:
   18–29 −0.76 → 70+ +1.23), education (No diploma −0.25 → Prof/PhD +0.59), subjective
   class; dim 3 ← race 0.083 (Black +0.55 vs White −0.19), self-described
@@ -288,6 +301,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   Category-map paragraph (4.1) gained a dim-3 preview sentence pointing
   to Section 4.3 (\label{sec:contrib}); Figure 4 caption notes "darker
   shades indicate older age groups."
+- 2026-10-08 (unpushed to Overleaf): fixed weight labeling — script 03
+  tab-groups now reports both λ1 and Weight (1/λ1) (5.004/6.452/2.064), and
+  the §4.3 sentence quotes the true inverse weights; new tab-partial-axes
+  table + §4.3 partial-axes paragraph (with technical footnote) added after
+  the Lg discussion; compiles at 24 pp. (pre-existing "Float too large"
+  warning for tab-regression remains).
 - Remaining: (a) robustness note comparing inclusive vs conjunctive
   evaluation codings (RV structure nearly identical: 0.057/0.062 vs
   0.049/0.060); (a2) DONE 2026-10-08: MCA-vs-PCA robustness footnote added
