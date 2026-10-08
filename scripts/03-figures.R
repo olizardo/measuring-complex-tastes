@@ -85,8 +85,8 @@ p3 <- ggplot(cc, aes(dim2, dim3)) +
                                 Consumption = "#A63603",
                                 Evaluation = "#006D2C")) +
   labs(x = "Dimension 2", y = "Dimension 3",
-       color = "Modality",
-       title = "Category map: 'yes' categories by taste modality",
+       color = "Aspect",
+       title = "Category map: 'yes' categories by taste aspect",
        subtitle = "Grey points: 'no' categories") +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
@@ -108,7 +108,7 @@ p5 <- ggplot(rvdf, aes(g1, g2, fill = rv)) +
   scale_fill_gradient(low = "#F5F5F5", high = "#2166AC", limits = c(0, 1)) +
   coord_fixed() +
   labs(x = NULL, y = NULL, fill = "RV",
-       title = "RV coefficients between taste modalities") +
+       title = "RV coefficients between taste aspects") +
   theme(panel.grid = element_blank(),
         axis.text.x = element_text(angle = 30, hjust = 1))
 ggsave("manuscript/figures/fig-rv.pdf", p5, width = 4, height = 3.6)
@@ -152,7 +152,7 @@ glines <- c(
   "\\begin{tabular}{lcccccc}", "\\toprule",
   " & & & \\multicolumn{3}{c}{Contributions (\\%)} & \\\\",
   "\\cmidrule(lr){4-6}",
-  "Modality & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
+  "Aspect & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
   "\\midrule")
 for (i in 1:3) {
   glines <- c(glines, paste0(gnames[i], " & ",

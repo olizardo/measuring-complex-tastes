@@ -1,5 +1,5 @@
 # 01-prepare-mfa-data.R
-# Build the 60-column MFA input: 20 genres x 3 taste modalities
+# Build the 60-column MFA input: 20 genres x 3 taste aspects
 # (preference = like, consumption = listened past month,
 #  evaluation = typical fan perceived as high status)
 #
@@ -54,7 +54,7 @@ saveRDS(mfa_dat, "data/mfa_input.rds")
 
 cat(sprintf("rows: %d -> %d complete cases\n", n_before, n_after))
 cat(sprintf("columns: %d (3 groups x 20)\n", ncol(mfa_dat)))
-cat("\nOverall yes-rates by modality:\n")
+cat("\nOverall yes-rates by aspect:\n")
 data.frame(
   preference = mean(as.matrix(mfa_dat[, paste0("pref_", genres)])),
   consumption = mean(as.matrix(mfa_dat[, paste0("cons_", genres)])),

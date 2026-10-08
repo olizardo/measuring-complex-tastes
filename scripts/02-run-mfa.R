@@ -6,7 +6,7 @@
 # Groups are treated as categorical (MCA within each group), following the
 # GDA tradition of Pagès, "Multiple Factor Analysis by Example Using R".
 # MFA balances the three groups by weighting each group by the inverse of
-# the first eigenvalue of its separate analysis, so no modality dominates.
+# the first eigenvalue of its separate analysis, so no aspect dominates.
 
 library(FactoMineR)
 

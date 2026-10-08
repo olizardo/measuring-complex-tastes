@@ -1,10 +1,10 @@
 # 06-transposed-mfa.R
 # The duality: genres as TARGETS of complex tastes.
 #
-# Transposed MFA: individuals = 20 genres; each modality group contains one
+# Transposed MFA: individuals = 20 genres; each aspect block contains one
 # binary variable per respondent (did respondent i like / listen to /
 # attribute conjunctive high status to this genre). Groups remain the
-# modalities, so the transposed analysis asks the same structural questions
+# aspects, so the transposed analysis asks the same structural questions
 # from the object side.
 #
 # Implementation: FactoMineR::MFA exhausts memory at this size (6,700+
@@ -17,7 +17,7 @@
 # group contributions reproduce to < 1e-2 (see VALIDATION below).
 #
 # Respondents whose answers are constant across all 20 genres within a
-# modality (e.g., attribute high status to no genre) define variables with
+# aspect (e.g., attribute high status to no genre) define variables with
 # an empty category: zero inertia, no genre discrimination. They are
 # dropped from the transposed groups; genre geometry is unchanged (their
 # categories sit at the origin of the transformed space).
@@ -99,7 +99,7 @@ cfg <- sapply(genres, function(g) {
 })
 rownames(cfg) <- types; colnames(cfg) <- genres
 
-# drop constant respondent-variables per modality
+# drop constant respondent-variables per aspect
 keep <- function(pre) {
   M <- as.matrix(md[, grep(paste0("^", pre, "_"), names(md))])
   rs <- rowSums(M); rs > 0 & rs < 20
@@ -143,9 +143,9 @@ saveRDS(mt, "output/mfa_results_transposed.rds")
 
 cat("\n== Transposed eigenvalues (first 5) ==\n")
 print(round(mt$eig, 3))
-cat("\n== Separate MCA lambda1 per modality (transposed) ==\n")
+cat("\n== Separate MCA lambda1 per aspect (transposed) ==\n")
 print(round(mt$lambda1, 4))
-cat("\n== RV coefficients between modalities, genre level ==\n")
+cat("\n== RV coefficients between aspects, genre level ==\n")
 print(round(mt$RV, 3))
 cat("\n== Group contributions (dims 1-3, %) ==\n")
 print(round(mt$contrib[, 1:3], 1))
@@ -173,7 +173,7 @@ cat("\n== Percentage of inertia (transposed) ==\n")
 tot <- sum(mt$sv$d^2) / nrow(Xt_list[[1]])
 print(round(100 * mt$eig / tot, 1))
 
-# --- figure: genre map with modality partial points -----------------------------
+# --- figure: genre map with aspect partial points -----------------------------
 library(ggplot2)
 library(ggrepel)
 gnames <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
@@ -210,11 +210,11 @@ p9 <- ggplot() +
              aes(xintercept = x), linetype = 2, color = "grey60") +
   scale_color_manual(values = c(Preference = "#0072B2",
                                 Consumption = "#D55E00",
-                                Evaluation = "#009E73"), name = "Modality") +
+                                Evaluation = "#009E73"), name = "Aspect") +
   facet_wrap(~panel, scales = "free") +
   labs(x = NULL, y = NULL,
-       title = "Genre map with modality partial points (transposed MFA)",
-       subtitle = "Black points: genre compromise positions; colored points: modality partial points") +
+       title = "Genre map with aspect partial points (transposed MFA)",
+       subtitle = "Black points: genre compromise positions; colored points: aspect partial points") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "top")
 ggsave("manuscript/figures/fig-genre-map.pdf", p9, width = 7.2, height = 4.6)

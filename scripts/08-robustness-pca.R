@@ -1,7 +1,7 @@
 # 08-robustness-pca.R
 # Robustness check: MCA vs PCA as the within-group analysis of the MFA.
 # The main analysis (script 02) uses type "n" (MCA) on the 20 binary
-# indicators of each modality group. For 0/1 data, MCA is a reweighted PCA
+# indicators of each aspect block. For 0/1 data, MCA is a reweighted PCA
 # of the same columns: the only difference is the column scaling
 # (MCA up-weights rare categories by 1/sqrt(m(1-m))). This script runs the
 # same MFA with type "c" (scaled PCA within groups) and compares eigenvalues,

@@ -1,13 +1,13 @@
 # 04-antinomies.R
 # Geometric operationalization of Ma's (2026) six complex tastes.
 #
-# MFA geometry: each individual has one partial point per modality group;
+# MFA geometry: each individual has one partial point per aspect block;
 # the global point is their average. For dimension s and individual i:
 #   sum_h F_sh(i)^2  =  H * F_s(i)^2  +  sum_h (F_sh(i) - F_s(i))^2
 # i.e. partial inertia = global (harmony) part + within-individual
-# dispersion of modalities = "antinomy" part. The pairwise squared
+# dispersion of aspects = "antinomy" part. The pairwise squared
 # distances between partial points sum to H times the dispersion term
-# (H = 3), giving modality-pair-level disagreement shares.
+# (H = 3), giving aspect-pair-level disagreement shares.
 #
 # Discrete complement: each genre x respondent is one of Ma's 8
 # configurations (+++ simple positive; --- simple negative; and the six
@@ -26,7 +26,7 @@ genres <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
 
 NDIM <- 3
 
-# --- 1. partial points by modality -------------------------------------------
+# --- 1. partial points by aspect -------------------------------------------
 cp <- res$ind$coord.partiel
 rn <- rownames(cp)
 grp <- sub(".*\\.", "", rn)

@@ -64,6 +64,8 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    tab-groups header row is "Modality". A bridging footnote in the Analytic
    Strategy tells readers the MFA literature calls these sets "groups"
    (cites pages2014mfa). "Age group" keeps its ordinary meaning.
+   SUPERSEDED later the same day by decision 10: "modality" itself is now
+   purged entirely; the three blocks are "aspects (of taste)".
 8. Figure designs (current): individual factor map = single dims-2–3 panel,
    points colored by age group (referenced from the dim-2 paragraph with a
    pointer to the social-sources section); supplementary figure =
@@ -85,6 +87,22 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    yes-points size 1.8, darker Okabe–Ito derivatives #08519C/#A63603/
    #006D2C), author request 2026-10-07. fig-antinomy-map recolored by the
    geometric W1 score (was: combinatorial n_complex count), 2026-10-07.
+10. **Terminology v2 (author request, 2026-10-08): "modality" purged
+    everywhere.** In MCA/GDA a "modality" (French *modalité*) is a category
+    of a categorical variable — using it for the three blocks clashed with
+    the technical sense. The blocks are now "aspects (of taste)" throughout
+    main.tex, tables, and figure legends: "aspect contributions" (the
+    MFA-literature parenthetical kept), tab-groups header "Aspect",
+    fig-categories/fig-rv/fig-genre-map legends and titles "Aspect".
+    "The rarest modalities" (the one GDA-sense usage) became "the rarest
+    categories". The bridging footnote in the Analytic Strategy now also
+    defines the GDA sense: modalities = the distinct values a categorical
+    variable can take (yes/no), citing rouanet2000geometric-a44; the
+    manuscript says "category" throughout. Intro theory wording also purged
+    ("multimodality of taste" → "taste has multiple aspects"; "modalities
+    of action" → "aspects of action"). Internal R variable names
+    (`modality` in scripts 03/04/06) are unchanged — they never render into
+    the manuscript.
 
 ## Pipeline (run in order, from project root)
 
@@ -332,6 +350,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   decision 7 plus the modality definition; author's web edit `27e880f`
   ("The third question is different:") re-applied after the wholesale copy
   clobbered it.
+- 2026-10-08 (terminology v2, per decision 10): modality→aspect purge
+  across main.tex (38 prose occurrences; intro theory wording included),
+  GDA definition of "modality" added to the bridging footnote, tab-groups
+  header and fig legends/titles regenerated via scripts 03 and 06
+  (transposed MFA re-validated against FactoMineR; all headline numbers
+  unchanged; compiles at 24 pp.).
 - 2026-10-08 (pushed as `64a7724`): fixed weight labeling — script 03
   tab-groups now reports both λ1 and Weight (1/λ1) (5.004/6.452/2.064), and
   the §4.3 sentence quotes the true inverse weights; new tab-partial-axes
