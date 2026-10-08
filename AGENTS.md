@@ -172,7 +172,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `f3268d7` (2026-10-07) — rewrote the
+- Last Overleaf sync: commit `d66751c` (2026-10-07) — results sections echo
+  the strategy questions (4.2 RV opens with the same-structure question;
+  4.3 opens with participation + ownership questions; Lg sentence reframed
+  as the participation answer). Previous sync `f3268d7` (2026-10-07) — rewrote the
   quantities paragraph of the Analytic Strategy into three question-linked
   paragraphs (RV = same-structure question; Lg = participation-in-
   compromise question, definition corrected to group-vs-compromise; group
