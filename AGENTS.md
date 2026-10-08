@@ -172,7 +172,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `b3103ef` (2026-10-08) — sharpened the Lg vs
+- Last Overleaf sync: commit `fa787d4` (2026-10-08) — aligned results
+  echoes with the revised strategy wording (4.2 now echoes "redundant or
+  partially independent"; 4.3 "On the third question" replaces "ownership
+  question"). Previous sync `b3103ef` (2026-10-08) — sharpened the Lg vs
   group-contributions distinction in the strategy section (Lg = one number
   per group, absolute scale, unnormalized RV; contributions = one
   decomposition per dimension, sums to 100%) and added technical
