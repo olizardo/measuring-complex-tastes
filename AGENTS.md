@@ -89,6 +89,7 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4 |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds) |
+| `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
 - RDS columns are `haven_labelled` → `haven::zap_labels()` on load.
@@ -295,8 +296,9 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   ρ = 0.99/0.99/0.97 (sign-matched), W-scores ρ = 0.97/0.97/0.93,
   antinomy shares 51/52/62% — near-identical; the substantive difference
   is only MCA's rare-category upweighting (a feature for the paper's
-  argument). These numbers exist only in session history, not in any
-  script/output; (b) full intro/discussion prose.
+  argument). Numbers now reproducible: `scripts/08-robustness-pca.R`
+  writes `output/robustness_pca.rds` (2026-10-08); (b) full intro/discussion
+  prose.
 
 ## Key references
 
