@@ -172,7 +172,14 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `d66751c` (2026-10-07) — results sections echo
+- Last Overleaf sync: commit `6b7d3e5` (2026-10-08) — author's web edits
+  adopted locally (strategy paragraph rewordings: "redundant or partially
+  independent" RV justification, expanded Lg sentence, data-table sentence).
+  FLAGGED to user: (a) edit describes group weights as "inverse square root
+  of the first eigenvalue" — MFA uses 1/λ1 (FactoMineR), not 1/√λ1;
+  (b) Lg sentence reverted to "link between a variable group and each
+  dimension" — Lg(h, MFA) is a single group-vs-compromise coefficient.
+  Previous sync `d66751c` (2026-10-07) — results sections echo
   the strategy questions (4.2 RV opens with the same-structure question;
   4.3 opens with participation + ownership questions; Lg sentence reframed
   as the participation answer). Previous sync `f3268d7` (2026-10-07) — rewrote the
