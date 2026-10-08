@@ -194,11 +194,21 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `64a7724` (2026-10-08) — fixed weight labeling
-  (tab-groups now reports both λ1 and Weight (1/λ1) = 5.004/6.452/2.064; §4.3
-  sentence quotes the true inverse weights) and added tab-partial-axes +
-  §4.3 partial-axes paragraph (with technical footnote) after the Lg
-  discussion. Previous sync `fa787d4` (2026-10-08) — aligned results
+- Last Overleaf sync: commits `987dc96` + `291c37f` (2026-10-08) — terminology
+  rewrite per decision 7 ("blocks of variables"/"modalities" throughout,
+  bridging footnote, in-text definition of "modality" opening the Analytic
+  Strategy, tab-groups header "Modality"). `291c37f` re-applied the author's
+  web edit `27e880f` ("The third question is different:"), which the
+  wholesale `cp -r` in `987dc96` had silently CLOBBERED. **Workflow lesson:
+  after `pull --rebase`, always inspect the incoming "Update on Overleaf."
+  commits (`git log -p`) and re-apply their changes to the local tree BEFORE
+  the `rm -rf overleaf/manuscript && cp -r` step — the copy overwrites
+  whatever the web edit touched.** Previous sync `64a7724` (2026-10-08) —
+  fixed weight labeling (tab-groups now reports both λ1 and Weight (1/λ1) =
+  5.004/6.452/2.064; §4.3 sentence quotes the true inverse weights) and
+  added tab-partial-axes + §4.3 partial-axes paragraph (with technical
+  footnote) after the Lg discussion. Previous sync `fa787d4` (2026-10-08) —
+  aligned results
   echoes with the revised strategy wording (4.2 now echoes "redundant or
   partially independent"; 4.3 "On the third question" replaces "ownership
   question"). Previous sync `b3103ef` (2026-10-08) — sharpened the Lg vs
@@ -255,6 +265,11 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   (Dark2 palette, readable legend names, no title, legend at bottom).
   Pushes to Overleaf get
   rejected whenever a web edit lands after our pull — always re-pull first.
+  Worse: a web edit that lands BEFORE our pull survives the rebase but is
+  then silently overwritten by the wholesale `cp -r` of `manuscript/` —
+  always diff the incoming web-edit commits and re-apply their changes to
+  the local tree before copying (this happened with `27e880f`, fixed in
+  `291c37f`).
 
 ## Paper state & remaining steps
 
@@ -313,6 +328,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   Category-map paragraph (4.1) gained a dim-3 preview sentence pointing
   to Section 4.3 (\label{sec:contrib}); Figure 4 caption notes "darker
   shades indicate older age groups."
+- 2026-10-08 (pushed as `987dc96` + `291c37f`): terminology rewrite per
+  decision 7 plus the modality definition; author's web edit `27e880f`
+  ("The third question is different:") re-applied after the wholesale copy
+  clobbered it.
 - 2026-10-08 (pushed as `64a7724`): fixed weight labeling — script 03
   tab-groups now reports both λ1 and Weight (1/λ1) (5.004/6.452/2.064), and
   the §4.3 sentence quotes the true inverse weights; new tab-partial-axes
