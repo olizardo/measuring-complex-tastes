@@ -172,7 +172,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `6a7d1cb` (2026-10-07) — author's web rewrite of
+- Last Overleaf sync: commit `f3268d7` (2026-10-07) — rewrote the
+  quantities paragraph of the Analytic Strategy into three question-linked
+  paragraphs (RV = same-structure question; Lg = participation-in-
+  compromise question, definition corrected to group-vs-compromise; group
+  contributions = which-modality-owns-each-dimension question); previous
+  sync `6a7d1cb` (2026-10-07) — author's web rewrite of
   the Analytic Strategy opening (two paragraphs restructured into three:
   explicit data-table description, MCA step spelled out, RV/Lg/group-
   contribution sentences reworded); adopted locally, nothing to push
