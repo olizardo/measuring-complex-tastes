@@ -233,9 +233,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 ## Paper state & remaining steps
 
 - Written: abstract (from `complex taste abstract.docx`), intro (draft),
-  data & measures, analytic strategy (incl. decomposition equation),
-  results 4.1–4.6 (structure, RV, group contributions, antinomies, social
-  sources, duality), discussion placeholder. ~19 pp. compiled.
+  data & measures, analytic strategy (data-table paragraph, two-step MFA
+  description, three question-linked quantities paragraphs — RV, Lg, group
+  contributions, each with a technical calculation footnote — decomposition
+  equation, worked example), results 4.1–4.6 whose openings echo the three
+  strategy questions (structure, RV, group contributions, antinomies,
+  social sources, duality), discussion placeholder. ~19 pp. compiled.
 - Restructure (2026-10-07, author request): paper's point is the geometric
   approach — section 4.4 now leads with the geometric operationalization;
   all combinatorial material (prevalence paragraph, fig-configurations,
@@ -269,9 +272,31 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   (−0.52…−1.01, 70+ ≈ 0); W3: race only (>1 race +1.94, Asian −1.50 vs
   White). Robust to log outcomes; dPV3/dCV3 predicted by race only,
   dPC3 by parentba + sclassUpper.
+- Strategy/results rewrite (2026-10-07/08, author request): quantities
+  material of the strategy split into three question-linked paragraphs
+  (RV = redundant-or-partially-independent question; Lg = participation-in-
+  compromise — one number per group, absolute scale, Lg(h,k) =
+  tr(S_h S_k)/√tr(S_h²), the unnormalized RV; contributions = which
+  modality organizes each dimension, ctr(h,s) = Σ_j w_j f²_js/λ_s, sums to
+  100% per dimension). Technical calculation footnotes added for all three
+  quantities (configuration-matrix formulas, footnote style). Author's
+  "dominated by consumption" example relocated from the Lg paragraph to
+  the contributions paragraph. Results 4.2/4.3 openings echo the strategy
+  questions ("first question … redundant or partially independent";
+  "second and third questions posed above"; "On the third question").
+  Category-map paragraph (4.1) gained a dim-3 preview sentence pointing
+  to Section 4.3 (\label{sec:contrib}); Figure 4 caption notes "darker
+  shades indicate older age groups."
 - Remaining: (a) robustness note comparing inclusive vs conjunctive
   evaluation codings (RV structure nearly identical: 0.057/0.062 vs
-  0.049/0.060); (b) full intro/discussion prose.
+  0.049/0.060); (a2) candidate robustness footnote on MCA vs PCA: the same
+  MFA with type="c" (scaled PCA within groups) was computed 2026-10-08 —
+  eigenvalues 1.670/1.209/0.895, RV 0.32/0.05/0.07, individual coords
+  ρ = 0.99/0.99/0.97 (sign-matched), W-scores ρ = 0.97/0.97/0.93,
+  antinomy shares 51/52/62% — near-identical; the substantive difference
+  is only MCA's rare-category upweighting (a feature for the paper's
+  argument). These numbers exist only in session history, not in any
+  script/output; (b) full intro/discussion prose.
 
 ## Key references
 
