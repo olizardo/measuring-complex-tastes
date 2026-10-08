@@ -6,7 +6,15 @@
       "git add *": "allow",
       "git commit *": "allow",
       "timeout *": "allow",
-      "tail *": "allow"
+      "tail *": "allow",
+      "git -C overleaf pull *": "allow",
+      "git -C overleaf add *": "allow",
+      "git -C overleaf status *": "allow",
+      "git -C overleaf commit *": "allow",
+      "git -C overleaf push *": "allow",
+      "pdflatex *": "allow",
+      "grep *": "allow",
+      "echo *": "allow"
     }
   }
 }
