@@ -172,7 +172,14 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `fdc7d3f` (2026-10-08) — corrected the two
+- Last Overleaf sync: commit `b3103ef` (2026-10-08) — sharpened the Lg vs
+  group-contributions distinction in the strategy section (Lg = one number
+  per group, absolute scale, unnormalized RV; contributions = one
+  decomposition per dimension, sums to 100%) and added technical
+  calculation footnotes for RV/Lg/contributions (configuration-matrix
+  formulas, footnote style); author's misplaced "dominated by consumption"
+  example moved from the Lg paragraph to the contributions paragraph.
+  Previous sync `fdc7d3f` (2026-10-08) — corrected the two
   technical errors in the author's `6b7d3e5` web edit: weighting described
   as 1/λ1 (was "inverse square root"), Lg described as group-vs-compromise
   (was "each dimension"); pushed to Overleaf. Previous sync `6b7d3e5`
