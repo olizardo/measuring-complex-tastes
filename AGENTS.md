@@ -56,7 +56,15 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    left out of the manuscript: consumption-heavy, categories near the
    origin, weak social anchoring — no clean reading. Figures use dims 2–3
    only.
-7. Figure designs (current): individual factor map = single dims-2–3 panel,
+7. **Terminology (author request, 2026-10-08): "group" is reserved for its
+   sociological meaning.** MFA's variable groups are called "blocks of
+   variables" (generic MFA mechanics) or "modalities" (the three blocks of
+   this application) throughout main.tex; "group contributions" → "modality
+   contributions" (with a parenthetical noting the MFA-literature term);
+   tab-groups header row is "Modality". A bridging footnote in the Analytic
+   Strategy tells readers the MFA literature calls these sets "groups"
+   (cites pages2014mfa). "Age group" keeps its ordinary meaning.
+8. Figure designs (current): individual factor map = single dims-2–3 panel,
    points colored by age group (referenced from the dim-2 paragraph with a
    pointer to the social-sources section); supplementary figure =
    demographic category barycenters ONLY on dims 2–3, no respondent cloud,
@@ -64,7 +72,7 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    the barycenters near the origin); category map on dims 2–3 (switched
    from 1–2 at the author's request, 2026-10-07; prose figure references
    moved to the dim-2 sentence and the dim-3 η² discussion).
-8. Age: six groups (18–29, 30–39, 40–49, 50–59, 60–69, 70+) collapsed from
+9. Age: six groups (18–29, 30–39, 40–49, 50–59, 60–69, 70+) collapsed from
    the 13 codebook age bands (codes 2–15; `age6`), used in fig-individuals
    and as the supplementary age variable (author request, 2026-10-07;
    replaces the earlier four-group `age4`). Supplementary figure legend
@@ -186,7 +194,11 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: commit `fa787d4` (2026-10-08) — aligned results
+- Last Overleaf sync: commit `64a7724` (2026-10-08) — fixed weight labeling
+  (tab-groups now reports both λ1 and Weight (1/λ1) = 5.004/6.452/2.064; §4.3
+  sentence quotes the true inverse weights) and added tab-partial-axes +
+  §4.3 partial-axes paragraph (with technical footnote) after the Lg
+  discussion. Previous sync `fa787d4` (2026-10-08) — aligned results
   echoes with the revised strategy wording (4.2 now echoes "redundant or
   partially independent"; 4.3 "On the third question" replaces "ownership
   question"). Previous sync `b3103ef` (2026-10-08) — sharpened the Lg vs
@@ -301,7 +313,7 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   Category-map paragraph (4.1) gained a dim-3 preview sentence pointing
   to Section 4.3 (\label{sec:contrib}); Figure 4 caption notes "darker
   shades indicate older age groups."
-- 2026-10-08 (unpushed to Overleaf): fixed weight labeling — script 03
+- 2026-10-08 (pushed as `64a7724`): fixed weight labeling — script 03
   tab-groups now reports both λ1 and Weight (1/λ1) (5.004/6.452/2.064), and
   the §4.3 sentence quotes the true inverse weights; new tab-partial-axes
   table + §4.3 partial-axes paragraph (with technical footnote) added after

@@ -152,7 +152,7 @@ glines <- c(
   "\\begin{tabular}{lcccccc}", "\\toprule",
   " & & & \\multicolumn{3}{c}{Contributions (\\%)} & \\\\",
   "\\cmidrule(lr){4-6}",
-  "Group & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
+  "Modality & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
   "\\midrule")
 for (i in 1:3) {
   glines <- c(glines, paste0(gnames[i], " & ",
