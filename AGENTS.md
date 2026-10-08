@@ -290,7 +290,9 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   shades indicate older age groups."
 - Remaining: (a) robustness note comparing inclusive vs conjunctive
   evaluation codings (RV structure nearly identical: 0.057/0.062 vs
-  0.049/0.060); (a2) candidate robustness footnote on MCA vs PCA: the same
+  0.049/0.060); (a2) DONE 2026-10-08: MCA-vs-PCA robustness footnote added
+  to the strategy section after the MCA sentence (numbers from script 08).
+  Was: candidate robustness footnote on MCA vs PCA: the same
   MFA with type="c" (scaled PCA within groups) was computed 2026-10-08 —
   eigenvalues 1.670/1.209/0.895, RV 0.32/0.05/0.07, individual coords
   ρ = 0.99/0.99/0.97 (sign-matched), W-scores ρ = 0.97/0.97/0.93,
