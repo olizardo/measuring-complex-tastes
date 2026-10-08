@@ -230,7 +230,19 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: `bc48752` + follow-up `e6e3880` (2026-10-08) —
+- Last Overleaf sync: `abbe68e` (2026-10-08) — defines $H$ (number of
+  aspects, = 3) in eq:decomp (author flagged capital H as unclear; now
+  defined in both the partial-points sentence and the where-clause).
+  Author web edit `b95a0e6` landed before the copy and was re-applied
+  locally first: robustness footnote now says "the choice of MCA as the
+  GDA analytic engine"; Lg sentence "expressed in the global space" (was
+  "in the compromise"); third-question paragraph contrast rewritten as
+  "Note that this is different from what the $Lg$ coefficient tells
+  us. While... one decomposition across aspects." Only main.tex differed
+  at copy time, so the sync was a single-file copy (no wholesale
+  rm -rf/cp -r — which the assistant's auto mode now blocks). Outer repo
+  commit `4b810a1` records both the fix and the gitlink. Previous sync:
+  `bc48752` + follow-up `e6e3880` (2026-10-08) —
   terminology v2 per decision
   10 (modality→aspect purge, GDA modality footnote, Aspect table header and
   figure legends; no author web edits since `291c37f` at copy time, so
