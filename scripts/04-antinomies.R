@@ -114,6 +114,7 @@ print(round(cor(type_counts, wcols, method = "spearman"), 2))
 
 # --- 5. manuscript table and figures -------------------------------------------
 library(ggplot2)
+library(ggrepel)
 ant$n_complex <- type_counts$n_complex
 
 # table: Spearman correlations of type counts with MFA coords and antinomy scores
@@ -169,36 +170,48 @@ p7 <- ggplot(ant, aes(F2, F3, color = W1)) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 
-# figure: worked example — partial points of the example respondent (dims 1 & 3)
-# chosen as the highest-W3 respondent holding guilty-pleasure, taste-pose,
+# figure: worked example — partial points of the example respondent.
+# Two panels share the status-valuation axis (dim 3): left pairs it with
+# the general-affirmation axis (dim 1), right with the highbrow-popular
+# axis (dim 2, the plane of the paper's other maps). Respondent chosen
+# as the highest-W3 respondent holding guilty-pleasure, taste-pose,
 # and distant-praise configurations (original data row 1333)
 ex <- which(rownames(ant) == "1333")
-exd <- data.frame(
-  modality = factor(c("Preference", "Consumption", "Evaluation", "Global"),
-                    levels = c("Preference", "Consumption", "Evaluation", "Global")),
-  d1 = c(P[ex, 1], C[ex, 1], V[ex, 1], F[ex, 1]),
-  d3 = c(P[ex, 3], C[ex, 3], V[ex, 3], F[ex, 3]))
-segex <- data.frame(x = exd$d1[1:3], y = exd$d3[1:3],
-                    xend = exd$d1[4], yend = exd$d3[4])
-pex <- ggplot(exd, aes(d1, d3, color = modality, shape = modality)) +
+mods <- c("Preference", "Consumption", "Evaluation", "Global")
+panes <- c("Dimension 1 (general affirmation)",
+           "Dimension 2 (highbrow\u2013popular)")
+exd <- do.call(rbind, lapply(seq_along(panes), function(s) {
+  data.frame(
+    modality = factor(mods, levels = mods),
+    d = c(P[ex, s], C[ex, s], V[ex, s], F[ex, s]),
+    d3 = c(P[ex, 3], C[ex, 3], V[ex, 3], F[ex, 3]),
+    panel = factor(panes[s], levels = panes))
+}))
+segex <- do.call(rbind, lapply(seq_along(panes), function(s) {
+  k <- 4 * (s - 1)
+  data.frame(x = exd$d[k + 1:3], y = exd$d3[k + 1:3],
+             xend = exd$d[k + 4], yend = exd$d3[k + 4],
+             panel = exd$panel[k + 1])
+}))
+pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_segment(data = segex, aes(x, y, xend = xend, yend = yend),
                linetype = "dashed", color = "grey55", linewidth = 0.4,
                inherit.aes = FALSE, show.legend = FALSE) +
-  geom_point(size = 3.4, show.legend = FALSE) +
+  geom_point(size = 3, show.legend = FALSE) +
   geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
                   show.legend = FALSE, box.padding = 0.6,
                   point.padding = 0.4, seed = 3) +
+  facet_grid(. ~ panel, scales = "free_x") +
   scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
                                 Evaluation = "#009E73", Global = "black")) +
   scale_shape_manual(values = c(Preference = 16, Consumption = 17,
                                 Evaluation = 15, Global = 18)) +
-  labs(x = "Dimension 1 (general affirmation)",
-       y = "Dimension 3 (status valuation)") +
+  labs(x = NULL, y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank())
-ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 4.8, height = 4.2)
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 3.8)
 
 saveRDS(list(ant = ant, type_counts = type_counts),
         "output/antinomy_scores.rds")

@@ -87,6 +87,15 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    yes-points size 1.8, darker Okabe–Ito derivatives #08519C/#A63603/
    #006D2C), author request 2026-10-07. fig-antinomy-map recolored by the
    geometric W1 score (was: combinatorial n_complex count), 2026-10-07.
+   fig-worked-example two-panel since 2026-10-08 (author-approved after
+   discussion): left = dims 1–3, right = dims 2–3 (the plane of the
+   paper's other maps), shared dim-3 y-axis, free x-scales, facet
+   strips label the dimensions; 7x3.8in, .9\linewidth in main.tex.
+   Dim-2 prose sentence references the right panel; caption reports
+   W1/W2/W3. Also 2026-10-08: technical footnote added after the
+   pairwise-distance sentence in the eq:decomp paragraph (d²_s(h,k) =
+   (F_sh − F_sk)²; sum = H·W_s), and main-text sentence states the
+   sum-to-H·W_s identity.
 10. **Terminology v2 (author request, 2026-10-08): "modality" purged
     everywhere.** In MCA/GDA a "modality" (French *modalité*) is a category
     of a categorical variable — using it for the three blocks clashed with
@@ -103,6 +112,19 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     of action" → "aspects of action"). Internal R variable names
     (`modality` in scripts 03/04/06) are unchanged — they never render into
     the manuscript.
+
+11. **Terminology (author request, 2026-10-08): "strict" purged.** The
+    evaluation measure is called "genre evaluation(s)" in prose, not
+    "strict status attributions" (the author found "strict" confusing;
+    status attribution is simply how evaluation is measured — whether the
+    respondent thinks others think highly of the genre's fans). Eight
+    occurrences replaced (Measures bullet definition sentence removed;
+    worked example, 4.1 dim-1 and dim-3-preview sentences, 4.3
+    every-one-of-twenty sentence, pair-decomposition sentence, 4.5
+    "evaluation pole", configurations discussion). Unqualified "status
+    attributions" survives in two explanatory sentences (§4.2 RV
+    discussion, §4.6 duality) — kept as plain English, not the label.
+    "Conjunctive" stays in the Measures/data-section coding description.
 
 ## Pipeline (run in order, from project root)
 
@@ -230,7 +252,23 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: `abbe68e` (2026-10-08) — defines $H$ (number of
+- Last Overleaf sync: `0f3b436` (2026-10-08) — three batched changes:
+  (1) technical footnote on the pairwise-distance decomposition
+  (d²_s(h,k) = (F_sh − F_sk)²; the three distances sum to H·W_s) plus a
+  main-text sentence stating the sum-to-H·W_s identity; (2) two-panel
+  fig-worked-example (dims 1–3 left, dims 2–3 right, shared dim-3
+  y-axis), caption/prose updated, script 04 now loads ggrepel; (3) "strict"
+  purged per decision 11 — "genre evaluation(s)" throughout, Measures
+  definition sentence removed. Author web edit `3572d4c` landed before
+  the copy and was re-applied locally first: "On the first
+  (horizontal) dimension" in the worked example, "(for their rarity)"
+  after "the most extreme consumption affirmations" in 4.1 (its
+  context still contained "strict" — superseded by decision 11 at
+  copy). Rerun of script 04 regenerated fig-antinomy-map,
+  fig-configurations, antinomy_scores.rds with byte-only differences
+  (values verified identical; reverted rather than committed).
+  Outer repo commit records the same changes plus the gitlink.
+  Previous sync: `abbe68e` (2026-10-08) — defines $H$ (number of
   aspects, = 3) in eq:decomp (author flagged capital H as unclear; now
   defined in both the partial-points sentence and the where-clause).
   Author web edit `b95a0e6` landed before the copy and was re-applied
