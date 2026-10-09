@@ -157,17 +157,22 @@ p6 <- ggplot(mc, aes(type, mean, fill = complex)) +
         legend.position = "top")
 ggsave("manuscript/figures/fig-configurations.pdf", p6, width = 5.5, height = 3.6)
 
-# figure: individual map dim 2 x dim 3, colored by geometric score W1
-p7 <- ggplot(ant, aes(F2, F3, color = W1)) +
-  geom_point(size = 0.7, alpha = 0.5) +
+# figure: individual map dim 2 x dim 3; the 20% most complex respondents
+# (highest W1) highlighted over the full cloud. W1 is uncorrelated with
+# these dimensions, so the highlighted points blanket the plane — the
+# design makes that null pattern visible instead of fighting the overplotting
+hi80 <- ant$W1 >= quantile(ant$W1, .8)
+p7 <- ggplot(ant, aes(F2, F3)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  scale_color_viridis_c(option = "viridis",
-                        name = expression(Complex-taste~score~W[1])) +
-  labs(x = "Dimension 2 (highbrow vs popular)", y = "Dimension 3 (status valuation)",
-       title = "Individual map by complex-taste score") +
+  geom_point(data = ant[!hi80, ], color = "grey70", size = 0.6, alpha = 0.45) +
+  geom_point(data = ant[hi80, ], aes(color = "Top 20% most complex (W1)"),
+             size = 0.8, alpha = 0.75) +
+  scale_color_manual(values = c("Top 20% most complex (W1)" = "#D95F02"),
+                     name = NULL) +
+  labs(x = "Dimension 2 (highbrow vs popular)", y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank(), legend.position = "top")
 ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 
 # figure: worked example — partial points of the example respondent.
