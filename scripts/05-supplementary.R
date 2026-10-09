@@ -77,21 +77,21 @@ res <- MFA(mfa2,
 saveRDS(res, "output/mfa_results_sup.rds")
 
 # --- category coordinates (barycenters of members' individual coordinates) ------
-coord <- res$ind$coord[, 1:3]
+coord <- res$ind$coord[, 1:4]
 cc <- do.call(rbind, lapply(names(sup), function(v) {
   g <- sup[[v]]
   data.frame(variable = v, category = levels(g),
              d1 = tapply(coord[, 1], g, mean),
              d2 = tapply(coord[, 2], g, mean),
              d3 = tapply(coord[, 3], g, mean),
+             d4 = tapply(coord[, 4], g, mean),
              n = as.integer(table(g)))
 }))
 cc <- cc[cc$category != "Missing" & cc$n > 0, ]
 rownames(cc) <- NULL
 
 # --- correlation ratios (eta^2) of each variable with each dimension -------------
-coord <- res$ind$coord[, 1:3]
-eta <- sapply(1:3, function(s) {
+eta <- sapply(1:4, function(s) {
   sapply(names(sup), function(v) {
     g <- droplevels(sup[[v]])
     m <- tapply(coord[, s], g, mean)
@@ -101,13 +101,13 @@ eta <- sapply(1:3, function(s) {
     ss_b / sum((coord[, s] - mean(coord[, s]))^2)
   })
 })
-colnames(eta) <- paste0("d", 1:3)
+colnames(eta) <- paste0("d", 1:4)
 cat("\n== Correlation ratios (eta^2) with MFA dimensions ==\n")
 print(round(eta, 3))
 
-cat("\n== Supplementary category coordinates (dims 1-3) ==\n")
+cat("\n== Supplementary category coordinates (dims 1-4) ==\n")
 print(cbind(cc[, c("variable", "category", "n")],
-             round(cc[, c("d1", "d2", "d3")], 2)), row.names = FALSE)
+             round(cc[, c("d1", "d2", "d3", "d4")], 2)), row.names = FALSE)
 
 # --- figure: supplementary category barycenters, dims 2-3 ----------------------
 el <- c("gender" = "Gender", "race" = "Race/ethnicity", "age6" = "Age",
@@ -128,10 +128,50 @@ p8 <- ggplot(cc, aes(d2, d3, color = variable)) +
   theme(panel.grid.minor = element_blank(), legend.position = "bottom")
 ggsave("manuscript/figures/fig-supplementary.pdf", p8, width = 6, height = 4.4)
 
+# --- figure: category map on dimensions 2 and 4 ---------------------------------
+# Dimension 4 is a racialized engagement contrast (reggae/Latin/rap/Blues-R&B
+# vs. the rock-country cluster). Show its 'yes' categories by aspect, with 'no'
+# categories in grey, mirroring the fig-categories design.
+gshort <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
+            "country", "blueg", "folk", "hymgos", "latspsal", "raphiphop",
+            "blurb", "reggae", "toppop", "controck", "indalt", "danclub", "hvymtl")
+genres <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
+            "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
+            "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
+            "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
+            "Dance/Club", "Heavy Metal")
+cd4 <- as.data.frame(res$quali.var$coord[, c(2, 4)])
+names(cd4) <- c("dim2", "dim4")
+cd4$name <- rownames(cd4)
+cd4$aspect <- ifelse(grepl("^pref_", cd4$name), "Preference",
+                 ifelse(grepl("^cons_", cd4$name), "Consumption", "Evaluation"))
+cd4$yes <- grepl("_1$", cd4$name)
+cd4$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cd4$name)),
+                          gshort)]
+p9 <- ggplot(cd4, aes(dim2, dim4)) +
+  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+  geom_point(data = subset(cd4, !yes), color = "grey65", size = 1) +
+  geom_point(data = subset(cd4, yes), aes(color = aspect), size = 1.8,
+             alpha = 0.9) +
+  ggrepel::geom_text_repel(data = subset(cd4, yes),
+                           aes(label = genre, color = aspect), size = 2.6,
+                           segment.color = NA, max.overlaps = 25,
+                           show.legend = FALSE) +
+  scale_color_manual(values = c(Preference = "#08519C",
+                                Consumption = "#A63603",
+                                Evaluation = "#006D2C")) +
+  labs(x = "Dimension 2", y = "Dimension 4",
+       color = "Aspect",
+       title = "Category map: 'yes' categories on Dimensions 2 and 4",
+       subtitle = "Grey points: 'no' categories") +
+  theme(panel.grid.minor = element_blank())
+ggsave("manuscript/figures/fig-dim4.pdf", p9, width = 6, height = 5)
+
 # --- LaTeX tables ---------------------------------------------------------------
 tl <- c(
-  "\\begin{tabular}{lccc}", "\\toprule",
-  "Variable & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+  "\\begin{tabular}{lcccc}", "\\toprule",
+  "Variable & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
 for (v in names(el)) {
   tl <- c(tl, paste0(el[v], " & ",
                      paste(sprintf("%.3f", eta[v, ]), collapse = " & "),
@@ -141,15 +181,15 @@ tl <- c(tl, "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-eta.tex")
 
 sl <- c(
-  "\\begin{tabular}{llcccc}", "\\toprule",
-  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+  "\\begin{tabular}{llccccc}", "\\toprule",
+  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
 prev <- NULL
 for (i in seq_len(nrow(cc))) {
   if (!is.null(prev) && cc$variable[i] != prev) sl <- c(sl, "\\addlinespace")
   cat_esc <- gsub("\\$", "\\\\$", cc$category[i])
   sl <- c(sl, paste0(el[cc$variable[i]], " & ", cat_esc, " & ",
                      cc$n[i], " & ",
-                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3")]),
+                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3", "d4")]),
                            collapse = " & "), " \\\\"))
   prev <- cc$variable[i]
 }

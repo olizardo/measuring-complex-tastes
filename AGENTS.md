@@ -75,7 +75,19 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 6. Dimension 4 was explored (category and individual maps) and deliberately
    left out of the manuscript: consumption-heavy, categories near the
    origin, weak social anchoring — no clean reading. Figures use dims 2–3
-   only.
+   only. PARTIALLY SUPERSEDED 2026-10-09: under the unambiguous-status
+   coding dim 4 gained a strong race anchor (η² 0.255; old coding 0.171)
+   and a clean reading — racialized engagement contrast, reggae/Latin/rap/
+   Blues-R&B engagement (cons +0.77/+0.67/+0.52/+0.45) vs the rock–country
+   cluster (metal −0.74, indie −0.62, controck −0.61, crold −0.45).
+   λ4 = 0.788 (52% of λ1); aspect contributions cons 57%/pref 37%/eval 6%;
+   partial axes pref ax3 +0.83, cons ax3 +0.93; other demographics ≤0.03;
+   r(dim4, n likes) −0.005, r(n listens) −0.08 (not a volume artifact).
+   Now in the manuscript as a supplementary paragraph in sec:social with
+   fig-dim4 (category map dims 2×4, fig-categories design); tab-eta and
+   tab-sup-coord extended to d4; script 05 computes dims 1–4 throughout
+   (supplementary.rds cc/eta now include d4; script 07 reads only sup$sup,
+   unaffected). Compiles at 26 pp.
 7. **Terminology (author request, 2026-10-08): "group" is reserved for its
    sociological meaning.** MFA's variable groups are called "blocks of
    variables" (generic MFA mechanics) or "modalities" (the three blocks of
@@ -301,7 +313,18 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: `0f3b436` (2026-10-08) — three batched changes:
+- Last Overleaf sync: `5d039e2` (2026-10-09) — dim-4 supplementary section:
+  script 05 extended to dims 1–4 (tab-eta and tab-sup-coord gain a Dim 4
+  column; new fig-dim4 = category map on dims 2×4 in the fig-categories
+  design; supplementary.rds cc/eta now include d4), new paragraph in
+  sec:social reading dim 4 as a racialized engagement contrast (race
+  η² 0.255; Black +0.98 vs White −0.30; reggae/Latin/rap/Blues-R&B cons
+  +0.77/+0.67/+0.52/+0.45 vs metal/indie/controck/crold −0.74/−0.62/−0.61/
+  −0.45; eval flat), fig:dim4 environment, captions updated to "first four
+  MFA dimensions". Decision 6 marked partially superseded in AGENTS.md.
+  No author web edits since `0fdead3` — nothing to re-apply. Compiles at
+  26 pp., no undefined refs. Previous sync: `60d3145` (2026-10-09).
+- Previous sync: `0f3b436` (2026-10-08) — three batched changes:
   (1) technical footnote on the pairwise-distance decomposition
   (d²_s(h,k) = (F_sh − F_sk)²; the three distances sum to H·W_s) plus a
   main-text sentence stating the sum-to-H·W_s identity; (2) two-panel
