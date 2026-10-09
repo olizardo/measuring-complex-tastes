@@ -9,6 +9,11 @@
 # distances between partial points sum to H times the dispersion term
 # (H = 3), giving aspect-pair-level disagreement shares.
 #
+# The partial points also decompose exactly over genres (each partial
+# point is 3 * the sum of twenty per-genre contributions), which splits
+# W_s into a genre-local dispersion part (omega) and a cross-genre
+# coherence part (same disagreement direction repeated across genres).
+#
 # Discrete complement: each genre x respondent is one of Ma's 8
 # configurations (+++ simple positive; --- simple negative; and the six
 # antinomies: guilty pleasure ++-, pre-acquired -++, taste pose +-+,
@@ -85,6 +90,98 @@ for (g in genres) {
 type_counts <- as.data.frame(type_counts)
 type_counts$n_complex <- rowSums(type_counts[, c("guilty", "preacquired", "pose",
                                                  "distanced", "justified", "distant")])
+
+# --- 3b. genre-level decomposition: localized antinomies vs coherence ---------
+# Each partial point is exactly 3 * (sum over genres of per-genre
+# contributions): c_ighs = Delta_ghs * (z_igh - p_gh), with z the binary
+# indicator, p its margin, and Delta = (w_yes * V_yes - w_no * V_no) /
+# sqrt(p * (1 - p)) taken from the global PCA (column weights w and
+# loadings V satisfy F = X %*% diag(w) %*% V). Deviating each genre's
+# three aspect contributions from their three-aspect mean gives
+# d_ighs, and W_s(i) = sum_g omega_s(i;g) + 18 sum_{g<g'} sum_h
+# d_ighs d_ig'hs, with omega_s(i;g) = 9 sum_h d_ighs^2 the genre-local
+# complex-taste score and the second term the cross-genre coherence.
+
+gp <- res$global.pca
+w  <- gp$call$col.w
+Vl <- gp$svd$V[, seq_len(NDIM)]
+enm <- paste0(rep(c("pref", "cons", "eval"), each = 40),
+              "_", rep(genres, each = 2, times = 3), "_", rep(0:1, times = 60))
+stopifnot(identical(colnames(gp$call$X)[seq_along(enm)], enm))
+Zb <- as.matrix(mfa_dat)
+stopifnot(identical(colnames(Zb), paste0(rep(c("pref", "cons", "eval"), each = 20),
+                                         "_", rep(genres, times = 3))))
+pm <- colMeans(Zb)
+stopifnot(all(pm > 0 & pm < 1))
+
+Dcoef <- array(0, c(20, 3, NDIM))
+Ccont <- array(0, c(nrow(Zb), 20, 3, NDIM))
+for (h in 1:3) for (g in 1:20) {
+  j1 <- 2 * (20 * (h - 1) + g)
+  p  <- pm[20 * (h - 1) + g]
+  Dcoef[g, h, ] <- (w[j1] * Vl[j1, ] - w[j1 - 1] * Vl[j1 - 1, ]) /
+                   sqrt(p * (1 - p))
+  Ccont[, g, h, ] <- (Zb[, 20 * (h - 1) + g] - p) %*% t(Dcoef[g, h, ])
+}
+cat("\n== Genre-level decomposition: exactness checks ==\n")
+cat("max |sum of 60 genre-aspect contributions - global coord| :",
+    max(abs(apply(Ccont, c(1, 4), sum) - F)), "\n")
+blk <- apply(Ccont, c(1, 3, 4), sum)
+cat("max |3 * block sum - partial point| :",
+    max(abs(3 * blk[, 1, ] - P), abs(3 * blk[, 2, ] - C),
+        abs(3 * blk[, 3, ] - V)), "\n")
+
+migs <- apply(Ccont, c(1, 2, 4), mean)
+Cdev <- Ccont
+for (h in 1:3) Cdev[, , h, ] <- Ccont[, , h, ] - migs
+omega <- 9 * apply(Cdev^2, c(1, 2, 4), sum)   # n x 20 x NDIM genre-local scores
+Wloc  <- apply(omega, c(1, 3), sum)           # localized part of W
+coh   <- W - Wloc                             # cross-genre coherence part
+
+# brute-force check of the decomposition on a few respondents
+chk  <- c(1, nrow(Zb) %/% 2, nrow(Zb))
+bmax <- 0
+for (i in chk) for (s in 1:NDIM) {
+  G  <- Cdev[i, , , s]
+  d2 <- rowSums(G^2)
+  bmax <- max(bmax, abs(sum(9 * d2) + 9 * (sum(G %*% t(G)) - sum(d2)) - W[i, s]))
+}
+cat("max |brute-force (sum_g omega + coherence) - W| :", bmax, "\n")
+
+# configuration held in each genre x respondent cell (rows in mfa_dat order)
+cell_cfg <- matrix("simple_neg", nrow(Zb), 20, dimnames = list(NULL, genres))
+pp <- Zb[, 1:20] == 1; cc <- Zb[, 21:40] == 1; vv <- Zb[, 41:60] == 1
+cell_cfg[pp &  cc &  vv] <- "simple_pos"
+cell_cfg[pp &  cc & !vv] <- "guilty"
+cell_cfg[!pp & cc &  vv] <- "preacquired"
+cell_cfg[pp & !cc &  vv] <- "pose"
+cell_cfg[!pp & cc & !vv] <- "distanced"
+cell_cfg[pp & !cc & !vv] <- "justified"
+cell_cfg[!pp & !cc & vv] <- "distant"
+stopifnot(all(sapply(setdiff(types, "n_complex"),
+                     function(t) sum(cell_cfg == t) == sum(type_counts[[t]]))))
+
+ant$Wloc1 <- Wloc[, 1]; ant$Wloc2 <- Wloc[, 2]; ant$Wloc3 <- Wloc[, 3]
+ant$coh1  <- coh[, 1];  ant$coh2  <- coh[, 2];  ant$coh3  <- coh[, 3]
+
+cat("\n== Localized antinomy vs cross-genre coherence (means) ==\n")
+sm <- round(rbind(W = colMeans(W), localized = colMeans(Wloc),
+                  coherence = colMeans(coh)), 2)
+colnames(sm) <- paste0("dim", 1:NDIM)
+print(sm)
+ncc <- type_counts$n_complex
+cat("corr(n_complex, W):    ", round(c(cor(ncc, W), total = cor(ncc, rowSums(W))), 3), "\n")
+cat("corr(n_complex, Wloc): ", round(c(cor(ncc, Wloc), total = cor(ncc, rowSums(Wloc))), 3), "\n")
+cat("bottom-third W3 but top-third localized:",
+    sum(W[, 3] < quantile(W[, 3], 1 / 3) & Wloc[, 3] > quantile(Wloc[, 3], 2 / 3)), "\n")
+
+exi <- which(rownames(ant) == "362")
+cat("\n== Worked example (respondent 362): local vs coherence ==\n")
+cat("W:", round(W[exi, ], 1), "| localized:", round(Wloc[exi, ], 1),
+    "| coherence:", round(coh[exi, ], 1), "\n")
+o <- order(-omega[exi, , 3])
+print(data.frame(genre = genres[o], config = cell_cfg[exi, o],
+                 omega3 = round(omega[exi, o, 3], 2))[1:5, ])
 
 # --- 4. relate antinomy scores and type counts to the MFA ----------------------
 cat("\n== Distribution of configurations (per genre x respondent) ==\n")
@@ -220,7 +317,8 @@ pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   theme(panel.grid = element_blank())
 ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 3.8)
 
-saveRDS(list(ant = ant, type_counts = type_counts),
+saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
+             cell_cfg = cell_cfg, Dcoef = Dcoef),
         "output/antinomy_scores.rds")
 cat("\nsaved output/antinomy_scores.rds\n")
 cat("wrote manuscript/tables/tab-antinomy.tex and figures\n")

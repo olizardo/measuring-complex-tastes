@@ -251,6 +251,28 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   at the status-granting pole). Config signatures: distant praise +0.79
   on dim 3; guilty −0.25 dim 2 / −0.24 dim 3; justified −0.33 dim 3;
   pose 0.22/0.34/0.37.
+- **Genre-level decomposition (added 2026-10-09; script 04 section 3b)**:
+  each partial point is exactly H·Σ_g c_ighs with per-genre contribution
+  c = Δ_ghs·(z−p), Δ = (w_yes·V_yes − w_no·V_no)/√(p(1−p)) from the global
+  PCA (F = X·diag(col.w)·svd$V; NOTE svd.triplet stores V/√w, so the weights
+  enter linearly, not as √w). With d_ighs = c minus the genre's 3-aspect
+  mean (center per GENRE — centering on the respondent's overall mean
+  inflates the local part; first-pass numbers with that bug were 53/85/34%
+  local shares), W_s(i) = Σ_g ω_s(i;g) + 2H²Σ_{g<g'}Σ_h d d', ω = H²Σ_h d².
+  Mean local shares of W: 29/48/23% (dims 1–3); coherence 71/52/77%.
+  Worked example 362: W3 133.1 = 8.5 local (max cell 1.0, a pose in
+  latspsal) + 124.6 coherence (94%); W1 0.8 = 2.4 local + (−1.6) coherence
+  (cancellation). corr(n_complex, Wloc) 0.69/0.63/0.17 vs corr(n_complex, W)
+  0.44/0.18/0.08 — the localized part is the geometric counterpart of the
+  combinatorial measure. 196 respondents in bottom-third W3 but top-third
+  localized (masked complexity). Script 04 saves omega (2259×20×3),
+  cell_cfg (per-cell config labels), Dcoef in antinomy_scores.rds; ant gains
+  Wloc1–3, coh1–3 columns (script 07 unaffected). Manuscript: new paragraph
+  + Equation eq:genre in the Measuring Complex Taste at the Individual
+  Level subsection (defines genre-local dispersion and cross-genre
+  coherence); worked-example paragraph gains the 362 split (8.5 vs 94%
+  coherence) after the combinatorial footnote. Compiles at 26 pp., no
+  undefined refs. Not yet synced to Overleaf.
 - Regression (sec:who): R² 0.052/0.020/0.021. W1: parents' BA +1.32***,
   upper class +3.67***, >1 race +2.51**, age decline (−1.09 → −2.09).
   W2: only 70+ +0.63*. W3: upper class +7.70***, age +2.04..+2.73*,
