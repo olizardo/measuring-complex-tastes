@@ -64,14 +64,33 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     rowname 1333 → 362 (highest W3 among guilty+pose+distant holders;
     likes 15, listens 9, evaluates 18; W1 0.8/3%, W2 13.5/60%,
     W3 133.1/76%).
+13. **Terminology (author request, 2026-10-09): "complex-taste score" label
+    purged.** $W_s(i)$ is now called the **aspect-disagreement (score)** on
+    dimension $s$ throughout main.tex (prose, footnotes, figure and table
+    captions; 11 hyphenated uses plus pre-existing "aspect disagreement"
+    phrases). The eq:decomp paragraph replaces the old stipulation ("We
+    call $W_s(i)$ the individual's complex-taste score") with an explicit
+    interpretive move: $W_s(i)$ read strictly is the individual's
+    aspect-disagreement on dimension $s$ — how much the person's position
+    depends on which aspect is consulted — and we interpret that
+    disagreement as complex taste because a profile whose aspects place
+    the person in different locations cannot be summarized by any single
+    taste position. "Complex taste space" (the global MFA structure) and
+    "complex tastes" (the concept) are unchanged; script comments (04/08)
+    still say "complex-taste score" but never render. Rationale: the score
+    is literally aspect dispersion, not configural complexity (ρ with
+    config counts 0.31/0.19/−0.06; worked example 362 is 94% coherence;
+    all-yes respondents get W without configurations).
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
-   not "antinomies"; $W_s(i)$ is the "complex-taste score." Table 3
+   not "antinomies." Table 3
    (tab-groups) is kept and the group-contributions figure was dropped as
    redundant. `manuscript/main.tex` is stored reflowed, one
    paragraph-per-line. Modality phrasing is "preference, engagement, and
    evaluation" — not "feeling, doing, praising"; Ma's configuration names
    (guilty pleasure, distant praise, taste pose, …) are kept as-is.
+   The $W_s(i)$ "complex-taste score" label was SUPERSEDED 2026-10-09 by
+   decision 13.
 6. Dimension 4 was explored (category and individual maps) and deliberately
    left out of the manuscript: consumption-heavy, categories near the
    origin, weak social anchoring — no clean reading. Figures use dims 2–3
@@ -372,7 +391,18 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `448a39e` (2026-10-09, later) — genre-level
+- Last Overleaf sync: `e0b7952` (2026-10-09, later) — "complex-taste
+  score" label purged per decision 13: eq:decomp paragraph replaces the
+  "We call W_s(i) the complex-taste score" stipulation with the explicit
+  interpretive sentence (aspect-disagreement read strictly; disagreement
+  interpreted as complex taste because no single taste position summarizes
+  the profile); all 11 other label uses (robustness footnote, pairwise
+  footnote, eq:genre paragraph, 4.4 prose, fig-antinomy-map caption,
+  tab-antinomy + tab-regression captions, sec:who prose) now say
+  "aspect-disagreement score" or $W_s(i)$. No web edits since `448a39e`
+  (pull was clean); two-file copy (main.tex + AGENTS.md). Compiles at
+  26 pp., no undefined refs (pre-existing tab-regression float warning).
+  Previous sync: `448a39e` (2026-10-09, later) — genre-level
   decomposition of the complex-taste score: new Equation eq:genre +
   defining paragraph (per-genre contributions, genre-local dispersion
   ω, cross-genre coherence) in the Measuring Complex Taste at the
