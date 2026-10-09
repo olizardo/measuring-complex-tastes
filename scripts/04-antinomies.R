@@ -180,8 +180,8 @@ ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 # the general-affirmation axis (dim 1), right with the highbrow-popular
 # axis (dim 2, the plane of the paper's other maps). Respondent chosen
 # as the highest-W3 respondent holding guilty-pleasure, taste-pose,
-# and distant-praise configurations (original data row 1333)
-ex <- which(rownames(ant) == "1333")
+# and distant-praise configurations (author-approved example; original data row 362)
+ex <- which(rownames(ant) == "362")
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
 panes <- c("Dimension 1 (general affirmation)",
            "Dimension 2 (highbrow\u2013popular)")

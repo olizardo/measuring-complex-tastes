@@ -44,6 +44,26 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    (middle OR upper class). Originally the inclusive OR version; changed at
    the author's request. Old-coding results are in git history; a robustness
    footnote comparing both codings is a planned addition.
+   **SUPERSEDED 2026-10-09 by decision 12.**
+12. **Evaluation v3 (author request, 2026-10-09): "unambiguous high
+    status" coding.** The fan-perception items are check-all-that-apply, so
+    the conjunctive coding passed check-everything respondents (65 had
+    eval = 20/20), which clumped the evaluation categories and leaked
+    21.6% of eval's contribution into Dim 1. New coding: eval = 1 iff
+    (grad AND NOT nocol) OR ((mc OR uc) AND NOT (lc OR wc)) — an
+    unambiguous high-status signal in at least one domain. Yes-rate
+    30.4% → 20.7%; agreement with conjunctive 72.5%; all-20 eval
+    respondents 65 → 5. Full pipeline (scripts 01–08) rerun; manuscript
+    numbers revised throughout. Key geometry changes: RV(eval,pref/cons)
+    0.049/0.060 → 0.013/0.014; eval contribution to dim 1 21.6% → 2.5%,
+    to dim 3 40.6% → 83.9%; dim 3 is now essentially the evaluation
+    aspect's own axis (eval leading partial axis +0.91); race anchoring
+    of dim 3 DISAPPEARS (η² 0.082 → 0.004) — dim 3 is socially flat
+    (max η² 0.011); race now weakly anchors dim 2 (η² 0.048, Hispanic
+    −0.42/Black −0.26/White +0.16). Worked-example respondent changed:
+    rowname 1333 → 362 (highest W3 among guilty+pose+distant holders;
+    likes 15, listens 9, evaluates 18; W1 0.8/3%, W2 13.5/60%,
+    W3 133.1/76%).
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
    not "antinomies"; $W_s(i)$ is the "complex-taste score." Table 3
@@ -174,47 +194,76 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   are NOT the weights — the original tab-groups "Weight" column and §4.3
   text mislabeled them; fixed 2026-10-08.
 
-## Current headline results (conjunctive coding)
+## Current headline results (unambiguous-status eval coding, 2026-10-09)
 
-- Yes-rates: preference 41.7%, consumption 22.9%, evaluation 30.3%
-  (conjunctive standard is the least-affirmed modality).
-- Eigenvalues: λ1 = 1.667 (12.3%), λ2 = 1.193 (8.8%); first 5 dims = 37.9%.
-- **RV coefficients** (central result): P–C 0.32; P–E 0.05; C–E 0.06 —
-  evaluation is geometrically independent of preference and consumption.
+- Yes-rates: preference 41.7%, consumption 22.9%, evaluation 20.7%
+  (unambiguous-status standard is the least-affirmed aspect).
+- Eigenvalues: λ1 = 1.509 (9.6%), λ2 = 1.178 (7.5%), λ3 = 0.982 (6.2%);
+  first 5 dims = 32.5%.
+- **RV coefficients** (central result): P–C 0.321; P–E 0.013; C–E 0.014 —
+  evaluation is essentially perfectly independent of preference and
+  consumption.
 - Dimension readings (signs are SVD-arbitrary — re-anchor pole claims to the
   category coordinates after ANY re-run):
-  - Dim 1 = general affirmation (all "yes" categories positive).
-  - Dim 2 = highbrow (+: opera/classical/big band/Broadway) vs popular
-    (−: rap, dance/club, indie, metal, reggae).
-  - Dim 3 = status valuation: all 20 eval "yes" categories on one side
-    (mean −0.63); positive pole = consecrated-genre consumption
-    (opera +0.90, reggae +0.65). Eval contributes 40.6% to dim 3.
-- **Partial axes** (correlations of each group's separate-analysis axes with
-  the global dims; tab-partial-axes, added 2026-10-08): dim 1 = consensus
-  (pref/cons/eval ax1: 0.79/0.81/0.60); dim 2 carried by pref ax2 (−0.89)
-  and cons ax2 (+0.89), no eval axis close; dim 3 = eval ax1 (−0.60, also
-  +0.60 on dim 1) plus pref ax3 (+0.57) and cons ax3 (+0.60) — evaluation-
-  led but not evaluation-alone.
-- Social anchoring (supplementary η²): dim 2 ← age 0.35 (six groups:
-  18–29 −0.76 → 70+ +1.23), education (No diploma −0.25 → Prof/PhD +0.59), subjective
-  class; dim 3 ← race 0.083 (Black +0.55 vs White −0.19), self-described
-  upper class +0.68, but education ~absent (0.008); dim 1 socially flat.
-- Antinomies: mean 9.6/20 genres per respondent in complex configurations;
-  only 19 respondents have zero. Justified abstention 2.8, distant praise
-  2.6, guilty pleasure 2.2, pose 1.5 per person. Antinomy dispersion ≈
-  51/51/62% of projected partial inertia (dims 1–3). n_complex ↔ W1
-  ρ = 0.58 but ~0 with W2/W3 — geometric vs combinatorial antinomy align on
-  engagement, diverge on hierarchical placement.
-- **Duality (transposed MFA, genres as targets)**: genre-level RVs are
-  HIGH — P–C 0.92, P–V 0.77, C–V 0.73 — the mirror image of the individual
-  level. Modality disagreement lives within individuals, not in divergent
-  audience structures. Transposed dims: λ1 = 2.31 (13.2%), λ2 = 2.13
-  (12.1%). Dim 2 = configuration axis: negative pole = guilty-pleasure
-  targets (classic rock −3.8, top 40 −2.5, country −2.0; guilty ρ = −0.90),
-  positive pole = distant-praise targets (opera +2.3, folk +1.4, bluegrass
-  +1.3; distant ρ = +0.59). Dim 1 = devoted-minority vs generalized
-  non-engagement. Partial points: consecrated genres' evaluation partials
-  displaced positive on dim 3 (classical +2.6 vs ~+1.0), country reverse.
+  - Dim 1 = general affirmation, now carried by liking/listening only
+    (pref_yes +0.57, cons_yes +0.83; eval_yes mean only +0.29, range
+    +0.03 Broadway to +0.53 rap).
+  - Dim 2 = highbrow (+: big band +0.98, opera +0.86, Broadway +0.84,
+    classical/bluegrass +0.73) vs popular (−: rap cons −0.91/pref −0.84,
+    indie −0.84, metal −0.78, dance/club −0.75, reggae −0.63).
+  - Dim 3 = status valuation, evaluation-owned: all 20 eval "yes"
+    categories positive (mean +1.12; range +0.20 opera to +1.87 rap);
+    ordered by rarity — granting status to popular-genre fans is the
+    distinctive position, granting it to consecrated-genre fans is nearly
+    universal. Pref/cons "yes" categories collapse near the origin on
+    dim 3. Eval contributes 83.9% to dim 3 (8.0/8.1% for pref/cons);
+    2.5% to dim 1, 11.0% to dim 2. Separate λ1s: 0.200/0.155/0.234
+    (weights 5.004/6.452/4.277).
+- **Partial axes**: dim 1 = pref/cons ax1 (0.84/0.86), eval ax1 only 0.19;
+  dim 2 = pref ax2 (−0.87) + cons ax2 (+0.89) + eval ax2 (+0.35);
+  dim 3 = eval ax1 (+0.91), pref/cons ax3 negligible (−0.14/−0.11) —
+  dim 3 is evaluation's own axis.
+- Social anchoring (supplementary η²): dim 2 ← age 0.331 (18–29 −0.74 →
+  70+ +1.23), education 0.053 (No diploma −0.26 → Prof/PhD +0.67),
+  subjective class 0.055 (upper +0.39), race 0.048 (Hispanic −0.42,
+  Black −0.26, White +0.16), income 0.016; dim 3 SOCIALLY FLAT (max η²
+  0.011, all barycenters within ±0.2) — the race gradient on dim 3 is
+  GONE under the new coding; dim 1 weak (max η² 0.026, education
+  concentrated at bottom: No diploma −0.39, HS −0.24, then +0.05..+0.13).
+- Antinomies: mean 10.2/20 genres per respondent in complex configurations;
+  only 12 respondents have zero. Justified 3.3, guilty 3.2, distant 2.2,
+  pose 1.0, distanced 0.4, pre-acquired 0.1, simple_neg 8.9. Antinomy
+  dispersion ≈ 56/52/63% of projected partial inertia (dims 1–3).
+  n_complex ↔ W1 ρ = 0.31 (W_tot 0.27), W2 0.19, W3 −0.06. Pair-level
+  dim-3 decomposition: dPV3 ρ = +0.16, dCV3 +0.14 (weakly concentrated
+  at the status-granting pole). Config signatures: distant praise +0.79
+  on dim 3; guilty −0.25 dim 2 / −0.24 dim 3; justified −0.33 dim 3;
+  pose 0.22/0.34/0.37.
+- Regression (sec:who): R² 0.052/0.020/0.021. W1: parents' BA +1.32***,
+  upper class +3.67***, >1 race +2.51**, age decline (−1.09 → −2.09).
+  W2: only 70+ +0.63*. W3: upper class +7.70***, age +2.04..+2.73*,
+  Hispanic +1.89*, Associate −3.79*. Log robustness: parentba F 5.2,
+  sclass 2.3, gender F 11.8 (women lower log-W1). Pairwise dim-3:
+  dPV3/dCV3 ← upper class (F 3.9/4.9); dPC3 ← parentba (15.2) + sclass
+  (9.3).
+- **Duality (transposed MFA, genres as targets)**: genre-level RVs
+  P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
+  Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
+  respondent-variables dropped: 83/84/326 (eval constant includes the
+  5 all-1 respondents). Dim 2 = configuration axis: positive pole =
+  actively-held genres (simple_pos ρ +0.77, pose +0.55, guilty +
+  justified +0.44): crold +3.7, moodez +2.0, country +1.8, toppop +
+  classical +1.3; negative pole = simple-non-taste genres (ρ −0.73):
+  rap −1.7, reggae −1.5, latspsal/metal −1.3, plus opera −1.2 (58.9%
+  distant praise). Dim 1: negative = status-without-engagement genres
+  (classical −3.6, opera −3.0, bwayst −2.1; distant ρ −0.82, pose
+  −0.58), positive = guilty/distanced targets (crold, toppop, rap,
+  controck; ρ +0.75/+0.80). Partial points dim 3: classical/opera eval
+  partials +2.3 vs pref/cons ~+1.0/−0.0; country eval −0.8 vs
+  pref/cons −3.1/−4.1.
+- Robustness (MCA vs PCA, script 08): eigen 1.504/1.188/0.997 vs
+  1.509/1.178/0.982; RV 0.32/0.013/0.015; coord ρ 0.98/0.97/0.84;
+  W ρ 0.96/0.89/0.77; shares 56/53/61 vs 56/52/63.
 
 ## Manuscript & Overleaf sync
 
@@ -517,3 +566,23 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   signatures…"). Divergence-paragraph citation now "(Table~\ref{tab:antinomy})"
   only. Appendix keeps definitions + fig-configurations. Compiles at
   25 pp., no undefined refs.
+
+- Coding change + full revision sync (2026-10-09, later): adopted the
+  "unambiguous high status" evaluation coding (decision 12) — eval = 1 iff
+  (grad & !nocol) | ((mc|uc) & !(lc|wc)) — because the check-all-that-apply
+  perception items let check-everything respondents pass the conjunctive
+  standard (65 all-20 eval respondents), clumping the eval categories and
+  leaking 21.6% of eval into Dim 1. Reran scripts 01–08; revised every
+  number in main.tex (measures, robustness footnote, worked example →
+  respondent 362, §4.1–4.6, appendix prevalence). Headline shifts: RV
+  P–E/C–E 0.05/0.06 → 0.013/0.014; eval contrib dim1 21.6% → 2.5%, dim3
+  40.6% → 83.9% (dim 3 is now essentially the evaluation aspect's own
+  axis); dim-3 race anchoring GONE (η² 0.082 → 0.004, dim 3 socially
+  flat); race now weakly anchors dim 2 (Hispanic −0.42/Black −0.26/
+  White +0.16); λ1 1.51 (9.6%). Web edit `91291b8` (author restructured
+  the partial-axes passage: new \subsection{Partial Axes}, two
+  paragraphs, footnote dropped, "evaluation-dominant but not exclusively
+  evaluative" → re-applied with NEW numbers; also "The two measurement
+  approaches") landed mid-sync and was briefly clobbered; merged in the
+  same commit. Overleaf `60d3145`; compiles at 25 pp., no undefined refs.
+  tab-groups Weight column updated (eval weight 4.277, λ1 0.234).

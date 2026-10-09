@@ -30,13 +30,20 @@ lis_raw <- paste0(genres, "lis")
 cons <- setNames(as.data.frame(lapply(df[lis_raw], function(x) as.integer(x))),
                  paste0("cons_", genres))
 
-# --- evaluation: typical fan is high status ---------------------------------
-# high status = college graduate AND (middle class OR upper class)
-status_raw <- paste0(rep(genres, each = 3), rep(c("grad", "mc", "uc"), times = 20))
+# --- evaluation: typical fan is unambiguously high status --------------------
+# The fan-perception items are check-all-that-apply, so categories are not
+# mutually exclusive: respondents can tick both "college graduate" and "did
+# not attend college", or both "working" and "upper" class. The conjunctive
+# coding (grad & (mc|uc)) therefore passes check-everything respondents.
+# Coding (author decision 2026-10-09): the genre is evaluated highly if the
+# respondent gives an UNAMBIGUOUS high-status signal in either domain:
+#   (grad AND NOT nocol) OR ((mc OR uc) AND NOT (lc OR wc))
 eval_high <- lapply(genres, function(g) {
   grad <- df[[paste0(g, "grad")]] == 1
-  clas <- rowSums(df[, paste0(g, c("mc", "uc"))], na.rm = TRUE) > 0
-  as.integer(grad & clas)
+  nocol <- df[[paste0(g, "nocol")]] == 1
+  hicls <- rowSums(df[, paste0(g, c("mc", "uc"))], na.rm = TRUE) > 0
+  locls <- rowSums(df[, paste0(g, c("lc", "wc"))], na.rm = TRUE) > 0
+  as.integer((grad & !nocol) | (hicls & !locls))
 })
 eval_high <- setNames(as.data.frame(eval_high), paste0("eval_", genres))
 # propagate item-level missingness (fan vars share the same 2 missing rows)
