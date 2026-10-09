@@ -333,7 +333,27 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `897803f` (2026-10-09) — white-figure restyle +
+- Last Overleaf sync: `d348520` (2026-10-09) — full prose revision
+  (author request: "less stilted and robotic... clearer and more
+  conversational") applied throughout main.tex: cut throat-clearing
+  openers ("Accordingly, for the global MFA analysis, we consider..."),
+  nominalized/passive constructions, and over-qualified sentences; no
+  numbers, citation keys, labels, \ref targets, or \input paths changed
+  (verified by diffing the sorted multiset of numeric tokens and of
+  label/ref/cite/input commands against the pre-revision text — both
+  identical). Also fixed a stale detail: the worked-example caption still
+  said "Dashed segments connect each partial point to the compromise"
+  from before the `897803f` restyle switched those connectors to solid
+  aspect-colored lines; caption now matches. MERGE NOTE: a web edit
+  (`6170dc9`, landed between the prose-revision draft and this sync)
+  restructured the aspect-independence/partial-axes/composition region
+  (new subsection "Independence or Redundancy Among Complex Taste
+  Aspects" merging the RV + near-orthogonality paragraphs; "Partial Axes"
+  moved before "Composition of the Dimensions of Complex Taste Space";
+  RV table floated earlier) — adopted verbatim (not reflowed into the
+  rest of the draft's voice, since it was the author's own just-made
+  edit) and the surrounding paragraphs polished to match. Compiles at
+  26 pp., no undefined refs. Previous sync: `897803f` (2026-10-09) — white-figure restyle +
   worked-example connectors (see note above). One author web edit since
   `348896c` (`ab16e48`, \footnotesize on the worked-example caption),
   re-applied locally before the copy. Previous sync: `348896c` (2026-10-09) — merged 20 author web-edit
