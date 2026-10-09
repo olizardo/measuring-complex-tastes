@@ -58,7 +58,8 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
        title = "Individual factor map (dimensions 2-3)",
        subtitle = "Points: respondents, colored by age group") +
-  theme(panel.grid.minor = element_blank())
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Figure 3: category map ---------------------------------------------------
@@ -88,7 +89,8 @@ p3 <- ggplot(cc, aes(dim2, dim3)) +
        color = "Aspect",
        title = "Category map: 'yes' categories by taste aspect",
        subtitle = "Grey points: 'no' categories") +
-  theme(panel.grid.minor = element_blank())
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
 
 # --- Figure 3b: category map on dimensions 1-2 (supports the 4.1 opening) ------
@@ -117,7 +119,8 @@ p3b <- ggplot(cc12, aes(dim1, dim2)) +
        color = "Aspect",
        title = "Category map: 'yes' categories on Dimensions 1 and 2",
        subtitle = "Grey points: 'no' categories") +
-  theme(panel.grid.minor = element_blank())
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-categories12.pdf", p3b, width = 6, height = 5)
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------

@@ -196,13 +196,15 @@ segex <- do.call(rbind, lapply(seq_along(panes), function(s) {
   k <- 4 * (s - 1)
   data.frame(x = exd$d[k + 1:3], y = exd$d3[k + 1:3],
              xend = exd$d[k + 4], yend = exd$d3[k + 4],
+             modality = exd$modality[k + 1:3],
              panel = exd$panel[k + 1])
 }))
 pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend),
-               linetype = "dashed", color = "grey55", linewidth = 0.4,
+  # solid connectors colored by aspect, as in fig-genre-map
+  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend, color = modality),
+               linewidth = 0.5, alpha = 0.7,
                inherit.aes = FALSE, show.legend = FALSE) +
   geom_point(size = 3, show.legend = FALSE) +
   geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
@@ -215,7 +217,7 @@ pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
                                 Evaluation = 15, Global = 18)) +
   labs(x = NULL, y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank())
+  theme(panel.grid = element_blank())
 ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 3.8)
 
 saveRDS(list(ant = ant, type_counts = type_counts),

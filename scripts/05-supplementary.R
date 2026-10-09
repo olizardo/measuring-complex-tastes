@@ -165,7 +165,8 @@ p9 <- ggplot(cd4, aes(dim2, dim4)) +
        color = "Aspect",
        title = "Category map: 'yes' categories on Dimensions 2 and 4",
        subtitle = "Grey points: 'no' categories") +
-  theme(panel.grid.minor = element_blank())
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-dim4.pdf", p9, width = 6, height = 5)
 
 # --- LaTeX tables ---------------------------------------------------------------

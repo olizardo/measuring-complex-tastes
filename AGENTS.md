@@ -321,7 +321,22 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   fig-categories, seed 17), supporting the 4.1 opening paragraph
   (`fig:categories12` referenced from its first sentence; figure env placed
   after that paragraph). Compiles at 26 pp.
-- Last Overleaf sync: `348896c` (2026-10-09) — merged 20 author web-edit
+- 2026-10-09 (later): figure restyling to white backgrounds (author request,
+  prompted by the grey panel on the new fig-categories12): fig-categories,
+  fig-categories12, fig-dim4, fig-individuals now use theme_minimal
+  (panel.grid.minor blank, legend right); fig-worked-example connectors
+  changed from dashed grey to solid aspect-colored segments (linewidth 0.5,
+  alpha 0.7, fig-genre-map style) with panel.grid removed. Script 03/04/05
+  blocks updated. GOTCHA: FactoMineR ind$coord.partiel is stacked PER
+  INDIVIDUAL (rownames "362.pref", "362.cons", "362.eval"; row =
+  3*(i-1)+h), not by group — a session-side reconstruction initially
+  grabbed group-stacked rows and produced wrong coordinates; script 04's
+  own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
+  on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last Overleaf sync: `897803f` (2026-10-09) — white-figure restyle +
+  worked-example connectors (see note above). One author web edit since
+  `348896c` (`ab16e48`, \footnotesize on the worked-example caption),
+  re-applied locally before the copy. Previous sync: `348896c` (2026-10-09) — merged 20 author web-edit
   commits (`5d039e2..89ce214`): Analytic Strategy restructured into five
   \subsections (Constructing the Global Complex Taste Space; Independence
   or Redundancy of Aspects of Complex Tastes; Interpretation of Complex
