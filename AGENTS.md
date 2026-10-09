@@ -507,3 +507,13 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   Tastes" → "Measuring Complex Tastes"; "We measure complex tastes
   geometrically, as the dispersion…") and was briefly clobbered by the
   copy; re-applied in `c10aed7`.
+
+- Sync `482564c`/`49287ea` (2026-10-09): moved tab-antinomy (Spearman
+  correlations of Ma's eight configurations with MFA dims and W-scores)
+  from Appendix A into §4.4, immediately after the geometric-vs-
+  combinatorial divergence paragraph, together with its interpreting
+  paragraph (first sentence reworded to follow the divergence discussion:
+  "The configuration counts themselves have distinct geometric
+  signatures…"). Divergence-paragraph citation now "(Table~\ref{tab:antinomy})"
+  only. Appendix keeps definitions + fig-configurations. Compiles at
+  25 pp., no undefined refs.
