@@ -91,6 +91,35 @@ p3 <- ggplot(cc, aes(dim2, dim3)) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
 
+# --- Figure 3b: category map on dimensions 1-2 (supports the 4.1 opening) ------
+cc12 <- as.data.frame(res$quali.var$coord[, c(1, 2)])
+names(cc12) <- c("dim1", "dim2")
+cc12$name <- rownames(cc12)
+cc12$aspect <- ifelse(grepl("^pref_", cc12$name), "Preference",
+                  ifelse(grepl("^cons_", cc12$name), "Consumption", "Evaluation"))
+cc12$yes <- grepl("_1$", cc12$name)
+cc12$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc12$name)),
+                           gshort)]
+p3b <- ggplot(cc12, aes(dim1, dim2)) +
+  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+  geom_point(data = subset(cc12, !yes), color = "grey65", size = 1) +
+  geom_point(data = subset(cc12, yes), aes(color = aspect), size = 1.8,
+             alpha = 0.9) +
+  ggrepel::geom_text_repel(data = subset(cc12, yes),
+                           aes(label = genre, color = aspect), size = 2.6,
+                           segment.color = NA, max.overlaps = 25,
+                           show.legend = FALSE, seed = 17) +
+  scale_color_manual(values = c(Preference = "#08519C",
+                                Consumption = "#A63603",
+                                Evaluation = "#006D2C")) +
+  labs(x = "Dimension 1", y = "Dimension 2",
+       color = "Aspect",
+       title = "Category map: 'yes' categories on Dimensions 1 and 2",
+       subtitle = "Grey points: 'no' categories") +
+  theme(panel.grid.minor = element_blank())
+ggsave("manuscript/figures/fig-categories12.pdf", p3b, width = 6, height = 5)
+
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
 rv <- res$group$RV
 rv <- rv[c("Preference", "Consumption", "Evaluation"),
