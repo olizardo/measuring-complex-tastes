@@ -461,3 +461,15 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - Lizardo & Skiles 2012. SSI Cultural Tastes Survey [dataset].
 - Le Roux & Rouanet GDA volumes (added to `references.bib` by the author on
   Overleaf: keys `rouanet2000geometric-a44`, `roux2004geometric-65c`).
+
+- Reconciliation sync (2026-10-08, later): found the local tree BEHIND the
+  Overleaf clone (decisions 10–11 work had been committed from the clone
+  side in `abbe68e`/`0f3b436` plus web edit `3572d4c`, never copied back to
+  the local tree). Copied manuscript/ sources, figures, tables, scripts,
+  and AGENTS.md from the clone into the workspace; the only local-only
+  script differences were comment wording. Reverse fix: the clone's
+  tracked `data/mfa_input.rds` and `output/mfa_results.rds` were stale
+  OLD-CODING (inclusive-OR) binaries uploaded from the web on Oct 7
+  (`bd6fbf1`) — replaced with the current conjunctive-coding versions from
+  the workspace. Lesson: syncs must go both ways — after a clone-side
+  commit, copy back into the workspace so the trees never diverge.
