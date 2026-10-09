@@ -473,3 +473,13 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   (`bd6fbf1`) — replaced with the current conjunctive-coding versions from
   the workspace. Lesson: syncs must go both ways — after a clone-side
   commit, copy back into the workspace so the trees never diverge.
+
+- GitHub update (2026-10-08, after the reconciliation): origin/main was 6
+  commits ahead of local (7e30198..58b87fc — the same decisions-10/11 work,
+  committed to the outer repo in an earlier session but never fetched into
+  this checkout; local had diverged at 47f927a). Since the local tree was
+  already the reconciled state, rebased by soft-reset onto origin/main and
+  recommitted the true increment (AGENTS.md note, refreshed gitlink →
+  58e1401, regenerated mfa_results_transposed.rds) as ae0572f; pushed.
+  The pre-reset local history is preserved on branch
+  `backup-pre-gh-reconcile` (47f927a) — safe to delete once confirmed.
