@@ -372,7 +372,33 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `d348520` (2026-10-09) — full prose revision
+- Last Overleaf sync: `448a39e` (2026-10-09, later) — genre-level
+  decomposition of the complex-taste score: new Equation eq:genre +
+  defining paragraph (per-genre contributions, genre-local dispersion
+  ω, cross-genre coherence) in the Measuring Complex Taste at the
+  Individual Level strategy subsection; worked-example paragraph gains
+  the 362 split (W3 133.1 = 8.5 local, max cell a latspsal pose at 1.0,
+  94% coherence); new results 4.4 paragraph after the divergence
+  discussion (29/48/23% local shares; Spearman corr(n_complex, Wloc)
+  0.71/0.66/0.18 vs 0.31/0.19/−0.06 for W; 196 bottom-third-W3/
+  top-third-localized respondents, 9%); script 04 section 3b computes
+  the decomposition (exactness checks ~1e-15; antinomy_scores.rds gains
+  omega/cell_cfg/Dcoef, ant gains Wloc1–3/coh1–3). Merged author web
+  edit `2bc1c30` BEFORE copying (adopted as local base; my two
+  insertions re-applied on top): strategy opening rewording, RV
+  subsection sentence split + jæger2024from-a4b citation (references.bib
+  entry adopted), worked-example "In the second dimension (right
+  panel...)" phrasing, 4.1 figure-reference rewordings, Partial Axes +
+  Composition subsection restructuring (tab-partial-axes floated
+  earlier, balancing weights moved to a footnote, new interpretation
+  sentences), 4.4 opening rewording. NOTE: the author's edit DROPPED
+  the \citep{bourdieu1984distinction} from the dim-2 paragraph —
+  author's choice, flagged to them. Also: earlier conversation
+  first-pass local shares (53/85/34%) used a WRONG centering (respondent
+  overall mean, not per-genre aspect mean) — corrected numbers are
+  29/48/23%; see the genre-decomposition bullet under Current headline
+  results. Compiles at 26 pp., no undefined refs. Previous sync:
+  `d348520` (2026-10-09) — full prose revision
   (author request: "less stilted and robotic... clearer and more
   conversational") applied throughout main.tex: cut throat-clearing
   openers ("Accordingly, for the global MFA analysis, we consider..."),
