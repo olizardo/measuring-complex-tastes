@@ -271,8 +271,25 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   + Equation eq:genre in the Measuring Complex Taste at the Individual
   Level subsection (defines genre-local dispersion and cross-genre
   coherence); worked-example paragraph gains the 362 split (8.5 vs 94%
-  coherence) after the combinatorial footnote. Compiles at 26 pp., no
-  undefined refs. Not yet synced to Overleaf.
+  coherence) after the combinatorial footnote. Spearman version of the
+  localized-combinatorial link: corr(n_complex, Wloc) 0.71/0.66/0.18
+  (dims 1–3) vs 0.31/0.19/−0.06 for W. Results 4.4 gains a paragraph
+  after the divergence discussion reporting the 29/48/23% local shares
+  and the 196 bottom-third-W3/top-third-localized respondents (9%).
+  Compiles at 26 pp., no undefined refs.
+- Author web edit `2bc1c30` (2026-10-09, adopted before the sync):
+  Analytic Strategy opening ("like this one, namely"); RV subsection
+  sentence split + new citation jæger2024from-a4b (Jæger & Larsen 2024,
+  added to references.bib) + "more likely" rewording; worked example
+  "In the second dimension (right panel...)" phrasing (my genre-split
+  sentences re-inserted before it); 4.1 figure-reference rewordings
+  ("As Figure~\ref{fig:categories12} shows" ×2, fig:categories now cited
+  only in the 4.1 opening; the Bourdieu 1984 citation was DROPPED from
+  the dim-2 paragraph — author's edit, flagged to author); Partial Axes
+  and Composition subsections restructured (tab-partial-axes floated
+  before Partial Axes; balancing-weights sentence moved to a footnote;
+  new interpretation sentences; Composition split into several
+  paragraphs); 4.4 opening "provide/cover" rewording.
 - Regression (sec:who): R² 0.052/0.020/0.021. W1: parents' BA +1.32***,
   upper class +3.67***, >1 race +2.51**, age decline (−1.09 → −2.09).
   W2: only 70+ +0.63*. W3: upper class +7.70***, age +2.04..+2.73*,
