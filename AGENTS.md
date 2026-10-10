@@ -537,6 +537,44 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later): two interpretation-repair insertions in
+  sec:antinomies, from a session vetting the author's proposed concrete
+  glosses of the disagreement scores. BOTH proposed glosses were wrong and
+  were replaced with corrected ones:
+  (1) DIM-2 GLOSS: "respondents like highbrow genres but listen to popular
+  ones and vice versa" — right TYPE of reading (rung disagreement) but
+  P–C is only 18% of dim-2 disagreement (pair MSd 1.50 vs P–E 2.89, C–E
+  3.91; pref/cons partial r 0.73) — the modal dim-2 disagreement is
+  evaluation vs engagement; directions balanced (302 vs 263 top-quartile).
+  Not added to the manuscript; the abstract "rung placement" phrasing kept.
+  (2) DIM-1 GLOSS: the author inserted "This indicates that many
+  respondents like genres they don't listen to and vice versa" on Overleaf
+  (web edit `c97f48a`) — DELETED and replaced with a corrected footnote.
+  Verified: the signed P–C dim-1 gap is a VOLUME contrast, not a
+  contradiction tally — cor(P1−C1, n_likes − n_listens) = 0.96; the 120
+  set-equal respondents (likes ≡ listens, zero mismatches) have
+  ABOVE-AVERAGE P–C disagreement (mean sq 4.84 vs 4.31 overall), the
+  margin effect (yes-rates 41.7 vs 22.9% → different MCA weights, echoes
+  the W3 "not a count of per-genre contradictions" footnote); directions
+  balanced (305 vs 260); |gap|↔mismatch count cor only 0.51. New footnote
+  anchored at "liking and listening" in the meanings-paragraph dim-1
+  sentence carries the volume reading. (3) CONTRIBUTION-VS-DISAGREEMENT
+  reconciliation (author question "need to indicate somewhere that
+  disagreement can be driven by an aspect that doesn't contribute much to
+  that dimension"): new sentences in the aspect-split paragraph after the
+  Pagès cite — shares (distance from the person's average, within-person)
+  ≠ contributions (spread around the origin, between-respondent); eval on
+  dim 1 the extreme case, 2.5% contribution vs a third of W1; mechanism
+  verified: eval partial sd 0.46 vs 2.07/2.11, eval's squared deviation
+  from the personal average grows with |F1| (0.27/0.77/3.44 across |F1|
+  terciles, cor 0.78) — eval is the point left behind near the origin.
+  Adopted web edit `c97f48a` as base (subsection retitled "Measuring
+  Complex Tastes Geometrically"; opening rewritten in author voice —
+  "As noted in the analytic strategy section..."; NOTE: the author's
+  rewrite DROPPED the Ma-configurations complement sentence from the
+  opening — flagged to them, their call; meanings paragraph tweaked
+  "corresponding dimension", "respondents"). Compiles at 29 pp., no
+  undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): sec:antinomies "Measuring Complex Tastes"
   restructured (author request: first paragraph incomplete, "three scores"
   unannounced, paragraphs long/convoluted). The old 4-paragraph block
