@@ -460,6 +460,51 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): DIM-1 AXIS RENAMED "volume" (author request:
+  "general-affirmation axis" was wordy/stilted). Author chose "volume" via
+  AskUser (over breadth, extensity, keep-but-shorten); 12 label occurrences
+  in main.tex now read "volume axis"/"volume dimension", the 4.1 coinage is
+  "Dimension 1 is thus a \emph{volume} axis" (gloss sentence unchanged),
+  fig-categories caption "Dimension 1 (volume)", script-04 worked-example
+  strip "Dimension 1 (volume)" (fig regenerated). ALSO swept the plural
+  noun "affirmations" for yes responses per the same request (→ "yes
+  categories" for MCA category weighting, "yes answers" for responses:
+  the "two affirmations" footnote, 1881's listening-yes-weighs-2x
+  sentence, "consumption yes categories" ×2 in 4.1, "most distinctive yes
+  categories" in the strategy MCA footnote, "supplying any of the yes
+  answers" in standing-apart). KEPT: the ordinary VERB "affirm" ("the
+  respondents who affirm it", duality section; "propensity to like and to
+  listen" in the coinage). "Volume" had no prior collisions in main.tex.
+  MID-SYNC WEB EDITS (54e9657..256c0b0, four commits) landed while the
+  rename was local-only; adopted the Overleaf main.tex as base and
+  re-applied the rename to the author's wording. Author changes adopted:
+  dim-3 example block SPLIT into its own paragraph between the meanings
+  paragraph and the pair-level paragraph; "To make the geometric
+  measurement machinery concrete"; "The two running examples are cases of
+  low and high disagreement on the first global axis"; "which pairs of
+  aspects disagree" (trimmed); "An aspect's share of disagreement differs
+  from its contribution... Table 5 records..."; "compared with 20% for
+  preference... making evaluation the outlier"; "closer to the middle of
+  the axis; the further..."; "On the other two dimensions, it is
+  typically evaluation"; "Both have many complex configurations,
+  thirteen and seventeen, respectively, yet their status-valuation scores
+  differ by more than a factor of forty"; "sharpen both readings";
+  "one repeated pattern: engagement without valuation" (author's colon,
+  kept); fig ref in standing-apart ("shows this clearly"); W3 footnote
+  "best measures" + "not how many per-genre contradictions". THREE REPAIRS
+  on top (flagged to author): (1) the author's "The first global
+  affirmation axis is the extreme case. It supplies only 2.5%..." broke
+  the referent (the 2.5% supplier is EVALUATION, not the axis) →
+  "Evaluation on the first global axis is the extreme case"; (2) the
+  author's 1881 weighting sentence was tangled ("a more significant
+  ``yes'' than liking because listening is globally rarer ... than
+  liking, carrying...") → "a more significant ``yes'' than liking---it is
+  globally rarer and represents a more meaningful investment---so it
+  carries roughly twice the weight in the separate MCA"; (3) the dangling
+  bridge sentence "The two running respondents sit at the two ends of
+  this axis" (left at the end of the meanings paragraph after their
+  example-block move) moved to OPEN the new example paragraph.
+  Compiles at 31 pp., 0 undefined refs, same 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): sec:antinomies (4.5) restructured as a
   RUNNING-EXAMPLE section (author request: the example used to come at the
   end, after too many new ideas, leaving the reader lost). Author chose via

@@ -317,7 +317,7 @@ ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 # figure: worked examples — partial points of two contrasting respondents,
 # used as running examples throughout Section "Measuring Complex Tastes
 # Geometrically". Rows = respondents, columns share the status-valuation
-# axis (dim 3): left pairs it with the general-affirmation axis (dim 1),
+# axis (dim 3): left pairs it with the volume axis (dim 1),
 # right with the highbrow-popular axis (dim 2, the plane of the paper's
 # other maps). Scales are free in both directions (respondent 362's dim-3
 # spread dwarfs 1881's; fixed axes would flatten the second row).
@@ -332,7 +332,7 @@ rlab <- c("Grants 18 of 20 recognitions", "Grants none")
 ex <- match(exr, rownames(ant))
 stopifnot(!any(is.na(ex)))
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
-panes <- c("Dimension 1 (general affirmation)",
+panes <- c("Dimension 1 (volume)",
            "Dimension 2 (highbrow\u2013popular)")
 exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
   do.call(rbind, lapply(seq_along(panes), function(s) {
