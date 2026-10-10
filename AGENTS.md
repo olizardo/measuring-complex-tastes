@@ -477,6 +477,13 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   aspect's" typo. Mid-sync web edit `6f5594c` (final clause "possible at the
   level of the data structure---" → "possible empirically;") also adopted.
   Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): RV footnotes 2 and 3 COMBINED (author
+  request/question). The config-matrix note and the RV formula note are now
+  one footnote at the end of the RV paragraph (deac304 had already moved the
+  formula note there), definition first, formula second, restoring the
+  one-footnote-per-quantity pattern (Lg and contributions each have one).
+  Footnote auto-numbering shifts for everything after. Compiles at 29 pp.,
+  0 undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): colon sweep of the Lg and contributions
   strategy paragraphs (decision 15 applied; author request). Four fixes:
   "and the global structure: how much..." → "...global structure, that is,
