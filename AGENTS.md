@@ -146,6 +146,38 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     (fig-scree pattern). The dim-4 numbers (race η² 0.255, racialized
     engagement contrast) remain on file in AGENTS.md decision 6 for a
     reviewer response if needed.
+18. **sec:social REBUILT around demographics vs. DISAGREEMENT (author
+    request, 2026-10-10; the demographic-position analysis "does not
+    really answer the question of the social sources of complex tastes"
+    because barycenter position is only indirectly connected to how many
+    complex tastes a person has).** The supplementary-position subsection
+    is DELETED from main.tex (projection-method paragraph, tab-eta,
+    tab-sup-coord, fig-supplementary envs, the three dimension-position
+    paragraphs incl. the dim-3 social-flatness reading); the files stay
+    in the repo unreferenced (fig-scree pattern) and script 05 still
+    computes/generates everything — supplementary.rds `sup` remains the
+    covariate source for script 07, so 05 must keep running in the
+    pipeline. The old sec:who subsection is merged into a single section
+    "The Social Sources of Complex Tastes" carrying BOTH labels
+    (\label{sec:social}\label{sec:who}) so the 4.1 dim-2 age pointer and
+    the [DRAFT] discussion enumeration still resolve (FLAGGED to author:
+    the draft's "social sources in Section X, their individual-level
+    correlates in Section X" now names the same section twice — fix when
+    writing the discussion). New opening paragraph states the
+    position-vs-disagreement distinction (positions are anchored — age
+    η² 0.33 on the highbrow–popular axis — but W_s is a within-respondent
+    quantity, so barycenters cannot answer the amount question) and
+    introduces the NEW tab-w-eta (script 07 block after tab-regression):
+    η² of each of the 8 demographics with W1–W3, uniformly tiny — max
+    age→W1 0.019, no variable reaches 0.02, quoted against the 0.33.
+    The old sec:who opening kept with fixes ("projected as supplementary
+    variables above" → "on the eight demographics jointly"; the
+    "(Section~\ref{sec:social})" self-ref dropped; the semicolon chiasmus
+    split into two sentences); partial-effects/log/pairwise/ω/coherence
+    paragraphs unchanged. tab-regression.tex re-run byte-identical.
+    Renumbering: tab-w-eta is Table 7, tab-regression Table 8. One of the
+    two pre-existing overfulls lived in the deleted prose and is gone;
+    the tab-genre-profile overfull remains. Compiles at 28 pp.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
    not "antinomies." Table 3
@@ -253,9 +285,9 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
 | `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
 | `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, fig-signatures, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs (tab-antinomy replaced by fig-signatures, decision 16) |
-| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4; tables report dims 1–3 only (decision 17) |
+| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4; tables report dims 1–3 only (decision 17); manuscript outputs UNREFERENCED since decision 18 but the script must keep running (script 07 reads `sup`) |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
-| `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds) |
+| `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex`, `manuscript/tables/tab-w-eta.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds); also the bivariate η² table of demographics with W1–W3 (decision 18) |
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
@@ -497,6 +529,32 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): sec:social REBUILT per decision 18 (author
+  request after a methodological critique — the barycenter/η²-with-dimensions
+  analysis answered where groups sit, not who has complex tastes). The
+  supplementary-position subsection is gone (tab-eta, tab-sup-coord,
+  fig-supplementary envs deleted; files kept in repo unreferenced; script 05
+  unchanged and still required by script 07); the section now titled "The
+  Social Sources of Complex Tastes" merges the regression material and OPENS
+  with the position-vs-disagreement distinction plus the NEW tab-w-eta
+  (η² of demographics with W1–W3; max 0.019, no variable reaches 0.02,
+  against age-position 0.33). Both \label{sec:social} and \label{sec:who}
+  live on the merged section (the [DRAFT] discussion sentence now names the
+  same section twice — flagged to author). Script 07 gains the tab-w-eta
+  block. Compiles at 28 pp., 0 undefined refs, 1 pre-existing overfull
+  (tab-genre-profile) + pre-existing tab-regression float warning.
+  ADOPTED MID-SYNC web edit `ca49461` (author, 22:42 UTC; landed at pull
+  and was briefly clobbered by the manuscript copy, re-applied): shares-
+  vs-contributions paragraph — "an aspect supplies" → "an aspect is
+  responsible for"; the extreme-case sentence rewritten axis-first
+  ("The first global axis is the extreme case, contributing only
+  $2.5\%$ to the dimension yet carrying a third of the disagreement") —
+  REPAIR re-applied on top (flagged to author, second time): the 2.5%
+  supplier is EVALUATION, not the axis, so the clause now reads "with
+  evaluation contributing only $2.5\%$ of the dimension yet carrying a
+  third of the disagreement" (keeps the author's axis-first structure;
+  they reverted to an axis subject once before — see the 2026-10-09
+  repairs note — if they insist on their exact wording, restore it).
 - Last sync (2026-10-10, later): TWO TRIMS the author requested back to
   back (decisions 16 + 17). (1) tab-antinomy (Table 7) replaced by
   fig-signatures — the signed Spearman heatmap of the same 9×9 matrix

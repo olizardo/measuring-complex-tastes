@@ -3,7 +3,8 @@
 # scores W_s(i) (script 04) on respondent demographics (script 05), with
 # robustness checks (log outcomes; pairwise disagreement components on
 # dimension 3; genre-based components; cross-genre coherence components).
-# Writes the LaTeX table manuscript/tables/tab-regression.tex.
+# Writes manuscript/tables/tab-regression.tex (partial effects) and
+# manuscript/tables/tab-w-eta.tex (bivariate correlation ratios).
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
 sup <- readRDS("output/supplementary.rds")$sup
@@ -77,6 +78,35 @@ tl <- c(tl,
         paste0("$N$ & ", paste(rep(nrow_lab, 3), collapse = " & "), " \\\\"),
         "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-regression.tex")
+
+# --- bivariate association: correlation ratios (eta^2) of each demographic
+# with the aspect-disagreement scores — the direct social-sources question
+# (positions in the space are anchored, e.g. age eta^2 = 0.33 on dim 2,
+# but W is a within-respondent quantity, so these are near zero)
+eta2 <- sapply(preds, function(v) sapply(ys, function(t) {
+  g <- droplevels(factor(dat[[v]]))
+  keep <- !is.na(g) & g != "Missing"
+  g <- droplevels(g[keep]); y <- dat[[t]][keep]
+  m <- tapply(y, g, mean); nh <- table(g)
+  mu <- sum(nh * m) / sum(nh)
+  sum(nh * (m - mu)^2) / sum((y - mu)^2)
+}))
+colnames(eta2) <- preds
+cat("\n== Correlation ratios (eta^2) with W scores ==\n")
+print(round(t(eta2), 3))
+elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
+          educ = "Education", parentba = "Parents' BA",
+          income4 = "Household income", sclass = "Subjective class",
+          region = "Census region")
+te <- c("\\begin{tabular}{lccc}", "\\toprule",
+        " & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
+for (v in preds) {
+  te <- c(te, paste0(elab[v], " & ",
+                     paste(sprintf("%.3f", eta2[, v]), collapse = " & "),
+                     " \\\\"))
+}
+te <- c(te, "\\bottomrule", "\\end{tabular}")
+writeLines(te, "manuscript/tables/tab-w-eta.tex")
 
 # --- robustness 1: log-transformed outcomes -------------------------------------
 cat("\n== Robustness: log outcomes ==\n")
