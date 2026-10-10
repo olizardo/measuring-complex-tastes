@@ -532,7 +532,16 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   "left behind near the origin" logic in milder form: eval moves a bit
   (sd 0.97 vs 0.46 on dim 1) but independently, and the rung's spread
   generates its distance. Insert wording avoids re-quoting r = 0.73
-  (already one paragraph up in the pair-level paragraph). ADOPTED MID-EDIT web commits
+  (already one paragraph up in the pair-level paragraph). Author trims
+  adopted (web edit `c787808`, which also fixed their own "evaluation
+  aspect's separate MCA" possessive flagged to them): "agree closely, so
+  each sits near", "so it typically stands apart". Author-approved tweaks
+  applied on top: "shows the same pattern as the affirmation axis in a
+  milder form" → "repeats that logic in a milder form"; gradient clause
+  added ("and the further liking and listening carry the respondent to a
+  rung, the farther evaluation sits from that respondent's average" —
+  the cor 0.83 rung↔eval-deviation link, author approved both via chat).
+  ADOPTED MID-EDIT web commits
   `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
   single "For instance, ..." sentence — as of this sync it ends mid-word
   ("...as being high statu") and drops the "about equally often" sentence;
