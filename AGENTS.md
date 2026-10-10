@@ -537,6 +537,19 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later, small): the dim-1 volume-tracking symbol
+  fixed from $\rho$ to $r$ in the meanings paragraph — it is a PEARSON
+  correlation (signed P1−C1 placement gap vs n_likes − n_listens per
+  respondent, N = 2,259; Pearson 0.957, Spearman 0.951, both round to
+  0.96). The paper's convention is r = Pearson (e.g., the 0.73 pref/cons
+  partial correlation on dim 2), ρ = Spearman (tab-antinomy); the ρ was a
+  labeling error in the drafted sentence. Follow-up (same day): the
+  tracking sentence rewritten to specify the two correlated quantities
+  explicitly in plain language — "Correlating the two quantities across
+  all respondents---the gap between where liking and listening place a
+  person on the axis, and the difference between how many genres that
+  person likes and how many they listen to---yields $r = 0.96$." Compiles
+  at 29 pp.
 - Last sync (2026-10-10, later): DIM-1 GLOSS MOVED FROM FOOTNOTE TO TEXT and
   the margin footnote rewritten in plain English (author request: the
   footnote "is totally obscure"; wanted a clean in-text sentence). The
