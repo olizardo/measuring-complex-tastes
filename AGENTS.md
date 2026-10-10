@@ -537,6 +537,33 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later): DIM-1 GLOSS MOVED FROM FOOTNOTE TO TEXT and
+  the margin footnote rewritten in plain English (author request: the
+  footnote "is totally obscure"; wanted a clean in-text sentence). The
+  meanings-paragraph dim-1 block now reads: sentence 1 unchanged (author
+  web edit `acb670e` "how many genres respondents choose" adopted);
+  sentence 2 NEW in text — "In plain terms, respondents who like many
+  genres but listen to few are placed higher on the axis by their liking
+  than by their listening, and the reverse holds for those who listen to
+  more genres than they like."; sentence 3 NEW — "The liking--listening
+  gap tracks the difference between how many genres a respondent likes
+  and how many they listen to almost exactly ($\rho = 0.96$)." (the
+  signed-gap↔volume-difference correlation, cor 0.96). Footnote (plain
+  rewrite, anchored after the ρ sentence) now explains the scale effect
+  concretely: MCA weighs rare affirmations more; listening (22.9%) rarer
+  than liking (41.7%) so one listening moves the consumption point ~2x as
+  far; worked example INSIDE the footnote = the 7 like-all-AND-listen-all
+  respondents (zero contradictions) with liking points near +5.6 and
+  listening points near +10.7 on dim 1 (verified: mean P1 5.63, C1 10.68,
+  E1 0.01 among them; set-equal mean signed gap −1.95, i.e., listening
+  point systematically further out). Dropped from the footnote: the
+  "on average slightly more than the sample as a whole" claim (author
+  found it obscure; the all-yes example carries the point better).
+  The earlier gloss-swap footnote ("difference in level, not a tally of
+  contradictions...") is fully replaced — its content split between the
+  in-text sentences (volume reading, ρ 0.96) and the new footnote
+  (scale effect + all-yes example). Compiles at 29 pp., no undefined
+  refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): two interpretation-repair insertions in
   sec:antinomies, from a session vetting the author's proposed concrete
   glosses of the disagreement scores. BOTH proposed glosses were wrong and
