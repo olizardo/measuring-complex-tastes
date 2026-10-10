@@ -109,6 +109,37 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     prefer separate sentences, "so that", "and", or em-dash appositives.
     Applies to assistant-drafted prose; the author flagged this after the
     RV paragraph rewrite. Semicolon-chained clauses are also best split.
+16. **Table 7 (tab-antinomy) REPLACED by fig-signatures heatmap (author
+    choice via AskUser, 2026-10-10; the 9×9 Spearman table was "busy").**
+    Script 04's table block became a figure block: `fig-signatures.pdf`
+    (label `fig:signatures`), .95\linewidth, 7×3.8in. Signed Spearman
+    heatmap of the SAME matrix (type_counts × F1–3/W1–3/ω1–3); rows
+    grouped by which aspect stands against the other two (evaluation-odd
+    guilty/distant, consumption-odd pose/distanced, liking-odd
+    preacquired/justified), then Simple taste, Simple non-taste, and
+    Total complex tastes, with blank separator rows (GOTCHA: duplicate
+    "" factor levels error — the two gap rows use levels " " and "  ").
+    Columns F/W/ω within each Dimension 1/2/3 facet; diverging
+    #08519C–white–#A63603 fill with FIXED limits [−1,1]; values printed in
+    cells (white text when |ρ| > 0.55); plotmath x labels (F[1]…omega[3]);
+    ρ legend at bottom. `tab-antinomy.tex` git-rm'd (must also be deleted
+    from the Overleaf clone). main.tex: three refs updated (divergence
+    sentence, 0.71/0.66 sentence, "genre-based columns" sentence →
+    Figure~\ref{fig:signatures}); table env → figure env with adapted
+    caption. Script 04's console Spearman prints unchanged (still the
+    source of these numbers).
+17. **Dimension 4 fully REMOVED from the manuscript (author request,
+    2026-10-10) — decision 6's partial supersession reversed.** The
+    supplementary dim-4 paragraph in sec:social and the fig-dim4 env are
+    deleted; "across all four dimensions" → "across the three dimensions";
+    tab-eta and tab-sup-coord trimmed back to Dims 1–3 (captions "first
+    three MFA dimensions"; script 05 table blocks, with a comment noting
+    the manuscript no longer discusses dim 4). Script 05 STILL computes
+    d4 in eta/cc (supplementary.rds unchanged, script 07 unaffected) and
+    still generates fig-dim4.pdf — file kept in repo, unreferenced
+    (fig-scree pattern). The dim-4 numbers (race η² 0.255, racialized
+    engagement contrast) remain on file in AGENTS.md decision 6 for a
+    reviewer response if needed.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
    not "antinomies." Table 3
@@ -215,8 +246,8 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/01-prepare-mfa-data.R` | `data/mfa_input.rds` | builds 60 binary cols (pref_/cons_/eval_ prefixes) |
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
 | `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
-| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, tab-antinomy, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs |
-| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4 |
+| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, fig-signatures, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs (tab-antinomy replaced by fig-signatures, decision 16) |
+| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4; tables report dims 1–3 only (decision 17) |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds) |
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
@@ -460,6 +491,27 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): TWO TRIMS the author requested back to
+  back (decisions 16 + 17). (1) tab-antinomy (Table 7) replaced by
+  fig-signatures — the signed Spearman heatmap of the same 9×9 matrix
+  (see decision 16 for design + the duplicated-factor-level gotcha);
+  tab-antinomy.tex git-rm'd from workspace AND the clone (Overleaf compile
+  would break on the stale \input otherwise — the 2026-10-09 lesson).
+  (2) Dimension 4 fully removed from the manuscript (decision 17):
+  dim-4 paragraph + fig-dim4 env deleted, tables trimmed to dims 1–3,
+  captions and the "all four dimensions" clause updated. Reran scripts
+  04 + 05; regenerated figures/RDS byte-identical values reverted
+  (fig-antinomy-map/configurations/worked-example/supplementary/dim4,
+  mfa_results_sup/supplementary.rds — the RDS re-runs differ only at
+  1e-6 cross-session SVD noise); antinomy_scores.rds byte-identical.
+  PAGE-COUNT NOTE: prior "29 pp." sync notes were stale — HEAD (pre-
+  change, with tab-antinomy and dim-4 material) compiles at 31 pp.
+  (verified in a clean git worktree); after both trims the manuscript
+  compiles at 30 pp., 0 undefined refs, 2 pre-existing overfulls +
+  pre-existing tab-regression float warning. Figures now: 1 categories,
+  2 worked-example, 3 signatures (p. 19 with its discussion), 4
+  supplementary, 5 genre-map, 6 configurations. No web edits at pull
+  time (clone at bab1234; clean rebase).
 - Last sync (2026-10-10, later): DIM-1 AXIS RENAMED "volume" (author request:
   "general-affirmation axis" was wordy/stilted). Author chose "volume" via
   AskUser (over breadth, extensity, keep-but-shorten); 12 label occurrences

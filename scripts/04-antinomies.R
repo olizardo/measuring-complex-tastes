@@ -232,29 +232,56 @@ library(ggplot2)
 library(ggrepel)
 ant$n_complex <- type_counts$n_complex
 
-# table: Spearman correlations of type counts with MFA coords,
-# aspect-disagreement scores, and genre-based complex-taste components
+# figure: geometric signatures of the configurations — Spearman
+# correlations of the type counts with MFA coordinates,
+# aspect-disagreement scores, and genre-based complex taste, as a signed
+# heatmap (replaces the former tab-antinomy table). Rows are grouped by
+# which aspect stands against the other two (evaluation-odd, consumption-
+# odd, liking-odd), with the simple tastes and the total detached.
 cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3",
                                "Wloc1", "Wloc2", "Wloc3")],
           method = "spearman")
-labs <- c("Simple taste ($+++$)", "Guilty pleasure ($++-$)",
-          "Pre-acquired taste ($-++$)", "Taste pose ($+\\,-+$)",
-          "Distanced consumption ($-+\\,-$)", "Justified abstention ($+\\,--$)",
-          "Distant praise ($--+$)", "Simple non-taste ($---$)",
-          "Total complex tastes")
-fmt <- function(x) gsub("-", "$-$", sprintf("%.2f", x))
-tl <- c(
-  "\\footnotesize", "\\setlength{\\tabcolsep}{2pt}",
-  "\\begin{tabular}{lccccccccc}", "\\toprule",
-  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Aspect-disagreement} & \\multicolumn{3}{c}{Genre-based complex taste} \\\\",
-  "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\\cmidrule(lr){8-10}",
-  " & Dim 1 & Dim 2 & Dim 3 & $W_1$ & $W_2$ & $W_3$ & $\\omega_1$ & $\\omega_2$ & $\\omega_3$ \\\\", "\\midrule")
-for (i in seq_len(nrow(cm))) {
-  tl <- c(tl, paste0(labs[i], " & ", paste(fmt(cm[i, ]), collapse = " & "),
-                     " \\\\"))
-}
-tl <- c(tl, "\\bottomrule", "\\end{tabular}")
-writeLines(tl, "manuscript/tables/tab-antinomy.tex")
+sigrows <- data.frame(
+  key = c("guilty", "distant", "pose", "distanced", "preacquired",
+          "justified", "", "simple_pos", "simple_neg", "", "n_complex"),
+  lab = c("Guilty pleasure (++-)", "Distant praise (--+)",
+          "Taste pose (+-+)", "Distanced consumption (-+-)",
+          "Pre-acquired taste (-++)", "Justified abstention (+--)", "",
+          "Simple taste (+++)", "Simple non-taste (---)", "",
+          "Total complex tastes"))
+scols <- c("F1", "W1", "Wloc1", "F2", "W2", "Wloc2", "F3", "W3", "Wloc3")
+skeys <- paste0(rep(1:3, each = 3), ".", rep(c("F", "W", "O"), 3))
+slabs <- c(expression(F[1]), expression(W[1]), expression(omega[1]),
+           expression(F[2]), expression(W[2]), expression(omega[2]),
+           expression(F[3]), expression(W[3]), expression(omega[3]))
+sig <- do.call(rbind, lapply(seq_len(nrow(sigrows)), function(r) {
+  v <- if (sigrows$key[r] == "") rep(NA_real_, 9) else as.numeric(cm[sigrows$key[r], scols])
+  data.frame(cfg = sigrows$lab[r], score = skeys, value = v)
+}))
+# blank separator rows need distinct factor levels to render as gaps
+lv <- sigrows$lab
+lv[lv == ""] <- c(" ", "  ")
+sig$cfg <- factor(sig$cfg, levels = rev(lv))
+sig$dim <- factor(rep(c("Dimension 1", "Dimension 2", "Dimension 3"),
+                     each = 3, times = nrow(sigrows)),
+                  levels = c("Dimension 1", "Dimension 2", "Dimension 3"))
+psig <- ggplot(sig, aes(score, cfg, fill = value)) +
+  geom_tile(color = "white", linewidth = 0.7) +
+  geom_text(aes(label = ifelse(is.na(value), "", sprintf("%.2f", value)),
+                color = abs(value) > 0.55), size = 3,
+            show.legend = FALSE) +
+  scale_color_manual(values = c(`FALSE` = "grey20", `TRUE` = "white"),
+                     na.value = "grey20") +
+  scale_fill_gradientn(
+    colors = c("#08519C", "#6BAED6", "white", "#FDAE6B", "#A63603"),
+    limits = c(-1, 1), breaks = seq(-1, 1, 0.5), na.value = "white") +
+  scale_x_discrete(labels = setNames(slabs, skeys)) +
+  facet_wrap(~ dim, nrow = 1) +
+  labs(x = NULL, y = NULL, fill = expression(rho)) +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid = element_blank(), legend.position = "bottom",
+        strip.text = element_text(face = "bold"))
+ggsave("manuscript/figures/fig-signatures.pdf", psig, width = 7, height = 3.8)
 
 # table: mean squared pairwise distances between partial points, dims 1-3
 pcols <- c("dPC1", "dPV1", "dCV1", "dPC2", "dPV2", "dCV2", "dPC3", "dPV3", "dCV3")
@@ -378,4 +405,4 @@ saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
              cell_cfg = cell_cfg, Dcoef = Dcoef),
         "output/antinomy_scores.rds")
 cat("\nsaved output/antinomy_scores.rds\n")
-cat("wrote manuscript/tables/tab-antinomy.tex and figures\n")
+cat("wrote manuscript tables and figures\n")

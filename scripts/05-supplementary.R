@@ -170,27 +170,29 @@ p9 <- ggplot(cd4, aes(dim2, dim4)) +
 ggsave("manuscript/figures/fig-dim4.pdf", p9, width = 6, height = 5)
 
 # --- LaTeX tables ---------------------------------------------------------------
+# tables report dims 1-3 only; the manuscript no longer discusses dim 4
+# (eta/cc still compute d4 and fig-dim4 is still generated, but unreferenced)
 tl <- c(
-  "\\begin{tabular}{lcccc}", "\\toprule",
-  "Variable & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
+  "\\begin{tabular}{lccc}", "\\toprule",
+  "Variable & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
 for (v in names(el)) {
   tl <- c(tl, paste0(el[v], " & ",
-                     paste(sprintf("%.3f", eta[v, ]), collapse = " & "),
+                     paste(sprintf("%.3f", eta[v, 1:3]), collapse = " & "),
                      " \\\\"))
 }
 tl <- c(tl, "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-eta.tex")
 
 sl <- c(
-  "\\begin{tabular}{llccccc}", "\\toprule",
-  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
+  "\\begin{tabular}{llcccc}", "\\toprule",
+  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
 prev <- NULL
 for (i in seq_len(nrow(cc))) {
   if (!is.null(prev) && cc$variable[i] != prev) sl <- c(sl, "\\addlinespace")
   cat_esc <- gsub("\\$", "\\\\$", cc$category[i])
   sl <- c(sl, paste0(el[cc$variable[i]], " & ", cat_esc, " & ",
                      cc$n[i], " & ",
-                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3", "d4")]),
+                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3")]),
                            collapse = " & "), " \\\\"))
   prev <- cc$variable[i]
 }
