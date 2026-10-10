@@ -537,6 +537,44 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later): Lg magnitude GUARD added to the Composition
+  subsection (sec:contrib), from a session diagnosing whether the Lg
+  coefficients' magnitudes can be read comparatively. Verified numerically:
+  (a) the Lg(pref/cons/eval, MFA) pref-cons gap is entirely the diagonal
+  Lg(h,h) — cross-aspect terms 0.822 vs 0.828; (b) exact binary-block
+  identity Lg(h,h) = [J + 2Σ_{g<k}φ²]/(J·λ1h)², where φ = Pearson r among
+  the block's 20 indicators — so preference has MORE raw internal
+  association (Σφ² 6.94 vs 3.99; mean φ² 0.037 vs 0.021) but consumption's
+  smaller λ1g (0.155 vs 0.200) gives it a bigger balancing multiplier and
+  hence a bigger Lg (2.91 vs 2.12; with-MFA 2.48 vs 1.95) — the ordering is
+  normalization arithmetic, and the rarity-free association picture is
+  inverted; (c) each block's first axis in the global metric is ≈ 1 by
+  construction (0.981/0.983/0.953), so Lg(h,MFA) has a floor ≈ 0.66 for any
+  block and the excess above the floor (Σ_{s≥2}λ² = 1.08/1.85/0.61) is
+  secondary-spectrum mass; (d) Lg shares 35.0/44.5/20.5% vs λ-weighted
+  share of dims-1–3 inertia 34.8/38.2/27.0% — same rank order, distorted
+  magnitudes (pref-cons gap 10 pts in Lg is really 3; evaluation is 70% of
+  consumption, not half, because it owns dim 3). Manuscript revision: the
+  "but unevenly" clause dropped; the sentence now ends at the presence
+  claim, then two new sentences — the three coefficients differ with
+  evaluation's link weakest of the three, "but we read them as
+  establishing presence and rank order rather than degree", and "MFA's
+  balancing gives every aspect a first axis of near-unit inertia, so no
+  aspect can score near zero, and the differences above that baseline
+  reflect how spread an aspect's structure is across its own secondary
+  dimensions rather than the intensity of its participation." The balancing
+  weights footnote moved to the end of the guard sentence (its natural
+  anchor). tab-groups unchanged. CONSOLE-GOTCHA for future sessions: in R,
+  `gcont/100*l3` recycles l3 across ROWS (aspects) not columns (dims) —
+  use `sweep(gcont, 2, l3, "*")`; an earlier output with pref 39.6/cons
+  34.3/eval 26.1 was that bug, corrected values 34.8/38.2/27.0.
+  Adopted web edit `048d922` (landed mid-sync; did not touch the Lg
+  sentence, clean merge): "ordered by rarity:" → "ordered by rarity, as"
+  + dropped the "Dimension 3 is thus a distinct axis..." closing sentence
+  of the Composition paragraph; commas after "On the affirmation axis,",
+  "On the highbrow--popular axis,"; "Nor are" → "Complex tastes are not";
+  "what these scores are made of" → "what these scores include".
+  Compiles at 29 pp., no undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): fig-individuals (individual factor map)
   DROPPED from main.tex (author choice via AskUser after a keep/drop
   analysis). Rationale: it was referenced exactly once (dim-2 paragraph,
