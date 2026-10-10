@@ -457,6 +457,20 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): partial-axes/contributions SEPARATION (author
+  choice via AskUser — "Clean separation" over merging the subsections).
+  The Partial Axes subsection (4.3) quoted two aspect-contribution numbers
+  ("matching its modest 2.5% contribution" / "matching its 11.0% contribution")
+  from tab-groups (Table 5) without citing it; both parentheticals DELETED so
+  4.3 is purely partial-axis correlations (tab-partial-axes) and contributions
+  live entirely in the Composition subsection (sec:contrib, tab-groups).
+  Web edit `e1d5aad` landed mid-sync and was adopted as base: the author
+  reworded the same 4.3 paragraph opening ("We represent a given aspect's
+  partial axis by correlating…", "captures maximal consensus in preference
+  and consumption") and appended a clause to the RV paragraph ("thus people
+  can evaluate highly genres that they neither like nor consume"); the author
+  KEPT the contribution clauses in their rewrite — the separation was
+  re-applied on top of their wording. Compiles at 29 pp., 0 undefined refs.
 - Last sync (2026-10-10, later): fig-categories12 + fig-categories COMBINED into
   one two-panel figure (author request; single figure sits next to its
   discussion). Script 03's two category-map blocks replaced by one
