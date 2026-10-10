@@ -452,6 +452,16 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync: eq:genre underbrace labels (2026-10-09, later) — Equation 2
+  (eq:genre) gains horizontal underbraces visually separating the two
+  components: the $\sum_g \omega_s(i;g)$ term labeled "genre-based complex
+  taste", the cross term labeled "cross-genre coherence" (same underbrace
+  style as eq:decomp). Where-clause prose unchanged; the "first term/second
+  term" sentences still read correctly. No new overfulls — the two
+  pre-existing ones (sec:social prose ~line 213, tab-genre-profile) are
+  untouched. Compiles at 29 pp. Author web edit `ac383e8` (toy-contrast
+  paragraph opening: "Consider two hypothetical respondents: The first
+  holds...") landed mid-sync and was adopted locally before the copy.
 - Last sync: coherence-component regressions + transposable-orientation
   paragraph (2026-10-09, later) — script 07 gains robustness 4: coherence
   models (coh_s = W_s − Wloc_s, exact by eq:genre identity; coef
