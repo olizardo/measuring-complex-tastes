@@ -315,7 +315,17 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   Hispanic +1.89*, Associate −3.79*. Log robustness: parentba F 5.2,
   sclass 2.3, gender F 11.8 (women lower log-W1). Pairwise dim-3:
   dPV3/dCV3 ← upper class (F 3.9/4.9); dPC3 ← parentba (15.2) + sclass
-  (9.3).
+  (9.3). Localized-component robustness (added 2026-10-09, script 07
+  robustness 3 + new final sec:who paragraph): ω models R²
+  0.085/0.080/0.033; upper-class premium on ALL THREE dims (+0.25/
+  +0.25/+0.58, p = .002/.002/.005 — incl. dim 2, where W2 shows none);
+  parentba on ω1/ω2 (+0.10/+0.11***); age: ω3 RISES (+0.24..+0.48, same
+  direction as W3) while ω1/ω2 decline; the W2 70+ premium (+0.63) is a
+  coherence effect — ω2 declines with age in every cohort (−0.08..−0.28,
+  all significant). WARNING for future sessions: an earlier assistant
+  reply misread the ω3 age coefficient as NEGATIVE (−0.48, confused with
+  n_complex's −0.54) and told the author there was a dim-3 age flip —
+  there is NOT; the real flip is dim 2 (W2 vs ω2).
 - **Duality (transposed MFA, genres as targets)**: genre-level RVs
   P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
   Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
@@ -391,7 +401,19 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `e60b577` (2026-10-09, later) — one sentence added
+- Last Overleaf sync: `005906f` (2026-10-09, later) — localized-component
+  robustness added to sec:who as its final paragraph: same OLS models with
+  the genre-localized component Σ_g ω_s(i;g) (the combinatorial-signal part
+  of the score) as outcome; R² 0.085/0.080/0.033; upper-class premium on all
+  three dims (incl. dim 2 where W2 shows none); parentba on ω1/ω2; age:
+  ω3 rises like W3, ω2 declines across every cohort — the W2 70+ premium
+  (+0.63) is a coherence effect. Script 07 gains robustness 3 (Wloc1–3
+  models; dat gains Wloc columns; tab-regression.tex unchanged).
+  CAUTION: the assistant's earlier summary of these results to the author
+  contained a sign error (claimed a dim-3 age flip) — corrected before the
+  paragraph was written; paragraph numbers verified against script output.
+  Compiles at 27 pp., no undefined refs.
+  Previous sync: `e60b577` (2026-10-09, later) — one sentence added
   to the 4.4 opening paragraph distinguishing the two disagreement readings:
   W2 = aspects disagreeing about rung placement on the shared highbrow–popular
   ladder; W3 = status attributions reaching further down the genre hierarchy

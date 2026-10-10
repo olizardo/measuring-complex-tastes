@@ -1,8 +1,9 @@
 # 07-regression.R
-# Who has complex tastes? OLS regressions of the geometric complex-taste
+# Who has complex tastes? OLS regressions of the geometric aspect-disagreement
 # scores W_s(i) (script 04) on respondent demographics (script 05), with
 # robustness checks (log outcomes; pairwise disagreement components on
-# dimension 3). Writes the LaTeX table manuscript/tables/tab-regression.tex.
+# dimension 3; genre-localized components). Writes the LaTeX table
+# manuscript/tables/tab-regression.tex.
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
 sup <- readRDS("output/supplementary.rds")$sup
@@ -11,7 +12,8 @@ stopifnot(nrow(ant) == nrow(sup))
 # interpretable reference categories
 sup$race <- relevel(sup$race, ref = "White")
 
-dat <- cbind(ant[, c("W1", "W2", "W3", "dPV3", "dCV3", "dPC3")], sup)
+dat <- cbind(ant[, c("W1", "W2", "W3", "dPV3", "dCV3", "dPC3",
+                     "Wloc1", "Wloc2", "Wloc3")], sup)
 
 preds <- c("gender", "race", "age6", "educ", "parentba",
            "income4", "sclass", "region")
@@ -99,6 +101,21 @@ for (y in c("dPV3", "dCV3", "dPC3")) {
   s <- summary(m)$coefficients
   cat("most significant coefficients:\n")
   print(round(s[order(s[, 4])[1:6], c(1, 2, 4)], 2))
+}
+
+# --- robustness 3: genre-localized components (Equation eq:genre) as outcomes -----
+# Wloc_s = omega, the localized antinomy part of W_s -- isolates the
+# configural component from the cross-genre coherence component.
+cat("\n== Robustness: localized components Wloc1-Wloc3 ==\n")
+ys_loc <- c("Wloc1", "Wloc2", "Wloc3")
+fits_loc <- lapply(ys_loc, function(y) lm(reformulate(preds, y), data = dat))
+print(round(sapply(fits_loc, function(m) summary(m)$r.squared), 3))
+for (i in seq_along(fits_loc)) {
+  cat("\n--", ys_loc[i], "--\n")
+  print(round(drop1(fits_loc[[i]], test = "F")[, "F value", drop = FALSE], 1))
+  s <- summary(fits_loc[[i]])$coefficients
+  sel <- grep("age6|parentba|sclass", rownames(s))
+  print(round(s[sel, c(1, 2, 4)], 3))
 }
 
 cat("\nfigures and tables written\n")
