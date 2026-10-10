@@ -460,6 +460,35 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): plain-language W2/W3 glosses in the
+  sec:antinomies meanings paragraph (author request: dim 1 had a full plain
+  treatment, dims 2–3 only one abbreviated sentence each). Dim-2 expansion:
+  "In plain terms, a respondent high in $W_2$ is one whose liking and
+  listening usually agree on a rung while their evaluations place them on a
+  different one" + the two concrete portraits (rap/rock/pop listener who
+  credits classical/opera fans with high status; classical-music listener
+  who grants that recognition to few audiences) + "about equally often".
+  Dim-3 expansion: existing reach sentence kept, then "In plain terms,
+  liking and listening place the high-$W_3$ respondent nowhere in
+  particular on this axis, so the score mostly records how far their
+  evaluations travel away from that middle" + generous/mirror-image split.
+  The existing squared-position footnote now anchors at the END of the dim-3
+  passage (explains why the generous form dominates). Empirical basis
+  (verified from partial points, extraction: res$ind$coord.partiel rownames
+  are "2.Preference"/"2.Consumption"/"2.Evaluation" — capital-P/C/E, NOT
+  "362.pref"): among top-quartile W2, eval is the largest-share aspect 67%
+  and the two directions split 51/49; eval_above group = popular engagement
+  (top40 .82/crold .78/rap .69 liked) yet eval-yes classical .83/opera .86;
+  eval_below group = classical liked .91/listened .72 yet eval-yes avg only
+  2.7/20 (classical .59, opera .67, all else ≤.29). Dim 3: among top-quartile
+  W3, pref/cons partial sds .71/.73 vs eval sd 4.56; generous (eval partial
+  > 0) carries 82% of top-quartile W3 MASS (54% of count — text says "most
+  of the disagreement", mass not count, deliberately), mean 10.2 eval-yes
+  ("ten of the twenty genres on average"), withholding group avg 0.28
+  eval-yes while still liking 5.8/listening 3.1. Pair-share quantities
+  (r 0.73, cons–eval 47%) stay in the NEXT paragraph per author's note —
+  the new material is qualitative. Compiles at 29 pp., no undefined refs,
+  2 pre-existing overfulls.
 - Last sync (2026-10-10, later): sec:contrib question-mapping FIXED (author
   flagged that the 4.4 opening claimed Table 5 alone answers Q2+Q3). The
   strategy's own assignment is Lg→Q2 (participation), contributions→Q3
