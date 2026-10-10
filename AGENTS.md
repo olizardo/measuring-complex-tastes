@@ -391,7 +391,15 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `e0b7952` (2026-10-09, later) — "complex-taste
+- Last Overleaf sync: `e60b577` (2026-10-09, later) — one sentence added
+  to the 4.4 opening paragraph distinguishing the two disagreement readings:
+  W2 = aspects disagreeing about rung placement on the shared highbrow–popular
+  ladder; W3 = status attributions reaching further down the genre hierarchy
+  than an engagement profile with no position on that axis (evaluation is
+  nearly the only aspect that varies on dim 3: partial sds 0.69/0.70/2.75;
+  cor(W3,|F3|) 0.72 vs 0.37 for W2; pairwise dim-2 shares pref-cons 18%,
+  eval pairs 82%, dominated by cons–eval 47%). Compiles at 27 pp.
+  Previous sync: `e0b7952` (2026-10-09, later) — "complex-taste
   score" label purged per decision 13: eq:decomp paragraph replaces the
   "We call W_s(i) the complex-taste score" stipulation with the explicit
   interpretive sentence (aspect-disagreement read strictly; disagreement
