@@ -452,6 +452,48 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10): RV and Lg descriptions revised from the Pagès book
+  (author request: "hard to follow, omit important information"). RV paragraph
+  now opens with the geometric basis (each aspect's twenty indicators generate
+  a cloud of the same N respondents, fully described by interindividual
+  distances; config-matrix footnote notes S and the squared-distance matrix
+  carry the same info), then RV compresses the similarity of the two distance
+  structures: 0 iff every indicator of one aspect is unrelated to every
+  indicator of the other; 1 iff the two clouds are homothetic; single-variable
+  blocks reduce RV to squared Pearson r (split into two footnotes: config
+  matrix + formula). Lg paragraph gains the choice rule (RV compares aspects
+  with one another, Lg gauges each aspect's link to the compromise) and the
+  Pagès "number of common dimensions, each weighted by its inertia" phrase
+  (p. 137 cite). **IMPORTANT CORRECTION**: the old Lg footnote formula was
+  WRONG — it claimed Lg(h,k) = tr(S_hS_k)/√tr(S_h²), asymmetric. Verified
+  numerically against FactoMineR (2026-10-10): Lg is the SYMMETRIC unnormalized
+  numerator of RV — Lg(h,k) = tr(S_hS_k)/N² (respondents equally weighted;
+  equal to the book's ⟨W_j,W_k⟩/(λ1jλ1l) with balancing absorbed into the
+  global column weights); Lg(h,h) = Σ_s λ_s² of the separate analysis in the
+  global metric (2.1206/2.9127/1.6640); Lg(h, MFA) = Σ_k Lg(h,k)/λ1(MFA)
+  (the compromise enters as a pseudo-block normalized by its own λ1 = 1.509).
+  All reported values were already correct (only the formula text was wrong);
+  RV formula verified to 1e-15. Also this sync: adopted author web edits
+  `3dc9a6f` (4.4 paragraph split at "On the third dimension..."; "respondent
+  engages" → "respondent chooses genres"; added "itself an argument for the
+  idea of complex tastes") and `2e1dd42` (two-step MCA description: "the
+  three analyses", weight "obtained from the separate MCA", "regardless of
+  the prominence of the first dimension in the separate analysis"); plus the
+  cross-aspect Lg trim from the results prose (see previous entry). Compiles
+  at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-09, later): cross-aspect $Lg$ coefficients TRIMMED from
+  the results prose (the §4.3 sentence now ends at "…weaker than the links of
+  preference (1.95) and consumption (2.48)") per the Pagès choice rule (RV
+  for the between-aspect similarity question, Lg only for aspect-vs-compromise
+  participation; book §7.2 pp. 137–138: "RV or Lg is chosen according to
+  whether we want to distinguish…" / "the two measurements complement each
+  other perfectly"). NOTE: tab-groups was ALREADY clean — it never carried
+  the cross-aspect Lg matrix, only the "Lg with MFA" column; the 0.80/0.02/
+  0.03 cross-aspect values lived in one prose sentence (an earlier assistant
+  note wrongly said they were in tab:groups). No script rerun, table unchanged.
+  The Lg strategy footnote keeps its general Lg(h,k) definition (still
+  accurate, and the asymmetry note applies to Lg(h, MFA) too). Compiles at
+  29 pp., 0 undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-09, later): read-through trims in 4.4 — the circular
   opening sentence of the aspect-disagreement paragraph ("The
   aspect-disagreement scores tell us how much of each respondent's
