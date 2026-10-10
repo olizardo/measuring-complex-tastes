@@ -244,11 +244,13 @@ cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3",
 sigrows <- data.frame(
   key = c("guilty", "distant", "pose", "distanced", "preacquired",
           "justified", "", "simple_pos", "simple_neg", "", "n_complex"),
+  # the blank separator rows need distinct labels to be distinct factor
+  # levels — one and two spaces render blank on the axis
   lab = c("Guilty pleasure (++-)", "Distant praise (--+)",
           "Taste pose (+-+)", "Distanced consumption (-+-)",
-          "Pre-acquired taste (-++)", "Justified abstention (+--)", "",
-          "Simple taste (+++)", "Simple non-taste (---)", "",
-          "Total complex tastes"))
+          "Pre-acquired taste (-++)", "Justified abstention (+--)",
+          " ", "Simple taste (+++)", "Simple non-taste (---)",
+          "  ", "Total complex tastes"))
 scols <- c("F1", "W1", "Wloc1", "F2", "W2", "Wloc2", "F3", "W3", "Wloc3")
 skeys <- paste0(rep(1:3, each = 3), ".", rep(c("F", "W", "O"), 3))
 slabs <- c(expression(F[1]), expression(W[1]), expression(omega[1]),
@@ -258,10 +260,7 @@ sig <- do.call(rbind, lapply(seq_len(nrow(sigrows)), function(r) {
   v <- if (sigrows$key[r] == "") rep(NA_real_, 9) else as.numeric(cm[sigrows$key[r], scols])
   data.frame(cfg = sigrows$lab[r], score = skeys, value = v)
 }))
-# blank separator rows need distinct factor levels to render as gaps
-lv <- sigrows$lab
-lv[lv == ""] <- c(" ", "  ")
-sig$cfg <- factor(sig$cfg, levels = rev(lv))
+sig$cfg <- factor(sig$cfg, levels = rev(sigrows$lab))
 sig$dim <- factor(rep(c("Dimension 1", "Dimension 2", "Dimension 3"),
                      each = 3, times = nrow(sigrows)),
                   levels = c("Dimension 1", "Dimension 2", "Dimension 3"))
@@ -276,7 +275,9 @@ psig <- ggplot(sig, aes(score, cfg, fill = value)) +
     colors = c("#08519C", "#6BAED6", "white", "#FDAE6B", "#A63603"),
     limits = c(-1, 1), breaks = seq(-1, 1, 0.5), na.value = "white") +
   scale_x_discrete(labels = setNames(slabs, skeys)) +
-  facet_wrap(~ dim, nrow = 1) +
+  # free_x is required: each facet holds only its dimension's 3 scores,
+  # otherwise all 9 x-levels appear in every panel and squeeze the tiles
+  facet_wrap(~ dim, nrow = 1, scales = "free_x") +
   labs(x = NULL, y = NULL, fill = expression(rho)) +
   theme_minimal(base_size = 10) +
   theme(panel.grid = element_blank(), legend.position = "bottom",

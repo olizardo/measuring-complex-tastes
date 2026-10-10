@@ -117,8 +117,14 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     grouped by which aspect stands against the other two (evaluation-odd
     guilty/distant, consumption-odd pose/distanced, liking-odd
     preacquired/justified), then Simple taste, Simple non-taste, and
-    Total complex tastes, with blank separator rows (GOTCHA: duplicate
-    "" factor levels error — the two gap rows use levels " " and "  ").
+    Total complex tastes, with blank separator rows. GOTCHAs (both bit us
+    in the first rendering): (a) gap rows must carry DISTINCT labels that
+    match the factor levels from the start (" " and "  " in sigrows$lab
+    directly) — patching `""` values to different levels AFTER factor() maps
+    them to NA and prints an "NA" row on the axis; (b) facet_wrap needs
+    `scales = "free_x"` — with 9 x-levels and fixed scales every panel
+    reserved space for all 9 scores and squeezed the 3 tiles to a third
+    of the panel width.
     Columns F/W/ω within each Dimension 1/2/3 facet; diverging
     #08519C–white–#A63603 fill with FIXED limits [−1,1]; values printed in
     cells (white text when |ρ| > 0.55); plotmath x labels (F[1]…omega[3]);
