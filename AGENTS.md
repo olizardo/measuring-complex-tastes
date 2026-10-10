@@ -482,8 +482,20 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   one footnote at the end of the RV paragraph (deac304 had already moved the
   formula note there), definition first, formula second, restoring the
   one-footnote-per-quantity pattern (Lg and contributions each have one).
-  Footnote auto-numbering shifts for everything after. Compiles at 29 pp.,
-  0 undefined refs, 2 pre-existing overfulls.
+  Footnote auto-numbering shifts for everything after. During this sync
+  THREE web edits landed and were all adopted: `a6be12b` (RV extremes
+  sentences each gain a concrete parenthetical example — "a person's
+  preferences are unrelated to the genres they consider high status" /
+  "a person's engagements are perfectly predictable from their
+  preferences"; "high RV coefficients between them" added; RV-0/1 sentences
+  re-merged with a semicolon — author's own, kept), `6859a87` (Lg
+  footnote reworded — "normalizes the global analysis as a block by its
+  first eigenvalue"; "in Pagès' phrase" dropped for "or"; "link to the
+  global complex taste space"), `95e0d97` (Lg closing sentences — "In
+  principle, an aspect... present in name only in the global structure";
+  "drops one in favor of the other two"). Push races handled by rebase;
+  my footnote merge touched only RV lines so the final rebase was clean.
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): colon sweep of the Lg and contributions
   strategy paragraphs (decision 15 applied; author request). Four fixes:
   "and the global structure: how much..." → "...global structure, that is,
