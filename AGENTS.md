@@ -104,6 +104,11 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     .21/.26/.25, pose .14/.23/.47, distanced .29/.25/.03, justified
     .27/.16/−.18, distant −.13/−.05/.38, simple_neg −.75/−.75/−.36,
     n_complex .71/.66/.18; dim-free Σω ↔ n_complex 0.61.
+15. **Style (author request, 2026-10-10): minimize colons in manuscript
+    prose.** Avoid colon-prefixed elaborations ("X: y z") in running text;
+    prefer separate sentences, "so that", "and", or em-dash appositives.
+    Applies to assistant-drafted prose; the author flagged this after the
+    RV paragraph rewrite. Semicolon-chained clauses are also best split.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
    not "antinomies." Table 3
@@ -471,7 +476,18 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   space)"; "inter-individual distance structures". Fixed the author's "ann
   aspect's" typo. Mid-sync web edit `6f5594c` (final clause "possible at the
   level of the data structure---" → "possible empirically;") also adopted.
-  Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): RV closing sentence rewritten + colon purge
+  (author requests). Final sentence now reads "Small RV coefficients mean
+  the opposite. Each aspect carries information the others lack, so no
+  single aspect can speak for a person's tastes. Taste profiles whose
+  aspects do not line up---complex tastes---then become an empirical
+  reality rather than a conceptual possibility." De-colonized the rest of
+  the paragraph too (decision 15): "unrelated to every indicator of the
+  other. Then two respondents..."; "same shape, so that the distance...";
+  "agree completely about who resembles whom, and differ only in...".
+  Adopted author web edit `deac304` (RV formula footnote moved to the end
+  of the paragraph). Compiles at 29 pp., 0 undefined refs, 2 pre-existing
   overfulls.
 - Last sync (2026-10-10): RV and Lg descriptions revised from the Pagès book
   (author request: "hard to follow, omit important information"). RV paragraph
