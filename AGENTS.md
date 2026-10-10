@@ -452,6 +452,18 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync: worked example walks dims 1-2-3 (2026-10-09, later) — the
+  dim-2 material moved from the end of the worked-example paragraph to
+  between the dim-1 and dim-3 sentences and sharpened: named the
+  highbrow--popular hierarchy axis, read the disagreement as rung
+  placement rather than engagement level, and made "here it is liking that
+  stands apart from the other two" explicit; the dim-3 opening now
+  completes the contrast ("now it is evaluation that stands apart from the
+  other two"). Classification footnote moved with the dim-2 sentence, so
+  the scheme is now defined BEFORE the 13-configurations footnote uses it.
+  Footnote-7 counts re-verified against cell_cfg for respondent 362
+  (1 guilty bband, 7 poses, 4 distant, 1 distanced = 13); latspsal pose
+  ω3 = 1.0 max, genre-based sum 8.5 — all current. Compiles at 29 pp.
 - Last sync: eq:genre underbrace labels (2026-10-09, later) — Equation 2
   (eq:genre) gains horizontal underbraces visually separating the two
   components: the $\sum_g \omega_s(i;g)$ term labeled "genre-based complex
