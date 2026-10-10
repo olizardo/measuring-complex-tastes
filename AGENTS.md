@@ -479,7 +479,14 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   the three global dimensions" sentence dropped (the Q3 paragraph's "while
   all aspects appear in the first three global dimensions" carries it).
   Colon in the opening ("posed above: does each aspect...") de-colonized
-  per decision 15. Web edit `6edd9d1` landed mid-sync and was adopted:
+  per decision 15. Follow-up (same day): the Partial Axes subsection (4.3)
+  now opens with its own question echo — "The second question posed above is
+  whether each aspect actually contributes to the common representation, and
+  the partial axes answer it at the level of specific dimensions" — so 4.3
+  self-frames rather than being retroactively framed by 4.4; the 4.4 opening
+  callback ("already spoke to the second question at the level of specific
+  dimensions") is unchanged and now deliberately echoes 4.3's phrasing.
+  Web edit `6edd9d1` landed mid-sync and was adopted:
   4.3 dim-2 sentence "independent" → "partially independent", and the dim-3
   sentence gains a closing clause ("suggesting that the third global
   dimension is a specialized status-evaluation axis with little input from
