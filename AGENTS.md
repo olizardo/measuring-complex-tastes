@@ -452,6 +452,17 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync: worked example moved from strategy 3.5 to results 4.5
+  (2026-10-09, later) — the worked-example paragraph + fig-worked-example
+  env now live in 4.5 "Measuring Complex Tastes" (inserted after the
+  fig-antinomy-map env, before tab-pairs), fixing the forward dependency
+  on the dimension readings (4.1); the example names all three axes and
+  previously presupposed results material. Strategy 3.5 keeps
+  eq:decomp/pairwise/eq:genre/toy (dimension-free) and ends with a bridge
+  sentence forward-referencing sec:antinomies and the figure. Figure
+  renumbering: fig-worked-example is now Figure 5 (was Figure 1). Doc grew
+  29→30 pp from float reflow (map p.14, example text p.15, fig+tab-pairs
+  p.16, tab-antinomy p.17 — clean sequence, no stranding).
 - Last sync: worked example walks dims 1-2-3 (2026-10-09, later) — the
   dim-2 material moved from the end of the worked-example paragraph to
   between the dim-1 and dim-3 sentences and sharpened: named the
