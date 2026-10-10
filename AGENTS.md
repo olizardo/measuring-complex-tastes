@@ -452,6 +452,48 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync: coherence-component regressions + transposable-orientation
+  paragraph (2026-10-09, later) — script 07 gains robustness 4: coherence
+  models (coh_s = W_s − Wloc_s, exact by eq:genre identity; coef
+  additivity check ~1e-14; R² 0.048/0.021/0.020; tab-regression.tex
+  unchanged). New final sec:who paragraph: full-score coefficients
+  decompose additively and the split is one-sided (W3 upper-class +7.12 of
+  +7.70; W3 age +1.37..+2.25, two oldest cohorts significant; W1 upper
+  +3.42 of +3.67, parentba +1.23 of +1.32); framing: genre-based component
+  = local accommodations to specific objects, coherence = transposable,
+  disposition-like orientation (negative coherence = genre-based tastes
+  that cancel); "social location tracks the transposable part". NOTE from
+  the framing discussion: avoid calling coherence a full "disposition" —
+  it is signed (disposition reading covers only the positive regime), it
+  is one cross-section (stability untested; response-style rival), and
+  both components are within-person. Manuscript hedges with
+  "disposition-like" + the parenthetical negative-coherence clause.
+  Paragraph then gains two sentences on why the localized/transposable
+  split is unavailable to the combinatorial measure: configurations are
+  nominal types — they can recur (same distant praise genre after genre)
+  but carry no magnitude or direction, so they can neither accumulate
+  into a total nor cancel; the how-much-is-transposable question has no
+  combinatorial answer. Extends 4.4's "the coherence component has no
+  combinatorial counterpart at all" claim; deliberately concedes that
+  type-recurrence is visible categorically (avoids overclaiming).
+- Last sync: `d_{ighs}` passage slowed down (2026-10-09, later) — the
+  eq:genre lead-in in the Measuring Complex Taste at the Individual Level
+  subsection now spells out all four subscripts before using them: a new
+  sentence glosses $c_{ighs}$ ($i$ individual, $g$ genre, $h$ aspect, $s$
+  dimension), defines $\bar{c}_{igs} = H^{-1}\sum_h c_{ighs}$ explicitly,
+  and reads $d_{ighs} = c_{ighs} - \bar{c}_{igs}$ with a signed gloss
+  (positive = aspect $h$ carries individual $i$ further along dimension $s$
+  in genre $g$ than the three-aspect average), before "In terms of these
+  deviations, the aspect-disagreement score splits exactly into...". Merged
+  on top of author web edit `98d5ba3`, which landed mid-edit and reworked the
+  same paragraph: "Moreover, each partial individual point in complex taste
+  space..." opening (two sentences, "respondent chose" wording) and the
+  pairwise paragraph's "speaks Ma's typology" / "standing apart from the
+  others" rewordings — both adopted; fixed the author's double space in
+  "that otherwise would be mixed up" (invisible in LaTeX). Compiles at
+  29 pp., no errors, no undefined refs. A second web edit `322666d` landed
+  during the push race (post-equation paragraph: "repeats across the genre
+  portfolio"); adopted locally and rebased cleanly on top.
 - Overleaf fix sync (2026-10-09, later): Overleaf compile broke because the
   `e6b9103`/`2497b8f` syncs pushed main.tex changes but NOT the regenerated
   table files — `tab-pairs.tex` was never copied to the clone, and

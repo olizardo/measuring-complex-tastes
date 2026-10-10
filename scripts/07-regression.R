@@ -2,8 +2,8 @@
 # Who has complex tastes? OLS regressions of the geometric aspect-disagreement
 # scores W_s(i) (script 04) on respondent demographics (script 05), with
 # robustness checks (log outcomes; pairwise disagreement components on
-# dimension 3; genre-localized components). Writes the LaTeX table
-# manuscript/tables/tab-regression.tex.
+# dimension 3; genre-based components; cross-genre coherence components).
+# Writes the LaTeX table manuscript/tables/tab-regression.tex.
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
 sup <- readRDS("output/supplementary.rds")$sup
@@ -103,10 +103,10 @@ for (y in c("dPV3", "dCV3", "dPC3")) {
   print(round(s[order(s[, 4])[1:6], c(1, 2, 4)], 2))
 }
 
-# --- robustness 3: genre-localized components (Equation eq:genre) as outcomes -----
-# Wloc_s = omega, the localized antinomy part of W_s -- isolates the
+# --- robustness 3: genre-based components (Equation eq:genre) as outcomes ---------
+# Wloc_s = omega, the genre-based complex-taste part of W_s -- isolates the
 # configural component from the cross-genre coherence component.
-cat("\n== Robustness: localized components Wloc1-Wloc3 ==\n")
+cat("\n== Robustness: genre-based components Wloc1-Wloc3 ==\n")
 ys_loc <- c("Wloc1", "Wloc2", "Wloc3")
 fits_loc <- lapply(ys_loc, function(y) lm(reformulate(preds, y), data = dat))
 print(round(sapply(fits_loc, function(m) summary(m)$r.squared), 3))
@@ -116,6 +116,32 @@ for (i in seq_along(fits_loc)) {
   s <- summary(fits_loc[[i]])$coefficients
   sel <- grep("age6|parentba|sclass", rownames(s))
   print(round(s[sel, c(1, 2, 4)], 3))
+}
+
+# --- robustness 4: cross-genre coherence components (Equation eq:genre) -----------
+# eq:genre is an identity, so coherence = W_s - Wloc_s exactly, and with the
+# same predictors/sample the three model sets decompose additively:
+# coef(W) = coef(Wloc) + coef(coherence). The coherence models therefore add
+# no new estimates, only the explicit attribution of each W coefficient.
+cat("\n== Robustness: coherence components coh1-coh3 ==\n")
+for (s in 1:3) {
+  dat[[paste0("coh", s)]] <- dat[[paste0("W", s)]] - dat[[paste0("Wloc", s)]]
+}
+ys_coh <- c("coh1", "coh2", "coh3")
+fits_coh <- lapply(ys_coh, function(y) lm(reformulate(preds, y), data = dat))
+print(round(sapply(fits_coh, function(m) summary(m)$r.squared), 3))
+for (i in seq_along(fits_coh)) {
+  cat("\n--", ys_coh[i], "--\n")
+  print(round(drop1(fits_coh[[i]], test = "F")[, "F value", drop = FALSE], 1))
+  s <- summary(fits_coh[[i]])$coefficients
+  sel <- grep("age6|parentba|sclass", rownames(s))
+  print(round(s[sel, c(1, 2, 4)], 3))
+}
+cat("\nadditivity check (max |coef(W) - coef(Wloc) - coef(coherence)|):\n")
+for (i in 1:3) {
+  cw <- coef(fits[[i]]); cl <- coef(fits_loc[[i]]); cc <- coef(fits_coh[[i]])
+  ok <- !is.na(cw) & !is.na(cl) & !is.na(cc)
+  cat("dim", i, ":", max(abs(cw[ok] - cl[ok] - cc[ok])), "\n")
 }
 
 cat("\nfigures and tables written\n")
