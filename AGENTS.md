@@ -463,15 +463,63 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - Last sync (2026-10-10, later): plain-language W2/W3 glosses in the
   sec:antinomies meanings paragraph (author request: dim 1 had a full plain
   treatment, dims 2–3 only one abbreviated sentence each). Dim-2 expansion:
-  "In plain terms, a respondent high in $W_2$ is one whose liking and
-  listening usually agree on a rung while their evaluations place them on a
+  "A respondent high in $W_2$ is one whose liking and listening usually
+  agree on a rung while their evaluations place them on a
   different one" + the two concrete portraits (rap/rock/pop listener who
   credits classical/opera fans with high status; classical-music listener
   who grants that recognition to few audiences) + "about equally often".
-  Dim-3 expansion: existing reach sentence kept, then "In plain terms,
-  liking and listening place the high-$W_3$ respondent nowhere in
+  Dim-3 expansion: existing reach sentence kept, then "Liking and
+  listening place the high-$W_3$ respondent nowhere in
   particular on this axis, so the score mostly records how far their
   evaluations travel away from that middle" + generous/mirror-image split.
+  STYLE RULE (author request, same day): "in plain terms" purged — plain
+  writing should not announce itself, so never use the phrase in drafted
+  prose. The purge itself was done by the AUTHOR on Overleaf (web edits
+  `6cbec83` + `e3d6b8a`) while the same removal was being made locally —
+  the Overleaf version was adopted as base (overleaf main.tex copied BACK
+  into the workspace; the local removal was discarded, redundant). Author
+  edits adopted with it: dim-1 sentence reworded ("rank higher on the
+  liking than on the listening side"), dim-2 opening replaced with "On
+  the second global axis disagreement reflects where respondents sit on
+  the highbrow--popular ladder shared by the preference and consumption
+  spaces", "at best the consecrated ones", pair-paragraph tweaks ("Where
+  evaluation varies, it reflects disagreement", "the level of engagement"),
+  and the meanings material SPLIT into three paragraphs (dim 1 / dim 2 /
+  dim 3), pair-paragraph after. Fixed one author typo in the new dim-3
+  opener (comma placement, "On the third, global dimension where" → "On
+  the third global dimension, where").
+  DIM-3 PASSAGE REWRITTEN (same day, after the author flagged the whole
+  dim-3 treatment as unclear twice, and asked whether W3-disagreement is
+  "just scoring high on the first dimension of the separate evaluation
+  analysis, e.g. being more ecumenical"): answer is YES, essentially —
+  verified numerically: cor(sep-eval ax1, global F3) = 0.907; cor(W3,
+  eval-partial³²... squared eval partial coordinate) = 0.986; with
+  pref/cons partials pinned (sds 0.69/0.70 vs eval 2.75), W3 ≈ (2/3)e²;
+  generous side sits at +5.3 (mean W3 26.5), withholding at −2.7 (mean
+  W3 6.8) — asymmetric, generous carries 82% of top-quartile mass;
+  withholding group grants eval-yes to opera at only 12%. New dim-3
+  passage says it in prose: dimension = essentially the evaluation
+  aspect's own first axis (tab:partial-axes ref), ranks respondents by
+  how far down the hierarchy recognitions reach; opera nearly universal,
+  rap/metal the distinctive move; liking and listening leave every
+  respondent near the middle, "they can neither support nor contradict
+  those recognitions"; "Evaluation alone decides the position, and the
+  score measures how far it travels from the middle that the other two
+  aspects share"; generous side (ten of twenty on average) + opposite
+  form ("not even to opera's fans"). "Engagement profile" phrase purged
+  (all three occurrences were in this passage + its footnote); footnote
+  last clause now "how far a respondent's status recognitions travel
+  down the hierarchy". NOTE for future sessions: the author's question
+  shows the squared-position footnote IS the honest caveat — W3 is
+  closer to a squared eval-axis position than to a contradiction
+  measure; do not let prose drift back toward "contradictions" language
+  for dim 3. Compiles at 29 pp., no undefined refs, 2 pre-existing
+  overfulls. ADOPTED MID-EDIT web commits
+  `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
+  single "For instance, ..." sentence — as of this sync it ends mid-word
+  ("...as being high statu") and drops the "about equally often" sentence;
+  author still typing, do not "complete" it for them; also author added the
+  comma in "On the second global axis, disagreement reflects" themselves).
   The existing squared-position footnote now anchors at the END of the dim-3
   passage (explains why the generous form dominates). Empirical basis
   (verified from partial points, extraction: res$ind$coord.partiel rownames
