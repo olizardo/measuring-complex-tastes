@@ -452,6 +452,17 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Overleaf fix sync (2026-10-09, later): Overleaf compile broke because the
+  `e6b9103`/`2497b8f` syncs pushed main.tex changes but NOT the regenerated
+  table files — `tab-pairs.tex` was never copied to the clone, and
+  `tab-antinomy.tex` there was still the pre-decision-13/14 6-column
+  "Complex-taste scores" version. Copied both from workspace
+  `manuscript/tables/`; clone now compiles clean (29 pp., no errors, no
+  undefined refs). LESSON: the sync checklist copies `manuscript/` wholesale,
+  but regenerated tables land in `manuscript/tables/` AFTER the last sync
+  commit only if script 04 is rerun post-sync — after any script rerun that
+  writes tables/figures, diff `manuscript/` against `overleaf/manuscript/`
+  before declaring a sync done.
 - Last Overleaf sync: `09a234f` (2026-10-09, later) — the 4.4 pair-share
   sentence gains the dim-1 contrast sentence: disagreement splits almost
   evenly across the three pairs on the affirmation axis (no aspect
