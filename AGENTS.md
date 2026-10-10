@@ -514,7 +514,25 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   closer to a squared eval-axis position than to a contradiction
   measure; do not let prose drift back toward "contradictions" language
   for dim 3. Compiles at 29 pp., no undefined refs, 2 pre-existing
-  overfulls. ADOPTED MID-EDIT web commits
+  overfulls.
+  DIM-2 CONTRIBUTION-VS-DISAGREEMENT mechanism added (same day, author
+  question: why does evaluation carry 49% of W2 when Table 5 says it
+  contributes only 11% to dim 2 — the dim-1 extreme case was in the
+  aspect-split paragraph but the dim-2 instance was numbers-only). Three
+  verified facts now behind a new 3-sentence insert after the
+  "49%/64% vs 18% each" sentence: (a) pref+cons supply 88.9% of dim-2
+  variation (contribs 40.0/48.9/11.0) and their partial positions
+  correlate 0.73, so they hug the personal average (shares 19.6/31.9%);
+  (b) eval partial sd on dim 2 is the SMALLEST of the three (0.97 vs
+  1.48/1.78) and correlates only 0.08 with the engagement rung;
+  (c) eval's deviation from the personal average correlates 0.83 with the
+  rung position — wherever engagement carries a person far out on the
+  ladder, eval (centered at the middle) is left behind and shows up as
+  the standing-apart aspect. So the dim-2 mechanism = the dim-1
+  "left behind near the origin" logic in milder form: eval moves a bit
+  (sd 0.97 vs 0.46 on dim 1) but independently, and the rung's spread
+  generates its distance. Insert wording avoids re-quoting r = 0.73
+  (already one paragraph up in the pair-level paragraph). ADOPTED MID-EDIT web commits
   `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
   single "For instance, ..." sentence — as of this sync it ends mid-word
   ("...as being high statu") and drops the "about equally often" sentence;
