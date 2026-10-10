@@ -469,7 +469,9 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   "(e.g., individuals who like the same genres are close in genre space and
   individuals who consume the same genres are close in the consumption
   space)"; "inter-individual distance structures". Fixed the author's "ann
-  aspect's" typo. Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  aspect's" typo. Mid-sync web edit `6f5594c` (final clause "possible at the
+  level of the data structure---" → "possible empirically;") also adopted.
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing
   overfulls.
 - Last sync (2026-10-10): RV and Lg descriptions revised from the Pagès book
   (author request: "hard to follow, omit important information"). RV paragraph
