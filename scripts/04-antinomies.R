@@ -69,6 +69,17 @@ ant$share1 <- ant$W1 / ant$T1
 ant$share2 <- ant$W2 / ant$T2
 ant$share3 <- ant$W3 / ant$T3
 
+# per-aspect decomposition of the score (Pages 2014, sec. 5.4): each
+# aspect's partial point contributes its squared deviation from the
+# global point; the three contributions sum to W_s
+Wp <- (P - F)^2; Wc <- (C - F)^2; We <- (V - F)^2
+stopifnot(max(abs(Wp + Wc + We - W)) < 1e-10)
+for (s in 1:3) {
+  ant[[paste0("Wp", s)]] <- Wp[, s]
+  ant[[paste0("Wc", s)]] <- Wc[, s]
+  ant[[paste0("We", s)]] <- We[, s]
+}
+
 # --- 3. Ma's eight configurations per genre x respondent -----------------------
 types <- c("simple_pos", "guilty", "preacquired", "pose",
            "distanced", "justified", "distant", "simple_neg")
@@ -196,6 +207,13 @@ print(round(summary(ant$W3), 3))
 cat("mean antinomy share of partial inertia: dim1",
     round(mean(ant$share1), 3), "| dim2", round(mean(ant$share2), 3),
     "| dim3", round(mean(ant$share3), 3), "\n")
+
+wshare <- function(s) {
+  round(c(mean(ant[[paste0("Wp", s)]]), mean(ant[[paste0("Wc", s)]]),
+          mean(ant[[paste0("We", s)]])) / mean(ant[[paste0("W", s)]]), 3)
+}
+cat("mean per-aspect shares of W_s (pref/cons/eval):\n")
+print(rbind(dim1 = wshare(1), dim2 = wshare(2), dim3 = wshare(3)))
 
 cat("\n== Pair-level disagreement, dim 3 (correlations with dims) ==\n")
 print(round(cor(ant[, c("dPC3", "dPV3", "dCV3")], ant[, c("F1", "F2", "F3")],

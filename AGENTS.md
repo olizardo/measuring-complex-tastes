@@ -534,6 +534,34 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later): per-aspect decomposition of the
+  aspect-disagreement score, from a Pagès-2014 chapter-5 audit. Script 04
+  gains the book's §5.4 decomposition after the ant frame (each aspect's
+  partial point contributes its squared deviation from the global point;
+  ant gains Wp1–3/Wc1–3/We1–3 columns, contributions sum to W_s via
+  stopifnot; console prints mean per-aspect shares). Numbers: dim 1
+  pref/cons/eval 32.5/33.5/34.0% of W1 (even thirds — individual-level
+  counterpart of the tab-pairs equal-thirds claim), dim 2
+  19.6/31.9/48.6%, dim 3 17.8/17.8/64.4% (evaluation carries two-thirds;
+  absolute mean deviation 3.58 vs 0.99/0.99). main.tex: the 4.4 pair-share
+  paragraph gains apportionment sentences after the "evaluation is the
+  aspect that stands apart" sentence (citing pp. 108–109); the eq:decomp
+  paragraph gains a footnote after "grows as the aspects disagree more"
+  defending W_s against Pagès' §5.5 superimposed-representation distortion
+  caveat (cross-aspect partial distances meaningful only when the partial
+  clouds have comparable inertia along the studied dimensions; the MFA
+  balancing gives each aspect's partial cloud unit maximal inertia in the
+  global metric), citing pp. 112–116. Script 04 rerun: figures regenerated
+  byte-only and reverted (values verified identical against console
+  output); tab-antinomy/tab-pairs unchanged; antinomy_scores.rds
+  legitimately gains the Wp/Wc/We columns. Verified in-session that W_s is
+  exactly the book's §5.4 within-class inertia (Huygens identity and
+  barycentric property hold to 1e-13). CAUTION for future sessions:
+  Pagès' Table 5.2 between/total ratio is an aggregate ratio-of-inertias
+  (49/44/65% on our data per dimension), which is NOT the same quantity as
+  our mean-of-individual-ratios shares (56/52/63%) — don't conflate them
+  when quoting the book by name. Compiles at 29 pp., 0 undefined refs,
+  2 pre-existing overfulls.
 - Last sync (2026-10-10, later): RV 0/1 passage de-jargoned (author request:
   "super-obscure"). "The two clouds share no direction" and "homothetic---one
   is a stretched or shrunken copy... order respondents identically and differ
