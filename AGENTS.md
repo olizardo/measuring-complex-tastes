@@ -350,6 +350,20 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   reply misread the ω3 age coefficient as NEGATIVE (−0.48, confused with
   n_complex's −0.54) and told the author there was a dim-3 age flip —
   there is NOT; the real flip is dim 2 (W2 vs ω2).
+- **Interpretive quantities now in the manuscript (2026-10-09)**:
+  (1) 4.4 dimension-readings sentence covers all three scores (W1 =
+  liking vs listening, eval near-inert on dim 1: partial sd 0.46 vs
+  2.07/2.11; W2 = rung placement on the shared ladder; W3 = attribution
+  reach beyond a positionless engagement profile) + W3 footnote (behaves
+  partly like a squared position score: cor(W3,|F3|) 0.72 vs 0.37 for
+  W2; mean W3 = 5.7 among grant-none, 156 among grant-all-20);
+  (2) pair-share sentence in 4.4 after the dim-3 pair-level sentence:
+  dim-2 pairwise shares pref-cons 18%/pref-eval 35%/cons-eval 47%,
+  cor(pref,cons partials on dim 2) 0.73 vs 0.09/0.06 with eval — new
+  \label{sec:rv} on the Independence subsection supports the ref;
+  (3) toy-contrast paragraph after eq:genre where-clause (single-genre
+  complex taste vs twenty aligned per-genre tilts reaching the same
+  total disagreement from opposite materials).
 - **Duality (transposed MFA, genres as targets)**: genre-level RVs
   P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
   Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
@@ -425,7 +439,15 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `e6b9103` (2026-10-09, later) — ω renamed "genre-based
+- Last Overleaf sync: `124289b` (2026-10-09, later) — four clarifying
+  additions (author request): toy-contrast paragraph after the eq:genre
+  where-clause; 4.4 dimension-readings sentence extended to W1
+  ("inherits its interpretation from its dimension"); 4.4 pair-share
+  sentence (dim-2 shares 18/35/47, pref-cons partial r 0.73, new
+  sec:rv label); W3 position-admixture footnote (cor 0.72 vs 0.37,
+  grant-none 5.7 vs grant-all 156). Compiles at 29 pp., no undefined
+  refs (two small pre-existing overfulls remain).
+  Previous sync: `e6b9103` (2026-10-09, later) — ω renamed "genre-based
   complex taste" per decision 14: eq:genre where-clause names the first term;
   all "localized antinomy/component" wording replaced in eq:genre paragraph,
   worked example, 4.4, sec:who; "antinomy shares" → "aspect-disagreement
