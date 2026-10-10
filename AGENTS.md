@@ -146,8 +146,11 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    SUPERSEDED later the same day by decision 10: "modality" itself is now
    purged entirely; the three blocks are "aspects (of taste)".
 8. Figure designs (current): individual factor map = single dims-2–3 panel,
-   points colored by age group (referenced from the dim-2 paragraph with a
-   pointer to the social-sources section); supplementary figure =
+   points colored by age group — **DROPPED from main.tex 2026-10-10** (author
+   request after a keep/drop discussion; follows the fig-scree pattern —
+   script 03 still generates it, file kept in repo, unreferenced; the dim-2
+   prose clause now states the age anchoring directly with the
+   Section~\ref{sec:social} pointer); supplementary figure =
    demographic category barycenters ONLY on dims 2–3, no respondent cloud,
    axes spanning the category coordinates (the cloud otherwise compresses
    the barycenters near the origin); category map on dims 2–3 (switched
@@ -533,6 +536,30 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   and the genre-level split ... once the space dimensions are empirically
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
+  2 pre-existing overfulls.
+- Last sync (2026-10-10, later): fig-individuals (individual factor map)
+  DROPPED from main.tex (author choice via AskUser after a keep/drop
+  analysis). Rationale: it was referenced exactly once (dim-2 paragraph,
+  "first look at this axis's social anchoring") and its whole quantitative
+  claim — the age gradient on dim 2 (cohort means −0.74 → +1.23, ~2.3 pooled
+  within-sds end to end, adjacent cohorts only 0.2–0.5 sd apart; pooled
+  within-sd 0.88) — is covered better by sec:social (η² 0.331, tab-eta,
+  tab-sup-coord) and fig-supplementary on the same dims-2–3 plane; the
+  overplotted blob couldn't fully cash "strongly ordered by age". The
+  only argument for keeping (only individual-level cloud in the paper; GDA
+  convention) was outweighed by the paper's each-figure-earns-its-place
+  criterion. Dim-2 clause rewritten: "The same axis is strongly anchored in
+  respondents' ages, with the youngest cohorts toward the popular pole and
+  the oldest toward the highbrow pole (Section~\ref{sec:social})." Script
+  03 still generates fig-individuals.pdf (kept in repo, unreferenced);
+  figures renumber automatically (fig-worked-example is now Figure 2).
+  Web edit `96c8cda` landed mid-sync and was adopted as the local base:
+  Partial Axes opening reworded ("The second question is whether...",
+  "little connection to"); Composition subsection restructured (opening now
+  carries the Lg paragraph + second-axes clause; the contributions and
+  dim-3-content paragraphs merged into one; author re-introduced a colon in
+  "questions posed above: whether..." — their own text, kept). Two-file
+  copy (main.tex + AGENTS.md). Compiles at 29 pp., no undefined refs,
   2 pre-existing overfulls.
 - Last sync (2026-10-10, later): per-aspect decomposition of the
   aspect-disagreement score, from a Pagès-2014 chapter-5 audit. Script 04
