@@ -564,6 +564,40 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   with the meanings paragraph's "ladder shared by the preference and
   consumption spaces". Compiles at 30 pp. (float reflow), no undefined
   refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): "Which Aspect Stands Apart" subsection
+  created (author request: the aspect-split paragraph needed its own
+  subsection explaining the geometry, the substantive question, and the
+  interpretation in plain language). New \subsubsection with
+  \label{sec:aspect-shares} has four paragraphs: (1) question + geometry
+  (partial points cluster around the global point = their average; score
+  measures cluster spread; since the global point is the average, each
+  point contributes its squared distance from it and the three sum to
+  the score — Pagès pp. 108–109 cite; share large = odd one out);
+  (2) shares vs Table-5 contributions + dim-1 extreme case + NEW
+  clarifier ("That third is not evidence of any contradiction in the
+  evaluations. A respondent could like exactly the genres they listen
+  to, and evaluation would still carry a large share..."); (3) results
+  by dimension — NOTE dim-2 shares now stated correctly as 49/20/32
+  (eval/pref/cons), fixing the old ambiguous "against 18% each" which
+  was true of W3 only (17.8/17.8); (4) substantive close linking to
+  Ma's configurations ("which aspect of taste stands against the other
+  two") + per-dimension answer summary. The "Complex tastes are not
+  concentrated in any region of the space" pair of sentences MOVED from
+  the end of the aspect paragraph to the end of the 4.5 opening
+  paragraph (they are about the score generally, not the aspect
+  attribution). Two delimiting headings added because LaTeX headings
+  extend forward: \subsubsection{A Worked Example} before the example
+  and \subsubsection{The Two Measures Compared} before the
+  divergence paragraph — the worked example's prose ("here it is liking
+  that stands apart", "now it is evaluation") fits the new subsection
+  frame but the genre-level split belongs outside it; the divergence/
+  genre-level/signatures block is the geometric-vs-combinatorial
+  comparison. 4.5 structure now: [untitled: opening + meanings +
+  pair-level] → Which Aspect Stands Apart → A Worked Example → The Two
+  Measures Compared → sec:social. The pair-level paragraph could get a
+  mirror heading later (strategy has "Pairwise Distances Across
+  Aspects"). Compiles at 30 pp., no undefined refs, 2 pre-existing
+  overfulls.
   ADOPTED MID-EDIT web commits
   `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
   single "For instance, ..." sentence — as of this sync it ends mid-word
