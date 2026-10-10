@@ -537,6 +537,30 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
   the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
   2 pre-existing overfulls.
+- Last sync (2026-10-10, later): sec:antinomies "Measuring Complex Tastes"
+  restructured (author request: first paragraph incomplete, "three scores"
+  unannounced, paragraphs long/convoluted). The old 4-paragraph block
+  (opening, meanings, pairs+aspects, worked example) became 7 paragraphs:
+  (1) NEW opening introduces the scores explicitly ("The measure of the
+  analytic strategy gives each respondent one aspect-disagreement score per
+  dimension... On the first three dimensions, this is three scores per
+  respondent, $W_1$, $W_2$, and $W_3$."), moves the 56/52/63% magnitude
+  headline UP from the old meanings paragraph into the opening ("Disagreement
+  is substantial"), and keeps the Ma-configurations complement sentence; the
+  old opener ("We measure complex tastes geometrically... read directly off
+  the MFA") is gone. (2) Meanings paragraph now pure — colon/semicolon chains
+  split into sentences, footnote unchanged. (3) Pair-level paragraph: dim
+  order now 2→3 (was 3/2/3 zigzag), shares-echo sentence now AFTER the
+  numbers with tab-pairs ref, dim-1 contrast split into short sentences.
+  (4) NEW aspect-split paragraph (per-aspect shares + Pagès cite + region-null
+  closing, colon de-colonized). (5–7) Worked example split into three
+  paragraphs (intro+dim 1 / dims 2–3 / genre-level split); four prose colons
+  de-colonized per decision 15. ALL numbers, refs, cites, footnotes preserved
+  (verified by token-multiset diff against HEAD; the only number-token
+  additions are the 1/2/3 from the new "$W_1$, $W_2$, and $W_3$" sentence;
+  footnote colons in the two worked-example footnotes kept — definitional
+  lists, author has kept them through edits). Compiles at 29 pp., no
+  undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): Lg magnitude GUARD added to the Composition
   subsection (sec:contrib), from a session diagnosing whether the Lg
   coefficients' magnitudes can be read comparatively. Verified numerically:
