@@ -214,8 +214,10 @@ library(ggplot2)
 library(ggrepel)
 ant$n_complex <- type_counts$n_complex
 
-# table: Spearman correlations of type counts with MFA coords and antinomy scores
-cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3")],
+# table: Spearman correlations of type counts with MFA coords,
+# aspect-disagreement scores, and genre-based complex-taste components
+cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3",
+                               "Wloc1", "Wloc2", "Wloc3")],
           method = "spearman")
 labs <- c("Simple taste ($+++$)", "Guilty pleasure ($++-$)",
           "Pre-acquired taste ($-++$)", "Taste pose ($+\\,-+$)",
@@ -224,10 +226,11 @@ labs <- c("Simple taste ($+++$)", "Guilty pleasure ($++-$)",
           "Total complex tastes")
 fmt <- function(x) gsub("-", "$-$", sprintf("%.2f", x))
 tl <- c(
-  "\\begin{tabular}{lcccccc}", "\\toprule",
-  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Complex-taste scores} \\\\",
-  "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}",
-  " & Dim 1 & Dim 2 & Dim 3 & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
+  "\\footnotesize", "\\setlength{\\tabcolsep}{2pt}",
+  "\\begin{tabular}{lccccccccc}", "\\toprule",
+  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Aspect-disagreement} & \\multicolumn{3}{c}{Genre-based complex taste} \\\\",
+  "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\\cmidrule(lr){8-10}",
+  " & Dim 1 & Dim 2 & Dim 3 & $W_1$ & $W_2$ & $W_3$ & $\\omega_1$ & $\\omega_2$ & $\\omega_3$ \\\\", "\\midrule")
 for (i in seq_len(nrow(cm))) {
   tl <- c(tl, paste0(labs[i], " & ", paste(fmt(cm[i, ]), collapse = " & "),
                      " \\\\"))

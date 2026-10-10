@@ -81,6 +81,29 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
     is literally aspect dispersion, not configural complexity (ρ with
     config counts 0.31/0.19/−0.06; worked example 362 is 94% coherence;
     all-yes respondents get W without configurations).
+14. **Terminology + table (author request, 2026-10-09): ω renamed
+    "genre-based complex taste"; tab-antinomy gains ω columns.** The
+    aggregate Σ_g ω_s(i;g) is "the genre-based component"; per-genre
+    ω_s(i;g) is introduced in the eq:genre where-clause as the
+    respondent's genre-based complex taste and "the geometric expression
+    of holding a complex configuration in that genre". Replaces
+    "localized antinomy/antinomies", "the localized component",
+    "genre-local part/dispersion" throughout main.tex (eq:genre
+    paragraph, worked example, 4.4, sec:who robustness paragraph).
+    Leftover "antinomy shares" in the robustness footnote →
+    "aspect-disagreement shares" (decision-5 cleanup). tab-antinomy
+    (script 04) now has 9 columns F1–3/W1–3/ω1–3, group headers "MFA
+    coordinates / Aspect-disagreement / Genre-based complex taste" —
+    the old "Complex-taste scores" header was a decision-13 leak, fixed;
+    \footnotesize + tabcolsep 2pt required for fit (overflows by 83pt at
+    \small, 27pt at \footnotesize/3pt). 4.4 signatures paragraph gains
+    the config→ω map sentence (guilty 0.53/0.43 on ω1/ω2; pose 0.47,
+    distant praise 0.38 on ω3; non-taste −0.75; simple-taste ω3 0.57 =
+    margin residue). Full type-ω Spearman map (script-04 console):
+    simple_pos .19/.35/.57, guilty .53/.43/−.22, preacquired
+    .21/.26/.25, pose .14/.23/.47, distanced .29/.25/.03, justified
+    .27/.16/−.18, distant −.13/−.05/.38, simple_neg −.75/−.75/−.36,
+    n_complex .71/.66/.18; dim-free Σω ↔ n_complex 0.61.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
    not "antinomies." Table 3
@@ -283,7 +306,8 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   latspsal) + 124.6 coherence (94%); W1 0.8 = 2.4 local + (−1.6) coherence
   (cancellation). corr(n_complex, Wloc) 0.69/0.63/0.17 vs corr(n_complex, W)
   0.44/0.18/0.08 — the localized part is the geometric counterpart of the
-  combinatorial measure. 196 respondents in bottom-third W3 but top-third
+  combinatorial measure (ω renamed "genre-based complex taste"
+  2026-10-09, decision 14). 196 respondents in bottom-third W3 but top-third
   localized (masked complexity). Script 04 saves omega (2259×20×3),
   cell_cfg (per-cell config labels), Dcoef in antinomy_scores.rds; ant gains
   Wloc1–3, coh1–3 columns (script 07 unaffected). Manuscript: new paragraph
@@ -401,7 +425,15 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `005906f` (2026-10-09, later) — localized-component
+- Last Overleaf sync: `e6b9103` (2026-10-09, later) — ω renamed "genre-based
+  complex taste" per decision 14: eq:genre where-clause names the first term;
+  all "localized antinomy/component" wording replaced in eq:genre paragraph,
+  worked example, 4.4, sec:who; "antinomy shares" → "aspect-disagreement
+  shares" in the robustness footnote; tab-antinomy gains ω1–ω3 columns
+  (9 cols, \footnotesize/2pt fit; stale "Complex-taste scores" header fixed);
+  4.4 signatures paragraph gains the config→ω map sentence + margin-residue
+  clause; caption updated. Script 04 table block rewritten. Compiles at
+  28 pp. Previous sync: `005906f` (2026-10-09, later) — localized-component
   robustness added to sec:who as its final paragraph: same OLS models with
   the genre-localized component Σ_g ω_s(i;g) (the combinatorial-signal part
   of the score) as outcome; R² 0.085/0.080/0.033; upper-class premium on all
