@@ -373,7 +373,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   distances on dims 1–3 with within-dimension shares — P–C 4.31/1.50/
   0.38 (33/18/2%), P–E 4.37/2.89/8.15 (33/35/49%), C–E 4.50/3.91/8.15
   (34/47/49%); totals 13.2/8.3/16.7 = 3·mean W_s; dim-3 P–C share 2%
-  quoted in the 4.4 pair-share sentence.
+  quoted in the 4.4 pair-share sentence, which also gains the dim-1
+  contrast sentence (equal thirds → no aspect stands apart on the
+  affirmation axis; liking vs listening around a near-inert eval point,
+  unlike dims 2–3 where evaluation is the odd aspect out).
 - **Duality (transposed MFA, genres as targets)**: genre-level RVs
   P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
   Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
@@ -449,7 +452,12 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `2497b8f` (2026-10-09, later) — two additions to the
+- Last Overleaf sync: `09a234f` (2026-10-09, later) — the 4.4 pair-share
+  sentence gains the dim-1 contrast sentence: disagreement splits almost
+  evenly across the three pairs on the affirmation axis (no aspect
+  stands apart; liking vs listening around a barely moving eval point),
+  unlike dims 2–3 where evaluation is the odd aspect out. Compiles at
+  29 pp. Previous sync: `2497b8f` (2026-10-09, later) — two additions to the
   pairwise-decomposition material: (1) strategy paragraph after the
   d² footnote gains the Ma mapping sentence (each complex configuration
   = one aspect standing against the other two; pair distances indicate
