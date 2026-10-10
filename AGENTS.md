@@ -477,6 +477,16 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   aspect's" typo. Mid-sync web edit `6f5594c` (final clause "possible at the
   level of the data structure---" → "possible empirically;") also adopted.
   Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): colon sweep of the Lg and contributions
+  strategy paragraphs (decision 15 applied; author request). Four fixes:
+  "and the global structure: how much..." → "...global structure, that is,
+  how much..."; "not equal presence in the result; an aspect..." split into
+  two sentences; "apportion each dimension...: the share of the dimension's
+  variance each one carries" → "apportion the variance of each dimension of
+  the common representation among the three aspects"; "different quantity
+  from $Lg$: $Lg$ assigns..." split into two sentences. Footnote formulas
+  left as-is (colon after a display formula is standard and unflagged).
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
 - Last sync (2026-10-10, later): RV closing sentence rewritten + colon purge
   (author requests). Final sentence now reads "Small RV coefficients mean
   the opposite. Each aspect carries information the others lack, so no
