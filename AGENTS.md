@@ -555,6 +555,11 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   third of the disagreement" (keeps the author's axis-first structure;
   they reverted to an axis subject once before — see the 2026-10-09
   repairs note — if they insist on their exact wording, restore it).
+  AUTHOR CONFIRMED THEIR WORDING (2026-10-10, immediately after the
+  push): the repair was REVERTED; the sentence now reads exactly as in
+  web edit `ca49461`. DO NOT re-repair this sentence in future sessions
+  — the author has now written an axis subject three times and has
+  explicitly chosen it.
 - Last sync (2026-10-10, later): TWO TRIMS the author requested back to
   back (decisions 16 + 17). (1) tab-antinomy (Table 7) replaced by
   fig-signatures — the signed Spearman heatmap of the same 9×9 matrix
