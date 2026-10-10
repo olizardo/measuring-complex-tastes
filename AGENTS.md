@@ -541,6 +541,29 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   added ("and the further liking and listening carry the respondent to a
   rung, the farther evaluation sits from that respondent's average" —
   the cor 0.83 rung↔eval-deviation link, author approved both via chat).
+  PAIR-PARAGRAPH closing sequence rewritten (same day, author flagged
+  "Where evaluation varies, it reflects disagreement... unlike the second
+  and third dimensions, where evaluation is the aspect that stands apart"
+  as hard to understand): cryptic gloss → "Wherever evaluation takes a
+  position of its own, it disagrees with both of the other aspects at
+  once"; "The first dimension is the contrast" → "the exception"; long
+  final sentence split into short ones ("a third each" = the 33/33/34
+  dim-1 pair shares; "There the disagreement runs between liking and
+  listening, each placing the person at a different level of engagement,
+  while evaluation stays near the middle and barely moves"; closing
+  contrast its own sentence). PLUS author catch (correct): "where all
+  three aspects place respondents on a shared ladder" was WRONG — the
+  ladder is shared by preference and consumption only (eval contributes
+  11% to dim 2, partial sd 0.97 vs 1.48/1.78, r = 0.08 with the rung;
+  nuance: eval is not mute — its second separate axis reappears weakly,
+  partial axis +0.35 — but it does not rank respondents on the ladder).
+  Sentence now reads "On the second dimension, preference and consumption
+  place respondents on a shared highbrow--popular ladder, and their
+  positions correlate at $r = 0.73$, so their pair accounts for only
+  18%..., against 47% for consumption--evaluation alone" — consistent
+  with the meanings paragraph's "ladder shared by the preference and
+  consumption spaces". Compiles at 30 pp. (float reflow), no undefined
+  refs, 2 pre-existing overfulls.
   ADOPTED MID-EDIT web commits
   `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
   single "For instance, ..." sentence — as of this sync it ends mid-word
