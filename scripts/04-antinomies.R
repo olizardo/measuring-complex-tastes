@@ -314,29 +314,44 @@ p7 <- ggplot(ant, aes(F2, F3)) +
   theme(panel.grid.minor = element_blank(), legend.position = "top")
 ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 
-# figure: worked example — partial points of the example respondent.
-# Two panels share the status-valuation axis (dim 3): left pairs it with
-# the general-affirmation axis (dim 1), right with the highbrow-popular
-# axis (dim 2, the plane of the paper's other maps). Respondent chosen
-# as the highest-W3 respondent holding guilty-pleasure, taste-pose,
-# and distant-praise configurations (author-approved example; original data row 362)
-ex <- which(rownames(ant) == "362")
+# figure: worked examples — partial points of two contrasting respondents,
+# used as running examples throughout Section "Measuring Complex Tastes
+# Geometrically". Rows = respondents, columns share the status-valuation
+# axis (dim 3): left pairs it with the general-affirmation axis (dim 1),
+# right with the highbrow-popular axis (dim 2, the plane of the paper's
+# other maps). Scales are free in both directions (respondent 362's dim-3
+# spread dwarfs 1881's; fixed axes would flatten the second row).
+#   362: high engagement + generous valuation (likes 15, listens 9,
+#        grants 18); highest-W3 respondent holding guilty-pleasure,
+#        taste-pose, and distant-praise configurations.
+#   1881: high engagement + withholding valuation (likes 14, listens 13,
+#        grants none); nearly the same rung as 362 on dim 2, reached by
+#        opposite materials (consumption above evaluation).
+exr <- c("362", "1881")
+rlab <- c("Grants 18 of 20 recognitions", "Grants none")
+ex <- match(exr, rownames(ant))
+stopifnot(!any(is.na(ex)))
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
 panes <- c("Dimension 1 (general affirmation)",
            "Dimension 2 (highbrow\u2013popular)")
-exd <- do.call(rbind, lapply(seq_along(panes), function(s) {
-  data.frame(
-    modality = factor(mods, levels = mods),
-    d = c(P[ex, s], C[ex, s], V[ex, s], F[ex, s]),
-    d3 = c(P[ex, 3], C[ex, 3], V[ex, 3], F[ex, 3]),
-    panel = factor(panes[s], levels = panes))
+exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
+  do.call(rbind, lapply(seq_along(panes), function(s) {
+    data.frame(
+      respondent = factor(rlab[r], levels = rlab),
+      modality = factor(mods, levels = mods),
+      d = c(P[ex[r], s], C[ex[r], s], V[ex[r], s], F[ex[r], s]),
+      d3 = c(P[ex[r], 3], C[ex[r], 3], V[ex[r], 3], F[ex[r], 3]),
+      panel = factor(panes[s], levels = panes))
+  }))
 }))
-segex <- do.call(rbind, lapply(seq_along(panes), function(s) {
-  k <- 4 * (s - 1)
-  data.frame(x = exd$d[k + 1:3], y = exd$d3[k + 1:3],
-             xend = exd$d[k + 4], yend = exd$d3[k + 4],
-             modality = exd$modality[k + 1:3],
-             panel = exd$panel[k + 1])
+# each (respondent, panel) block holds 3 partial points then the global
+segex <- do.call(rbind, lapply(split(exd, interaction(exd$respondent,
+                                                     exd$panel, drop = TRUE)),
+                               function(b) {
+  data.frame(x = b$d[1:3], y = b$d3[1:3],
+             xend = b$d[4], yend = b$d3[4],
+             modality = b$modality[1:3],
+             respondent = b$respondent[1], panel = b$panel[1])
 }))
 pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
@@ -349,7 +364,7 @@ pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
                   show.legend = FALSE, box.padding = 0.6,
                   point.padding = 0.4, seed = 3) +
-  facet_grid(. ~ panel, scales = "free_x") +
+  facet_grid(respondent ~ panel, scales = "free") +
   scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
                                 Evaluation = "#009E73", Global = "black")) +
   scale_shape_manual(values = c(Preference = 16, Consumption = 17,
@@ -357,7 +372,7 @@ pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   labs(x = NULL, y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
   theme(panel.grid = element_blank())
-ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 3.8)
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 6)
 
 saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
              cell_cfg = cell_cfg, Dcoef = Dcoef),
