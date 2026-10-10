@@ -452,6 +452,25 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): RV 0/1 passage de-jargoned (author request:
+  "super-obscure"). "The two clouds share no direction" and "homothetic---one
+  is a stretched or shrunken copy... order respondents identically and differ
+  only in how sharply they differentiate them" replaced with plain distance
+  language: RV 0 = "two respondents who are close together in one cloud are
+  then no more likely to be close in the other than any two respondents
+  chosen at random"; RV 1 = "the two clouds have exactly the same shape: the
+  distance between any pair of respondents in one cloud is a fixed multiple
+  of their distance in the other. The aspects then agree completely about
+  who resembles whom; they differ only in how far apart they spread the
+  respondents." The word "homothetic" is now gone from main.tex. Also adopted
+  author web edit `223c59e` (landed before this revision and preserved in
+  full): RV material split into two paragraphs; "The comparison relies on the
+  geometry each aspect imposes on the individuals"; added closeness example
+  "(e.g., individuals who like the same genres are close in genre space and
+  individuals who consume the same genres are close in the consumption
+  space)"; "inter-individual distance structures". Fixed the author's "ann
+  aspect's" typo. Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  overfulls.
 - Last sync (2026-10-10): RV and Lg descriptions revised from the Pagès book
   (author request: "hard to follow, omit important information"). RV paragraph
   now opens with the geometric basis (each aspect's twenty indicators generate
