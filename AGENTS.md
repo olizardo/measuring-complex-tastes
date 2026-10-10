@@ -452,6 +452,22 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-09, later): read-through trims in 4.4 — the circular
+  opening sentence of the aspect-disagreement paragraph ("The
+  aspect-disagreement scores tell us how much of each respondent's
+  position...") deleted (author verdict: not useful; the paragraph now opens
+  on "The three scores differ in what disagreement means..."); fig-antinomy-map
+  DROPPED from main.tex as redundant with prose (author request; the
+  fig-scree/fig-rv pattern — the figure's only content was the null result
+  W1↔dims 2–3 ρ = 0.01/−0.07, already stated in text, and a 2,259-point
+  cloud can't visually verify "blanketing"). Closing sentence rewritten
+  figure-free: "Nor are complex tastes concentrated in any region of the
+  space... high-disagreement respondents are spread across the hierarchical
+  and status-valuation axes rather than clustered anywhere in particular."
+  Figure env removed; figures renumber automatically (worked-example is now
+  Figure 4). Script 04 still generates fig-antinomy-map (file kept in repo,
+  unreferenced). Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  overfulls. Two-file copy (main.tex + AGENTS.md).
 - Last sync: worked example moved from strategy 3.5 to results 4.5
   (2026-10-09, later) — the worked-example paragraph + fig-worked-example
   env now live in 4.5 "Measuring Complex Tastes" (inserted after the
