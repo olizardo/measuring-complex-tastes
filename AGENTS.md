@@ -457,6 +457,34 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): fig-categories12 + fig-categories COMBINED into
+  one two-panel figure (author request; single figure sits next to its
+  discussion). Script 03's two category-map blocks replaced by one
+  mk_cc/facet_grid block: left panel dims 1–2, right panel dims 2–3, facet
+  strips name the dimensions (fig-worked-example style), free scales, labs
+  x/y NULL, shared Aspect legend, 8.5×4.4in, saved as
+  fig-categories.pdf (.95\linewidth in main.tex). fig-categories12.pdf is no
+  longer generated; the stale file was git-rm'd from BOTH the workspace repo
+  and the Overleaf clone. main.tex: single \label{fig:categories} (the
+  fig:categories12 label purged); caption merged from both old captions
+  (left/right panel sentences); prose refs updated ("As the left panel of
+  Figure~\ref{fig:categories} shows" in the 4.1 opening; "The right panel's
+  vertical axis also previews Dimension 3" in the dim-2 paragraph); figure
+  env placed after the dim-2 paragraph. Compiled placement: ref end of p.8,
+  dim-2 discussion p.9 (Table 2 takes the p.9 float slot — encountered
+  earlier, float order is preserved), figure top of p.10, directly after its
+  discussion; [!htb] placement tried and reverted to house [htbp] (made no
+  difference). Adopted web edits `fcaca6c`/`98163ec`/`5ac0b7a`: strategy
+  "Measuring Complex Taste at the Individual Level" gains \subsubsections
+  ("Aspect Disagreement Across Global Dimensions", "Pairwise Distances
+  Across Aspects", "Genre-Specific Disagreement Across Dimensions" — the
+  stray duplicate \subsection{Aspect Disagreement} became the first
+  subsubsection) and the toy-contrast paragraph closing reworded
+  ("provides a toy example of a single respondent across all three scores
+  and the genre-level split ... once the space dimensions are empirically
+  specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
+  the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
+  2 pre-existing overfulls.
 - Last sync (2026-10-10, later): RV 0/1 passage de-jargoned (author request:
   "super-obscure"). "The two clouds share no direction" and "homothetic---one
   is a stretched or shrunken copy... order respondents identically and differ

@@ -62,66 +62,46 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
-# --- Figure 3: category map ---------------------------------------------------
-cc <- as.data.frame(res$quali.var$coord[, 2:3])
-names(cc) <- c("dim2", "dim3")
-cc$name <- rownames(cc)
-cc$modality <- ifelse(grepl("^pref_", cc$name), "Preference",
-                 ifelse(grepl("^cons_", cc$name), "Consumption", "Evaluation"))
-cc$yes <- grepl("_1$", cc$name)
-cc$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc$name)),
-                         gshort)]
+# --- Figure 3: category maps, two panels (dims 1-2 and 2-3) --------------------
+# The panels share Dimension 2: left puts it on the y-axis, right on the
+# x-axis. Facet strips name the dimensions (fig-worked-example style).
+mk_cc <- function(dims, panel) {
+  d <- as.data.frame(res$quali.var$coord[, dims])
+  names(d) <- c("x", "y")
+  d$name <- rownames(d)
+  d$aspect <- ifelse(grepl("^pref_", d$name), "Preference",
+               ifelse(grepl("^cons_", d$name), "Consumption", "Evaluation"))
+  d$yes <- grepl("_1$", d$name)
+  d$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", d$name)),
+                          gshort)]
+  d$panel <- panel
+  d
+}
+cc_all <- rbind(
+  mk_cc(c(1, 2), "Dimensions 1\u20132"),
+  mk_cc(c(2, 3), "Dimensions 2\u20133")
+)
+cc_all$panel <- factor(cc_all$panel,
+                       levels = c("Dimensions 1\u20132", "Dimensions 2\u20133"))
 # "no" categories shown in light grey for reference
-p3 <- ggplot(cc, aes(dim2, dim3)) +
+p3 <- ggplot(cc_all, aes(x, y)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cc, !yes), color = "grey65", size = 1) +
-  geom_point(data = subset(cc, yes), aes(color = modality), size = 1.8,
+  geom_point(data = subset(cc_all, !yes), color = "grey65", size = 1) +
+  geom_point(data = subset(cc_all, yes), aes(color = aspect), size = 1.8,
              alpha = 0.9) +
-  ggrepel::geom_text_repel(data = subset(cc, yes),
-                           aes(label = genre, color = modality), size = 2.6,
-                           segment.color = NA, max.overlaps = 25,
-                           show.legend = FALSE) +
-  scale_color_manual(values = c(Preference = "#08519C",
-                                Consumption = "#A63603",
-                                Evaluation = "#006D2C")) +
-  labs(x = "Dimension 2", y = "Dimension 3",
-       color = "Aspect",
-       title = "Category map: 'yes' categories by taste aspect",
-       subtitle = "Grey points: 'no' categories") +
-  theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank(), legend.position = "right")
-ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
-
-# --- Figure 3b: category map on dimensions 1-2 (supports the 4.1 opening) ------
-cc12 <- as.data.frame(res$quali.var$coord[, c(1, 2)])
-names(cc12) <- c("dim1", "dim2")
-cc12$name <- rownames(cc12)
-cc12$aspect <- ifelse(grepl("^pref_", cc12$name), "Preference",
-                  ifelse(grepl("^cons_", cc12$name), "Consumption", "Evaluation"))
-cc12$yes <- grepl("_1$", cc12$name)
-cc12$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc12$name)),
-                           gshort)]
-p3b <- ggplot(cc12, aes(dim1, dim2)) +
-  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
-  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cc12, !yes), color = "grey65", size = 1) +
-  geom_point(data = subset(cc12, yes), aes(color = aspect), size = 1.8,
-             alpha = 0.9) +
-  ggrepel::geom_text_repel(data = subset(cc12, yes),
+  ggrepel::geom_text_repel(data = subset(cc_all, yes),
                            aes(label = genre, color = aspect), size = 2.6,
                            segment.color = NA, max.overlaps = 25,
                            show.legend = FALSE, seed = 17) +
+  facet_grid(. ~ panel, scales = "free") +
   scale_color_manual(values = c(Preference = "#08519C",
                                 Consumption = "#A63603",
                                 Evaluation = "#006D2C")) +
-  labs(x = "Dimension 1", y = "Dimension 2",
-       color = "Aspect",
-       title = "Category map: 'yes' categories on Dimensions 1 and 2",
-       subtitle = "Grey points: 'no' categories") +
+  labs(x = NULL, y = NULL, color = "Aspect") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "right")
-ggsave("manuscript/figures/fig-categories12.pdf", p3b, width = 6, height = 5)
+ggsave("manuscript/figures/fig-categories.pdf", p3, width = 8.5, height = 4.4)
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
 rv <- res$group$RV
