@@ -457,6 +457,34 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): sec:contrib question-mapping FIXED (author
+  flagged that the 4.4 opening claimed Table 5 alone answers Q2+Q3). The
+  strategy's own assignment is Lg→Q2 (participation), contributions→Q3
+  (which aspect organizes each dimension); the author's instinct that
+  partial axes bear on Q2 is right — they show each aspect's leading
+  separate axes reappearing in the global space, i.e., participation
+  dimension by dimension. Repairs: (1) 4.4 opening now acknowledges "The
+  partial axes of the previous subsection (Table~\ref{tab:partial-axes})
+  already spoke to the second question at the level of specific
+  dimensions"; (2) the Lg paragraph — which WRONGLY said Lg "answer[s] the
+  dimension composition question from the other direction" (a Q3 label
+  contradicting the opening) — now says "answer the second question for
+  the compromise as a whole"; (3) Lg paragraph MOVED before the
+  contributions paragraph so the subsection runs Q2 (Lg) then Q3
+  (contributions), matching the strategy order; (4) the balancing-weights
+  footnote moved from the deleted "answer to the second question is yes"
+  sentence to the Lg paragraph's "none is present in name only" sentence
+  (its content — equal footing going in, not equal presence coming out —
+  belongs there); (5) the redundant "Each aspect contributes to each of
+  the three global dimensions" sentence dropped (the Q3 paragraph's "while
+  all aspects appear in the first three global dimensions" carries it).
+  Colon in the opening ("posed above: does each aspect...") de-colonized
+  per decision 15. Web edit `6edd9d1` landed mid-sync and was adopted:
+  4.3 dim-2 sentence "independent" → "partially independent", and the dim-3
+  sentence gains a closing clause ("suggesting that the third global
+  dimension is a specialized status-evaluation axis with little input from
+  people's preferences or consumption behavior"). Compiles at 29 pp.,
+  0 undefined refs.
 - Last sync (2026-10-10, later): partial-axes/contributions SEPARATION (author
   choice via AskUser — "Clean separation" over merging the subsections).
   The Partial Axes subsection (4.3) quoted two aspect-contribution numbers
