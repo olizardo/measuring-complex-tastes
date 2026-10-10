@@ -207,7 +207,7 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/01-prepare-mfa-data.R` | `data/mfa_input.rds` | builds 60 binary cols (pref_/cons_/eval_ prefixes) |
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
 | `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
-| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, tab-antinomy | W scores, pairwise disagreements, Ma's 8 configs |
+| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, tab-antinomy, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs |
 | `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4 |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds) |
@@ -363,7 +363,17 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   \label{sec:rv} on the Independence subsection supports the ref;
   (3) toy-contrast paragraph after eq:genre where-clause (single-genre
   complex taste vs twenty aligned per-genre tilts reaching the same
-  total disagreement from opposite materials).
+  total disagreement from opposite materials);
+  (4) pairwise-decomposition paragraph gains the Ma mapping: each of the
+  six complex configurations = one aspect standing against the other two
+  (guilty/distant = evaluation odd; pose/distanced = consumption odd;
+  pre-acquired/justified = liking odd), so the pair distances indicate
+  which aspect is standing apart;
+  (5) new tab-pairs (script 04, after tab-antinomy): mean squared pair
+  distances on dims 1–3 with within-dimension shares — P–C 4.31/1.50/
+  0.38 (33/18/2%), P–E 4.37/2.89/8.15 (33/35/49%), C–E 4.50/3.91/8.15
+  (34/47/49%); totals 13.2/8.3/16.7 = 3·mean W_s; dim-3 P–C share 2%
+  quoted in the 4.4 pair-share sentence.
 - **Duality (transposed MFA, genres as targets)**: genre-level RVs
   P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
   Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
@@ -439,7 +449,16 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
-- Last Overleaf sync: `124289b` (2026-10-09, later) — four clarifying
+- Last Overleaf sync: `2497b8f` (2026-10-09, later) — two additions to the
+  pairwise-decomposition material: (1) strategy paragraph after the
+  d² footnote gains the Ma mapping sentence (each complex configuration
+  = one aspect standing against the other two; pair distances indicate
+  which aspect stands apart); (2) new tab-pairs (script 04 block after
+  tab-antinomy; 3×3 mean squared pair distances + within-dimension
+  shares; totals = H·mean W_s) placed after fig-antinomy-map, referenced
+  from the 4.4 pair-share sentence, which gains the dim-3 clause (P–C
+  share 2%). Compiles at 29 pp., no undefined refs.
+  Previous sync: `124289b` (2026-10-09, later) — four clarifying
   additions (author request): toy-contrast paragraph after the eq:genre
   where-clause; 4.4 dimension-readings sentence extended to W1
   ("inherits its interpretation from its dimension"); 4.4 pair-share

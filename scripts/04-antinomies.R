@@ -238,6 +238,27 @@ for (i in seq_len(nrow(cm))) {
 tl <- c(tl, "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-antinomy.tex")
 
+# table: mean squared pairwise distances between partial points, dims 1-3
+pcols <- c("dPC1", "dPV1", "dCV1", "dPC2", "dPV2", "dCV2", "dPC3", "dPV3", "dCV3")
+pm  <- matrix(colMeans(ant[, pcols]), nrow = 3,
+              dimnames = list(c("pc", "pe", "ce"), c("dim1", "dim2", "dim3")))
+psh <- sweep(pm, 2, colSums(pm), "/")
+print(round(pm, 2))
+print(round(psh, 3))
+plabs <- c("Preference--consumption", "Preference--evaluation",
+           "Consumption--evaluation")
+tlp <- c("\\begin{tabular}{lccc}", "\\toprule",
+         " & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+for (k in seq_len(3)) {
+  cells <- sprintf("%.2f~(%.0f\\%%)", pm[k, ], 100 * psh[k, ])
+  tlp <- c(tlp, paste0(plabs[k], " & ", paste(cells, collapse = " & "), " \\\\"))
+}
+tlp <- c(tlp, "\\midrule",
+         paste0("$H \\cdot W_s$ (total) & ",
+                paste(sprintf("%.1f", colSums(pm)), collapse = " & "), " \\\\"),
+         "\\bottomrule", "\\end{tabular}")
+writeLines(tlp, "manuscript/tables/tab-pairs.tex")
+
 # figure: mean number of genres held in each configuration
 cfg <- type_counts[, setdiff(names(type_counts), "n_complex")]
 mc <- data.frame(type = names(colMeans(cfg)), mean = colMeans(cfg))
