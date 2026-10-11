@@ -63,9 +63,11 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Figure 3: category maps, two panels (dims 1-2 and 2-3) --------------------
-# The panels share Dimension 2: left puts it on the y-axis, right on the
-# x-axis. Facet strips name the dimensions (fig-worked-example style).
-mk_cc <- function(dims, panel) {
+# Left panel puts Dimension 1 on the x-axis and Dimension 2 on the y-axis;
+# right panel puts Dimension 2 on the x-axis and Dimension 3 on the y-axis.
+# Axis titles name the dimensions explicitly (with their readings), since the
+# horizontal/vertical assignment differs between panels.
+mk_cc <- function(dims, xl, yl) {
   d <- as.data.frame(res$quali.var$coord[, dims])
   names(d) <- c("x", "y")
   d$name <- rownames(d)
@@ -74,33 +76,29 @@ mk_cc <- function(dims, panel) {
   d$yes <- grepl("_1$", d$name)
   d$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", d$name)),
                           gshort)]
-  d$panel <- panel
-  d
+  # "no" categories shown in light grey for reference
+  ggplot(d, aes(x, y)) +
+    geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+    geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+    geom_point(data = subset(d, !yes), color = "grey65", size = 1) +
+    geom_point(data = subset(d, yes), aes(color = aspect), size = 1.8,
+               alpha = 0.9) +
+    ggrepel::geom_text_repel(data = subset(d, yes),
+                             aes(label = genre, color = aspect), size = 2.6,
+                             segment.color = NA, max.overlaps = 25,
+                             show.legend = FALSE, seed = 17) +
+    scale_color_manual(values = c(Preference = "#08519C",
+                                  Consumption = "#A63603",
+                                  Evaluation = "#006D2C")) +
+    labs(x = xl, y = yl, color = "Aspect") +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid.minor = element_blank(), legend.position = "right")
 }
-cc_all <- rbind(
-  mk_cc(c(1, 2), "Dimensions 1\u20132"),
-  mk_cc(c(2, 3), "Dimensions 2\u20133")
-)
-cc_all$panel <- factor(cc_all$panel,
-                       levels = c("Dimensions 1\u20132", "Dimensions 2\u20133"))
-# "no" categories shown in light grey for reference
-p3 <- ggplot(cc_all, aes(x, y)) +
-  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
-  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cc_all, !yes), color = "grey65", size = 1) +
-  geom_point(data = subset(cc_all, yes), aes(color = aspect), size = 1.8,
-             alpha = 0.9) +
-  ggrepel::geom_text_repel(data = subset(cc_all, yes),
-                           aes(label = genre, color = aspect), size = 2.6,
-                           segment.color = NA, max.overlaps = 25,
-                           show.legend = FALSE, seed = 17) +
-  facet_grid(. ~ panel, scales = "free") +
-  scale_color_manual(values = c(Preference = "#08519C",
-                                Consumption = "#A63603",
-                                Evaluation = "#006D2C")) +
-  labs(x = NULL, y = NULL, color = "Aspect") +
-  theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank(), legend.position = "right")
+p3 <- mk_cc(c(1, 2), "Dimension 1 (volume)",
+            "Dimension 2 (highbrow vs popular)") +
+  mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
+        "Dimension 3 (status valuation)") +
+  patchwork::plot_layout(guides = "collect")
 ggsave("manuscript/figures/fig-categories.pdf", p3, width = 8.5, height = 4.4)
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------

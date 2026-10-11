@@ -529,6 +529,91 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Synced 2026-10-10 (overleaf 90a99b2): section 4.5 (sec:antinomies) restructured
+  into five question-framed \subsubsections (author request: 4.5 too dense; each
+  subsection = one measure framed by a natural-language substantive question,
+  not GDA technicalities). Structure now: untitled opening (score intro +
+  56/52/63% headline + two running respondents + fig-worked-example; the
+  examples-intro enumeration gains a fifth clause "and how the geometric
+  scores relate to counting configurations") → "How Far Does a Person's Taste
+  Come Apart?" (W-score meanings, dims 1–3, running-example anchors) →
+  "Which Aspects of Taste Disagree With Each Other?" (NEW heading + one lead
+  sentence "A large score says that the aspects disagree, but not which of
+  them are pulling against each other..."; pair-level decomposition +
+  running-example pair distances + tab-pairs) → "Which Aspect Stands Apart?"
+  (existing heading, question mark ADDED for consistency; per-aspect shares
+  unchanged) → NEW "Is the Disagreement Attached to Particular Genres?" (ω +
+  coherence; one new lead paragraph poses the local-vs-transposable question
+  and points to eq:genre; then the two genre-split paragraphs MOVED here from
+  the comparison subsection — 211's opener now "The running respondents show
+  how differently the two components can behave", 213 minus its
+  combinatorial-signal sentence) → "Do the Two Measures Find the Same Complex
+  Tastes?" (RETITLE of "The Two Measures Compared"; divergence paragraph with
+  the combinatorial-signal sentence MOVED IN from 213, de-colonized and
+  appended after the factor-of-forty sentence so ρ 0.31/0.19 precede the
+  0.71/0.66 "against" callback; then signatures paragraph + fig-signatures
+  env). All moved text otherwise verbatim. ALSO local-only from the same
+  session: two new Discussion paragraphs after the [DRAFT] placeholder
+  (two-measures recap; genre-based-vs-coherence answer to the propensity
+  question — genre-based component cannot answer "who is prone to complex
+  tastes", coherence is the geometric counterpart of the propensity,
+  person-type framing dissolves into separable quantities, orientation not
+  disposition). Compiles at 29 pp., 0 undefined refs, 1 pre-existing
+  overfull (tab-genre-profile).
+- Synced 2026-10-10 (overleaf 90a99b2): NEW main-text paragraph in the
+  4.5 dim-2 block (after "In the first case... consumption outruns valuation",
+  before the dim-3 paragraph) clarifying what the evaluation point's dim-2
+  position means — author chose main text over footnote after asking whether
+  positive = "evaluates highbrow genres highly" and negative = "extends high
+  evaluation to popular genres". BOTH readings are WRONG (verified numerically;
+  numbers below must not be contradicted in future prose). (a) All 20 eval-yes
+  categories sit POSITIVE on dim 2 — granting status to ANY genre moves the
+  eval partial point toward the highbrow side; per-grant push (partial-point
+  units = 3×move_yes) is rarity-weighted: opera 0.06 (eval-yes rate 0.74),
+  classical 0.06 (0.67), vs Latin/Salsa 0.42 (0.06), Blues/R&B and dance/club
+  0.39 — roughly 7x. (b) eval partial d2 correlates 0.98 with TOTAL grant
+  count; partial cor(pd2, eH−eP | total) = −0.66 — at equal totals a
+  popular-HEAVY grant profile sits MORE positive (opposite of the naive
+  reading); eval-yes rates average 0.29 highbrow vs 0.10 popular. (c) All-no
+  baseline = −1.02 (321 zero-grant respondents share it; 1881 sits exactly
+  there). (d) Selection mechanism: granters skew highbrow-demographic (mean
+  grants rise 3.3→4.9 across age6, 3.6→5.1 across education; cor(global F2,
+  total grants) 0.35; granters of any genre sit higher on global F2 than
+  non-granters, e.g. latspsal +0.75 vs −0.05, rap +0.39 vs −0.02). Paragraph
+  wording: sign does not say which genres a respondent thinks highly of;
+  position records how many genres recognition extends to; generous evaluators
+  are older/more educated and sit highbrow; 362's +4.31 = eighteen grants of
+  every kind, not special valuing of consecrated genres. The
+  generous/withholding reading belongs to DIM 3 (rap eval-yes +1.87, opera
+  +0.20 there).
+- Synced 2026-10-10 (overleaf 90a99b2): TWO connected changes from the
+  category-cloud discussion. (1) The dim-2 clarification paragraph gains the
+  cloud reference after the seven-times clause — "The category map shows the
+  pattern directly (Figure~\ref{fig:categories})---all twenty evaluation
+  ``yes'' categories sit on the positive side of the highbrow--popular axis,
+  and the rare grants sit furthest out, $+0.75$ for Latin/Salsa against
+  $+0.10$ for opera." Verified cloud numbers: eval-yes d2 range +0.09
+  (classical) to +0.75 (latspsal), all 20 positive; eval-no all negative
+  (−0.02 to −0.28); the per-grant push is EXACTLY proportional to the
+  eval-yes cloud coordinate (constant ratio 5.5 across all 20 genres — the
+  eval partial d2 is literally a rarity-weighted grant tally). Negative side
+  = 1,395 respondents: the 321 zero-grant at the shared −1.02 point plus
+  few/consecrated-only granters (granting only opera+classical still sits at
+  about −0.9; nobody is positive with fewer than 3 grants; some 5-grant
+  respondents remain negative). (2) FIG-CATEGORIES REDESIGNED (author
+  request — readers could not tell which dimension was horizontal vs
+  vertical): script 03's category-map block replaced the facet_grid two-panel
+  version with two mk_cc plots composed via patchwork::plot_layout(guides =
+  "collect"); explicit axis titles "Dimension 1 (volume)" /
+  "Dimension 2 (highbrow vs popular)" / "Dimension 3 (status valuation)";
+  facet strips DROPPED (the titles carry the info); same 8.5×4.4in, seed 17
+  per panel (repelled label positions can shift slightly vs the faceted
+  version). ASCII "vs" in titles also eliminates the mbcsToSbcs ggsave
+  warnings. main.tex caption: "The left panel shows dimensions 1--2 and the
+  right panel dimensions 2--3" sentence DELETED as redundant with the axis
+  titles; rest of caption unchanged. fig-individuals/fig-rv/fig-scree
+  regenerated byte-only and REVERTED; tables byte-identical. Compiles 29 pp.,
+  0 undefined refs, 1 pre-existing overfull (tab-genre-profile).
 - Last sync (2026-10-10, later): sec:social regression-motivation sentence
   REWRITTEN (author request — the old claim was wrong: counts CAN be modeled,
   as Ma does in his Socius piece). Old: "Measuring complex tastes
