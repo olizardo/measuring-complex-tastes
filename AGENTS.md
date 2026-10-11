@@ -529,6 +529,32 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): sec:social regression-motivation sentence
+  REWRITTEN (author request — the old claim was wrong: counts CAN be modeled,
+  as Ma does in his Socius piece). Old: "Measuring complex tastes
+  geometrically has one further advantage: W_s(i) is a continuous,
+  dimension-specific quantity, so it can serve directly as the outcome of a
+  standard regression model---something the combinatorial count, a single
+  coarse integer, can't do." New passage (opens the tab-regression
+  paragraph): concedes the count can be modeled directly, citing NEW bib
+  entry `ma2026deep` (Ma, Xiangyu. 2026. "On the Deep, Surprising, and
+  Persistently Gendered Dynamics in Complex Music Tastes." Socius,
+  doi 10.1177/23780231251410969 — the author's count-model companion piece;
+  SAGE paywalls the article page, so the entry has NO volume/article number —
+  fill in from the published version), then states the geometric measure's
+  actual regression-relevant advantages: (1) dimension-specificity — W_s(i)
+  is one quantity per dimension of the taste space, so the regressions ask
+  WHERE social location moves disagreement (volume, highbrow–popular, or
+  status-valuation axis) not just how many complex tastes a person holds;
+  (2) magnitude — each configuration enters the score weighted by how
+  distinctive its answers are in that genre, so same count can give very
+  different scores (the session-verified rarity weighting). Colon from the
+  old sentence gone (decision 15). SIDE EFFECT: ma2026deep disambiguates as
+  Ma 2026a and ALL existing ma2026tastes citations now display "Ma 2026b"
+  throughout (plainnat author-year, required) — flagged to author. Compiles
+  at 28 pp. (was 29, paragraph reflow), 0 undefined refs. main.tex +
+  references.bib changes are LOCAL-ONLY, pending commit and Overleaf sync
+  (this AGENTS.md note goes out with them).
 - Last sync (2026-10-10, later): NEW fig-genre-segments (per-genre tri-segment
   maps) from a new script-04 figure block (placed after library(ggplot2), before
   the fig-signatures block — ggplot2 loads at line 231, so section-3b placement
@@ -1686,6 +1712,10 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 ## Key references
 
 - Ma, X. 2026. "Tastes and Complex Tastes." *Cultural Sociology* 20(2):311–333.
+- Ma, X. 2026. "On the Deep, Surprising, and Persistently Gendered Dynamics
+  in Complex Music Tastes." *Socius* (bib key `ma2026deep`; cited in
+  sec:social for the count-model concession — do not reuse the old
+  "continuous so regressable" advantage claim; the count CAN be modeled).
 - Pagès, J. 2014. *Multiple Factor Analysis by Example Using R*. CRC.
 - Abdi, Williams & Valentin 2013. "Multiple factor analysis…" WIREs CS 5:149–179.
 - Lizardo & Skiles 2012. SSI Cultural Tastes Survey [dataset].
