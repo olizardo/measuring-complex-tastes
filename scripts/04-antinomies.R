@@ -232,6 +232,53 @@ library(ggplot2)
 library(ggrepel)
 ant$n_complex <- type_counts$n_complex
 
+# figure: genre-specific tri-segment maps (kept in repo, not referenced in
+# main.tex). For each genre, each aspect's yes and no answers place the
+# respondent at the two endpoints of a segment in complex taste space,
+# c_yes = Dcoef_ghs * (1 - p) and c_no = -Dcoef_ghs * p, so the mass-weighted
+# barycenter sits at 0 and rare answers move further. Facets run down the
+# highbrow-popular rung; arrows point toward the yes endpoint.
+glab <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
+          "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
+          "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
+          "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
+          "Dance/Club", "Heavy Metal")
+stopifnot(length(glab) == length(genres))
+rung  <- sapply(1:20, function(g)
+  (Dcoef[g, 1, 2] * (1 - pm[g]) + Dcoef[g, 2, 2] * (1 - pm[20 + g])) / 2)
+ord   <- order(-rung)
+segdf <- do.call(rbind, lapply(ord, function(g) {
+  pgh <- pm[c(g, 20 + g, 40 + g)]
+  do.call(rbind, lapply(1:3, function(h) do.call(rbind, lapply(seq_len(NDIM), function(s) {
+    data.frame(genre  = factor(glab[g], levels = glab[ord]),
+               aspect = c("Preference", "Consumption", "Evaluation")[h],
+               s = s,
+               no  = -Dcoef[g, h, s] * pgh[h],
+               yes =  Dcoef[g, h, s] * (1 - pgh[h]))
+  }))))
+}))
+segdf$off <- unname(c(Preference = -0.24, Consumption = 0,
+                      Evaluation = 0.24)[segdf$aspect])
+lim  <- 1.08 * max(abs(c(segdf$no, segdf$yes)))
+pseg <- ggplot(segdf) +
+  geom_hline(yintercept = 0, color = "grey65", linewidth = 0.3) +
+  geom_segment(aes(x = s + off, y = no, xend = s + off, yend = yes, color = aspect),
+               linewidth = 0.8,
+               arrow = arrow(length = unit(0.055, "in"), type = "closed")) +
+  geom_point(aes(x = s + off, y = yes, color = aspect), size = 0.9,
+             show.legend = FALSE) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("Volume", "Highbrow\u2013popular",
+                                "Status valuation")) +
+  scale_y_continuous(limits = c(-lim, lim)) +
+  scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
+                                Evaluation = "#009E73"), name = NULL) +
+  facet_wrap(~genre, ncol = 5) +
+  labs(x = NULL, y = "Contribution to the global position") +
+  theme_minimal(base_size = 9) +
+  theme(panel.grid.minor = element_blank(), legend.position = "bottom")
+ggsave("manuscript/figures/fig-genre-segments.pdf", pseg, width = 10, height = 8)
+
 # figure: geometric signatures of the configurations — Spearman
 # correlations of the type counts with MFA coordinates,
 # aspect-disagreement scores, and genre-based complex taste, as a signed

@@ -284,7 +284,7 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/01-prepare-mfa-data.R` | `data/mfa_input.rds` | builds 60 binary cols (pref_/cons_/eval_ prefixes) |
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
 | `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
-| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, fig-signatures, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs (tab-antinomy replaced by fig-signatures, decision 16) |
+| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, fig-signatures, fig-genre-segments, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs (tab-antinomy replaced by fig-signatures, decision 16). fig-genre-segments = per-genre tri-segment maps (yes/no endpoints of each aspect's contribution, arrows toward yes, facets down the highbrow–popular rung) — kept in repo, UNREFERENCED in main.tex (fig-scree pattern), added 2026-10-10 |
 | `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4; tables report dims 1–3 only (decision 17); manuscript outputs UNREFERENCED since decision 18 but the script must keep running (script 07 reads `sup`) |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex`, `manuscript/tables/tab-w-eta.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds); also the bivariate η² table of demographics with W1–W3 (decision 18) |
@@ -529,6 +529,28 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   grabbed group-stacked rows and produced wrong coordinates; script 04's
   own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
   on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Last sync (2026-10-10, later): NEW fig-genre-segments (per-genre tri-segment
+  maps) from a new script-04 figure block (placed after library(ggplot2), before
+  the fig-signatures block — ggplot2 loads at line 231, so section-3b placement
+  would break; the block uses script-04's own pm margins, NOT the session's
+  stray pm matrix). Design: for each genre x aspect, the yes/no endpoints of
+  the contribution c on dims 1-3 drawn as vertical segments (c_yes =
+  Dcoef*(1-p), c_no = -Dcoef*p, barycenter 0, so rare answers move further),
+  arrows toward yes, aspect palette, facets ordered down the highbrow-popular
+  rung (Big Band ... Rap/Hip-Hop), 10x8in. Kept in repo, UNREFERENCED in
+  main.tex (fig-scree pattern). Verified: formula endpoints match Ccont's
+  unique values to 5e-11; genre order on Ccont dim 2 confirmed CANONICAL via
+  barycentric-mass matching against yes-rates (identity permutation — the two
+  exactness identities sum over genres, so they cannot detect a permutation).
+  Session findings behind the figure: Ma's 8 configurations are exactly the 8
+  possible endpoint-triples per genre, all holders of a config in a genre
+  sharing IDENTICAL local geometry (within-cell spread 0); same config,
+  different local magnitude by genre (distant praise omega3 1.03 in rap,
+  0.00 in opera); rap's granting cells cluster omega3 ~0.9-1.0 incl.
+  simple_pos 0.92 (margin dispersion, not configuration — local face of
+  decision 13). Three-file copy (figure + scripts/04-antinomies.R + AGENTS.md);
+  main.tex untouched, no compile check needed. Outer commit also records the
+  gitlink.
 - Last sync (2026-10-10, later): sec:social REBUILT per decision 18 (author
   request after a methodological critique — the barycenter/η²-with-dimensions
   analysis answered where groups sit, not who has complex tastes). The
