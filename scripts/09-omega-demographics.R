@@ -228,8 +228,11 @@ for (i in seq_along(dim_labels)) {
       axis.text.y = element_text(size = 9),
       plot.title = element_text(size = 11.5, face = "bold", hjust = 0.5)
     )
+  # Height 5.8in: the manuscript's \linewidth is 6.53in, so width=\linewidth
+  # scales the figure up by 1.36x and a taller figure (plus caption) overflows
+  # the ~9in \textheight. 5.8 x 1.36 = ~7.9in leaves room for the caption.
   fname <- sprintf("manuscript/figures/fig-omega-demographics-genres-d%d.pdf", i)
-  ggsave(fname, p_i, width = 4.8, height = 6.6, dpi = 300)
+  ggsave(fname, p_i, width = 4.8, height = 5.8, dpi = 300)
   cat("Saved", basename(fname), "(20 genres x 9 demographics)\n")
 }
 
