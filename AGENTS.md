@@ -2258,3 +2258,59 @@ Generates three publication-ready figures showing demographic correlations with 
   switched to fig-omega-demographics-heatmap. Stale figures git-rm'd:
   fig-omega-demographics-dim1/2/3.pdf, fig-omega-demographics-genres.pdf (the 42-inch
   stack), fig-omega-demographics-heatmap-dim1/2/3.pdf. Compiles at 25 pp., 0 undefined refs.
+
+## Session: October 14, 2026 (figures) — splits, restyles, appendix reorganization
+
+- **FIGURE INVENTORY AFTER THIS SESSION** (compiled-PDF numbering): 1 worked-example;
+  2 categories dims 1–2; 3 categories dims 2–3; 4 signatures; 5–7 omega-demographics
+  dim1/dim2/dim3 (main text); 8–9 genre maps dims 1–2 / dims 1–3; 10 configurations
+  (appendix); 11–13 omega-demographics-genres d1–3 (appendix). Compiles at 32 pp.,
+  0 undefined refs, the 2 pre-existing overfulls. Page/figure counts in older notes
+  above predate the splits.
+- **SPLIT + APPENDIX (author request)**: fig-omega-demographics-heatmap (combined
+  20-genre × 7-demographic, 3 panels) replaced by fig-omega-demographics-genres-d1/
+  d2/d3 — one figure per dimension, 20 genre rows × **all nine** demographic columns
+  (the old 7-variable selection was flagged as arbitrary), cell text 3.0. New appendix
+  section `\label{app:omega-genres}` after app:configurations (intro paragraph +
+  per-dimension pointers). SIZE GOTCHA: the manuscript's \linewidth is 6.53in, so
+  `width=\linewidth` upscales by 1.36×; the first 4.8×6.6in version overflowed
+  \textheight by ~50pt ("Float too large") — regenerated at 4.8×5.8in (scaled ≈7.9in).
+- **SPLIT (author request)**: fig-omega-demographics (combined 8-genre main figure)
+  replaced by fig-omega-demographics-dim1/dim2/dim3 (rows = 9 demographics, columns =
+  8 key genres, 4.6×3.2in, text 2.5); prose refs now
+  `Figures~\ref{fig:omega-demographics-d1}--\ref{fig:omega-demographics-d3}`.
+  Script 09 unlinks both replaced combined files.
+- **STYLE (author requests, applies to all six omega matrices)**: Pearson-r colorbar
+  legend at bottom; mid color grey92 instead of white (near-zero cells read as tiles);
+  dark outline on cells with $|r| \ge 0.15$ (`R_MIN` in script 09; second `geom_tile`
+  with fill=NA, grey20, linewidth 0.9). Captions add "Cells with $|r| \ge 0.15$ are
+  outlined." Verified: exactly the 8 dim-2 cells ≥ 0.15 are outlined.
+- **DUPLICATE FIGURES 2/3 FIXED + SPLIT (author request)**: both category-map envs
+  had pointed at the SAME two-panel fig-categories.pdf (fig:categories was orphaned,
+  never referenced) — figures 2 and 3 printed identical images. Replaced by
+  fig-categories-d12/d23 (single-panel 4.6×4.4in, legend at bottom, mk_cc unchanged
+  otherwise); prose "right hand panel of Figure~\ref{fig:categories1-2}" →
+  "Figure~\ref{fig:categories}".
+- **fig-signatures restyled** to match the omega matrices: scale_fill_gradient2
+  (grey92 midpoint) replaces the 5-color gradientn; ρ colorbar legend at bottom;
+  tile linewidth 0.5. Matrix contents, facets, and plotmath labels unchanged.
+- **fig-genre-map SPLIT (author request; it was Figure 6 before the omega splits)**
+  into fig-genre-map-d12/d13 (5.2×4.6in; points 2.4/2.6, labels 3.1 ggrepel seed 11,
+  segments 0.45/0.75, bold titles, legend bottom, axis titles name the dimensions —
+  GOTCHA: first render leaked the variable names `xg`/`yg` as axis labels until
+  labs() was added). New labels fig:genre-map-d12/d13; prose refs ADDED (both had
+  been missing): "(Table~\ref{tab:genre-profile}; Figure~\ref{fig:genre-map-d12})" in
+  the transposed-space paragraph and "(Figure~\ref{fig:genre-map-d13})" opening the
+  partial-points paragraph.
+- **Script 06 robustness fix**: do.call first args now quoted ("cbind"/"c"/"rbind") —
+  a session variable named `c` (2259-int vector left by an earlier script run) masked
+  base::c and made `do.call(c, ...)` fail with "'what' must be a function or character
+  string". Quote do.call function names in shared-session contexts.
+- **Sync-point note**: the clone HEAD before this sync (38a0807) matched workspace
+  commit cf48363 exactly (08:23 eigenvalue/weighting-clarification commit; the
+  15:12–15:21 UTC web edits are incorporated in it) — all divergence since was
+  workspace-side; clean one-directional sync.
+- Reruns of scripts 03/04/06/09 rewrite ALL pdfs including unreferenced ones
+  (byte-noise from embedded creation dates) — git status shows M on fig-individuals/
+  fig-rv/fig-scree etc. with identical content; revert or commit freely. Tables
+  (.tex via writeLines) are byte-identical.
