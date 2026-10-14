@@ -144,15 +144,19 @@ mk_demo_rows <- function(data, y_labels = TRUE, text_size = 2.1) {
     geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
               size = text_size, show.legend = FALSE) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +
-    scale_fill_gradient2(low = low_col, mid = "white", high = high_col,
+    scale_fill_gradient2(low = low_col, mid = "grey92", high = high_col,
                          midpoint = 0, limits = c(-R_LIM, R_LIM),
-                         name = "Pearson r", guide = "none") +
+                         name = "Pearson r",
+                         guide = guide_colourbar(barwidth = 7, barheight = 0.8)) +
     scale_x_discrete(expand = c(0, 0)) +
     scale_y_discrete(expand = c(0, 0)) +
     matrix_theme() +
     theme(
       axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.4, size = 7),
-      axis.text.y = if (y_labels) element_text(size = 8) else element_blank()
+      axis.text.y = if (y_labels) element_text(size = 8) else element_blank(),
+      legend.position = "bottom",
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 7)
     )
 }
 
@@ -163,16 +167,20 @@ mk_genre_rows <- function(data, y_labels = TRUE, x_labels = TRUE, text_size = 1.
     geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
               size = text_size, show.legend = FALSE) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +
-    scale_fill_gradient2(low = low_col, mid = "white", high = high_col,
+    scale_fill_gradient2(low = low_col, mid = "grey92", high = high_col,
                          midpoint = 0, limits = c(-R_LIM, R_LIM),
-                         name = "Pearson r", guide = "none") +
+                         name = "Pearson r",
+                         guide = guide_colourbar(barwidth = 7, barheight = 0.8)) +
     scale_x_discrete(expand = c(0, 0)) +
     scale_y_discrete(expand = c(0, 0)) +
     matrix_theme() +
     theme(
       axis.text.x = if (x_labels) element_text(angle = 90, hjust = 1, vjust = 0.4,
                                                size = 7) else element_blank(),
-      axis.text.y = if (y_labels) element_text(size = 7.5) else element_blank()
+      axis.text.y = if (y_labels) element_text(size = 7.5) else element_blank(),
+      legend.position = "bottom",
+      legend.title = element_text(size = 9),
+      legend.text = element_text(size = 8)
     )
 }
 
@@ -194,7 +202,8 @@ panels <- lapply(seq_along(dim_labels), function(i) {
 })
 
 p_main <- (panels[[1]] | panels[[2]] | panels[[3]]) +
-  plot_layout(nrow = 1)
+  plot_layout(nrow = 1, guides = "collect")
+p_main <- p_main & theme(legend.position = "bottom")
 
 ggsave("manuscript/figures/fig-omega-demographics.pdf", p_main,
        width = 6.8, height = 3.5, dpi = 300)
