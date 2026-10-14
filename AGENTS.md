@@ -2042,6 +2042,15 @@ Manuscript now reads from individual→aggregate→dimension-level with full mat
 
 ## Session: October 14, 2026 (Later) — Genre-Specific Demographics & Figure 5 Improvements
 
+**SUPERSEDED 2026-10-14 (same day, later) by the "Section 4.9 figures REDESIGNED
+(colored-value matrices)" session at the end of this file.** The design described below
+(lollipop chart, fig-omega-demographics-genres.pdf, fig-omega-demographics-heatmap.pdf,
+"section 4.8") was rejected by the author as unreadable and replaced; the figure files
+listed under Deliverables were git-rm'd except fig-omega-demographics.pdf (regenerated
+under the same name). Section numbering: the material lives in sec:genre-specificity
+(manuscript section 4.9), not "4.8". The script-09 omega-by-demographics correlations
+and the demographic-extraction codebook notes below remain valid.
+
 ### Objectives
 1. ✅ Create reproducible pipeline for omega-demographics visualizations (section 4.8)
 2. ✅ Improve Figure 5 visibility and correct caption to reflect two-respondent design
@@ -2220,14 +2229,23 @@ Generates three publication-ready figures showing demographic correlations with 
   (Latin/salsa 0.31/0.18, rap 0.21, dance 0.20/0.15) match the ORDERED 0–4 race CODE, not
   the indicators. The figure uses indicators (defensible; a linear correlation with an
   unordered nominal code is not), so:
-  **PROSE DELTAS FLAGGED TO AUTHOR (not yet changed)**: (1) Hispanic×Latin/salsa d1:
-  indicator r = 0.39 (d2 0.25) vs prose 0.31/0.18 (race-code); recommend updating prose or
-  footnoting the encoding. (2) age×rap d1 = −0.424 → figure prints −0.42; prose says −0.43
-  (line 239 + fig paragraph) — rounding fix needed. (3) parentba×opera: recomputed
-  0.11 (d2) / 0.12 (d1) vs prose 0.15/0.14 — earlier session's encoding could not be
-  recovered; needs author decision. (4) Prose "Black respondents... mean difference +0.24"
-  is a centered-mean quantity; indicator r = 0.19 — different statistic, left as-is but
-  inconsistent with the figure's encoding.
+  **PROSE DELTAS — RESOLVED (same day, author approved the update)**: prose numbers in
+  sec:genre-specificity updated to the indicator encoding. (1) Hispanic x Latin/salsa:
+  0.31/0.18 -> 0.39/0.25. (2) age x rap d1: -0.43 -> -0.42 (both occurrences: age
+  paragraph and fig paragraph). (3) parentba: the "strongest in opera (0.15/0.14)" claim
+  was WRONG under the indicator encoding -- recomputed ranking is classical 0.13 (d2) >
+  folk 0.12 > opera 0.11 ~ musicals 0.11; sentence rewritten ("strongest ... in classical
+  music (r = 0.13 on Dimension 2), followed by folk, opera, and musicals (r = 0.12, 0.11,
+  and 0.11)"); "these prestige forms" -> "these genres" (folk breaks the prestige frame);
+  the old 0.15/0.14 came from an unrecoverable earlier encoding. (4) Black x rap d2:
+  "mean difference +0.24" -> "r = 0.19" (figure's statistic). ALSO fixed two further
+  mismatches found in the same sweep: gender x heavy metal -0.10 -> -0.09 (-0.093) and
+  gender x hymns/gospel 0.09 -> 0.08 (0.077). (5) The race paragraph's dance/club numbers
+  (0.20/0.15, race-code artifacts) did not survive indicators (black x dance = 0.03) --
+  sentence rewritten: Black x rap d1/d2 0.20/0.19 plus the White mirror image
+  (rap -0.27, reggae -0.22, dance -0.18). Unreferenced leftovers
+  tables/sec_genre_specificity.tex and tables/tab_omega_demographics.tex still contain
+  the old race-code numbers -- harmless (not \input anywhere) but candidates for git-rm.
 - **GOTCHA (cost us a scrambled figure)**: NEVER build aes() mappings via
   `aes(x = eval(quote(...)))` with branch-specific quoted expressions — it silently
   evaluated in the wrong environment and scrambled the supplementary matrix (Country×Age
