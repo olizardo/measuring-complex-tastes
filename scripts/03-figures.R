@@ -62,11 +62,12 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
-# --- Figure 3: category maps, two panels (dims 1-2 and 2-3) --------------------
-# Left panel puts Dimension 1 on the x-axis and Dimension 2 on the y-axis;
-# right panel puts Dimension 2 on the x-axis and Dimension 3 on the y-axis.
-# Axis titles name the dimensions explicitly (with their readings), since the
-# horizontal/vertical assignment differs between panels.
+# --- Figures 2-3: category maps, one figure per dimension pair (2026-10-14) ---
+# The combined two-panel figure was split at the author's request for
+# readability (and to fix the duplicated-figure problem: both main.tex
+# environments pointed at the same two-panel PDF). Dimensions 1-2 first,
+# then 2-3; axis titles name the dimensions explicitly (with their readings),
+# since the horizontal/vertical assignment differs between the two.
 mk_cc <- function(dims, xl, yl) {
   d <- as.data.frame(res$quali.var$coord[, dims])
   names(d) <- c("x", "y")
@@ -94,12 +95,16 @@ mk_cc <- function(dims, xl, yl) {
     theme_minimal(base_size = 10) +
     theme(panel.grid.minor = element_blank(), legend.position = "right")
 }
-p3 <- mk_cc(c(1, 2), "Dimension 1 (volume)",
-            "Dimension 2 (highbrow vs popular)") +
-  mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
-        "Dimension 3 (status valuation)") +
-  patchwork::plot_layout(guides = "collect")
-ggsave("manuscript/figures/fig-categories.pdf", p3, width = 8.5, height = 4.4)
+ggsave("manuscript/figures/fig-categories-d12.pdf",
+       mk_cc(c(1, 2), "Dimension 1 (volume)",
+             "Dimension 2 (highbrow vs popular)"),
+       width = 4.6, height = 4.2)
+ggsave("manuscript/figures/fig-categories-d23.pdf",
+       mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
+             "Dimension 3 (status valuation)"),
+       width = 4.6, height = 4.2)
+# the combined two-panel version is replaced by the two per-dimension figures
+unlink("manuscript/figures/fig-categories.pdf")
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
 rv <- res$group$RV

@@ -312,23 +312,29 @@ sig$dim <- factor(rep(c("Dimension 1", "Dimension 2", "Dimension 3"),
                      each = 3, times = nrow(sigrows)),
                   levels = c("Dimension 1", "Dimension 2", "Dimension 3"))
 psig <- ggplot(sig, aes(score, cfg, fill = value)) +
-  geom_tile(color = "white", linewidth = 0.7) +
+  geom_tile(color = "white", linewidth = 0.5) +
   geom_text(aes(label = ifelse(is.na(value), "", sprintf("%.2f", value)),
                 color = abs(value) > 0.55), size = 3,
             show.legend = FALSE) +
   scale_color_manual(values = c(`FALSE` = "grey20", `TRUE` = "white"),
                      na.value = "grey20") +
-  scale_fill_gradientn(
-    colors = c("#08519C", "#6BAED6", "white", "#FDAE6B", "#A63603"),
-    limits = c(-1, 1), breaks = seq(-1, 1, 0.5), na.value = "white") +
+  # same diverging scale as the omega-demographics matrices (script 09):
+  # grey92 midpoint so near-zero cells read as tiles, colorbar legend below
+  scale_fill_gradient2(low = "#A63603", mid = "grey92", high = "#08519C",
+                       midpoint = 0, limits = c(-1, 1),
+                       breaks = seq(-1, 1, 0.5), na.value = "white",
+                       name = expression(rho),
+                       guide = guide_colourbar(barwidth = 7, barheight = 0.8)) +
   scale_x_discrete(labels = setNames(slabs, skeys)) +
   # free_x is required: each facet holds only its dimension's 3 scores,
   # otherwise all 9 x-levels appear in every panel and squeeze the tiles
   facet_wrap(~ dim, nrow = 1, scales = "free_x") +
-  labs(x = NULL, y = NULL, fill = expression(rho)) +
+  labs(x = NULL, y = NULL) +
   theme_minimal(base_size = 10) +
   theme(panel.grid = element_blank(), legend.position = "bottom",
-        strip.text = element_text(face = "bold"))
+        strip.text = element_text(face = "bold"),
+        legend.title = element_text(size = 9),
+        legend.text = element_text(size = 8))
 ggsave("manuscript/figures/fig-signatures.pdf", psig, width = 7, height = 3.8)
 
 # table: mean squared pairwise distances between partial points, dims 1-3

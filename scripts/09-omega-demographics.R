@@ -188,26 +188,29 @@ dim_titles <- c("Dimension 1\n(volume)", "Dimension 2\n(highbrow-popular)",
                 "Dimension 3\n(status valuation)")
 
 # ============================================================================
-# STEP 3: MAIN FIGURE -- 8 key genres, three dimension panels side by side
+# STEP 3: MAIN FIGURES -- 8 key genres, one figure per dimension (2026-10-14)
+# The combined three-panel version was split at the author's request, matching
+# the treatment of the supplementary twenty-genre matrices. Rows = 9
+# demographics, columns = 8 key genres.
 # ============================================================================
 
 key_genres <- c("raphiphop", "indalt", "danclub", "classical", "opera",
                 "bwayst", "bband", "latspsal")
 
-panels <- lapply(seq_along(dim_labels), function(i) {
-  d <- corr_data |> filter(dimension == dim_labels[i], genre %in% key_genres) |>
+for (i in seq_along(dim_labels)) {
+  d <- corr_data |>
+    filter(dimension == dim_labels[i], genre %in% key_genres) |>
     mutate(genre_short = factor(genre_short, levels = genre_display[key_genres]))
-  mk_demo_rows(d, y_labels = (i == 1)) +
+  p_i <- mk_demo_rows(d, y_labels = TRUE, text_size = 2.5) +
     ggtitle(dim_titles[i])
-})
+  fname <- sprintf("manuscript/figures/fig-omega-demographics-dim%d.pdf", i)
+  ggsave(fname, p_i, width = 4.6, height = 3.2, dpi = 300)
+  cat("Saved", basename(fname), "(9 demographics x 8 key genres)\n")
+}
 
-p_main <- (panels[[1]] | panels[[2]] | panels[[3]]) +
-  plot_layout(nrow = 1, guides = "collect")
-p_main <- p_main & theme(legend.position = "bottom")
-
-ggsave("manuscript/figures/fig-omega-demographics.pdf", p_main,
-       width = 6.8, height = 3.5, dpi = 300)
-cat("Saved fig-omega-demographics.pdf (8 genres x 9 demographics x 3 dims, all values printed)\n")
+# The combined three-panel version is replaced by the three per-dimension
+# figures; remove it so no stale file lingers in the repo.
+unlink("manuscript/figures/fig-omega-demographics.pdf")
 
 # ============================================================================
 # STEP 4: SUPPLEMENTARY FIGURES -- one full matrix per dimension (2026-10-14)
