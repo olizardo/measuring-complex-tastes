@@ -128,6 +128,10 @@ low_col <- "#A63603"; high_col <- "#08519C"
 #   mk_genre_rows(): rows = genres, cols = demographics (supplementary)
 fmt_r <- function(r) ifelse(abs(r) < 0.005, "0.00", sprintf("%.2f", r))
 
+# cells with |r| at or above this threshold get a dark outline, so the key
+# patterns stand out against the printed values (author request, 2026-10-14)
+R_MIN <- 0.15
+
 matrix_theme <- function() theme_minimal(base_size = 8) + theme(
   panel.grid = element_blank(),
   axis.title = element_blank(),
@@ -141,6 +145,8 @@ mk_demo_rows <- function(data, y_labels = TRUE, text_size = 2.1) {
                    y = factor(demographic, levels = rev(demo_labels)),
                    fill = r)) +
     geom_tile(color = "white", linewidth = 0.4) +
+    geom_tile(data = ~ subset(.x, abs(r) >= R_MIN), fill = NA,
+              color = "grey20", linewidth = 0.9) +
     geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
               size = text_size, show.legend = FALSE) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +
@@ -164,6 +170,8 @@ mk_genre_rows <- function(data, y_labels = TRUE, x_labels = TRUE, text_size = 1.
   ggplot(data, aes(x = factor(demographic, levels = demo_labels_supp),
                    y = genre_short, fill = r)) +
     geom_tile(color = "white", linewidth = 0.4) +
+    geom_tile(data = ~ subset(.x, abs(r) >= R_MIN), fill = NA,
+              color = "grey20", linewidth = 0.9) +
     geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
               size = text_size, show.legend = FALSE) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +

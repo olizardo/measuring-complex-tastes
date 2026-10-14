@@ -93,16 +93,16 @@ mk_cc <- function(dims, xl, yl) {
                                   Evaluation = "#006D2C")) +
     labs(x = xl, y = yl, color = "Aspect") +
     theme_minimal(base_size = 10) +
-    theme(panel.grid.minor = element_blank(), legend.position = "right")
+    theme(panel.grid.minor = element_blank(), legend.position = "bottom")
 }
 ggsave("manuscript/figures/fig-categories-d12.pdf",
        mk_cc(c(1, 2), "Dimension 1 (volume)",
              "Dimension 2 (highbrow vs popular)"),
-       width = 4.6, height = 4.2)
+       width = 4.6, height = 4.4)
 ggsave("manuscript/figures/fig-categories-d23.pdf",
        mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
              "Dimension 3 (status valuation)"),
-       width = 4.6, height = 4.2)
+       width = 4.6, height = 4.4)
 # the combined two-panel version is replaced by the two per-dimension figures
 unlink("manuscript/figures/fig-categories.pdf")
 

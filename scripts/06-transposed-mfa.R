@@ -53,8 +53,10 @@ mfa_manual <- function(Xlist, ncp = 5) {
   l1 <- sapply(Xlist, mca_lambda1)
   TW <- Map(build_TW,
             lapply(Xlist, function(X) cbind(X, 1 - X)), l1)
-  Tall <- do.call(cbind, lapply(TW, `[[`, "T"))
-  wall <- do.call(c, lapply(TW, `[[`, "w"))
+  # quoted function names: do.call(c, ...) breaks if a session variable
+  # named `c` masks the base function
+  Tall <- do.call("cbind", lapply(TW, `[[`, "T"))
+  wall <- do.call("c", lapply(TW, `[[`, "w"))
   Tw <- sweep(Tall, 2, sqrt(wall), "*")
   sv <- svd(Tw)
   ncp <- min(ncp, ncol(Tall) - 1)
@@ -182,42 +184,50 @@ gnames <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
             "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
             "Dance/Club", "Heavy Metal")
 glob <- data.frame(genre = gnames, d1 = Fg[, 1], d2 = Fg[, 2], d3 = Fg[, 3])
-part <- do.call(rbind, lapply(seq_along(gname3), function(h)
+part <- do.call("rbind", lapply(seq_along(gname3), function(h)
   data.frame(genre = gnames, modality = gname3[h],
              d1 = mt$Fpart[[h]][, 1], d2 = mt$Fpart[[h]][, 2],
              d3 = mt$Fpart[[h]][, 3])))
 mk <- function(panel, xg, yg, xp, yp) data.frame(
   panel = panel, genre = glob$genre, xg = glob[[xg]], yg = glob[[yg]],
   modality = part$modality, xp = part[[xp]], yp = part[[yp]])
-plotdf <- rbind(mk("Dimensions 1-2", "d1", "d2", "d1", "d2"),
-                mk("Dimensions 1-3", "d1", "d3", "d1", "d3"))
-gglob <- rbind(
-  data.frame(panel = "Dimensions 1-2", genre = glob$genre,
-             x = glob$d1, y = glob$d2),
-  data.frame(panel = "Dimensions 1-3", genre = glob$genre,
-             x = glob$d1, y = glob$d3))
-p9 <- ggplot() +
-  geom_segment(data = plotdf, aes(x = xg, y = yg, xend = xp, yend = yp,
-                                  color = modality),
-               linewidth = 0.25, alpha = 0.6, show.legend = FALSE) +
-  geom_point(data = plotdf, aes(xp, yp, color = modality), size = 1.6) +
-  geom_point(data = gglob, aes(x, y), size = 1.8, color = "black") +
-  ggrepel::geom_text_repel(data = gglob, aes(x, y, label = genre),
-                           size = 2.4, segment.color = NA, max.overlaps = 30) +
-  geom_hline(data = data.frame(panel = unique(plotdf$panel), y = 0),
-             aes(yintercept = y), linetype = 2, color = "grey60") +
-  geom_vline(data = data.frame(panel = unique(plotdf$panel), x = 0),
-             aes(xintercept = x), linetype = 2, color = "grey60") +
-  scale_color_manual(values = c(Preference = "#0072B2",
-                                Consumption = "#D55E00",
-                                Evaluation = "#009E73"), name = "Aspect") +
-  facet_wrap(~panel, scales = "free") +
-  labs(x = NULL, y = NULL,
-       title = "Genre map with aspect partial points (transposed MFA)",
-       subtitle = "Black points: genre compromise positions; colored points: aspect partial points") +
-  theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank(), legend.position = "top")
-ggsave("manuscript/figures/fig-genre-map.pdf", p9, width = 7.2, height = 4.6)
+# Split into two per-dimension figures (2026-10-14, author request) with
+# larger points and labels for readability.
+mk_gm <- function(xg, yg, xp, yp, ttl, xl, yl) {
+  dfp <- data.frame(genre = glob$genre, xg = glob[[xg]], yg = glob[[yg]],
+                    modality = part$modality, xp = part[[xp]], yp = part[[yp]])
+  dfg <- data.frame(genre = glob$genre, x = glob[[xg]], y = glob[[yg]])
+  ggplot() +
+    geom_segment(data = dfp, aes(x = xg, y = yg, xend = xp, yend = yp,
+                                 color = modality),
+                 linewidth = 0.45, alpha = 0.75, show.legend = FALSE) +
+    geom_point(data = dfp, aes(xp, yp, color = modality), size = 2.4) +
+    geom_point(data = dfg, aes(x, y), size = 2.6, color = "black") +
+    ggrepel::geom_text_repel(data = dfg, aes(x, y, label = genre),
+                             size = 3.1, segment.color = NA, max.overlaps = 30,
+                             seed = 11) +
+    geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+    geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+    scale_color_manual(values = c(Preference = "#0072B2",
+                                  Consumption = "#D55E00",
+                                  Evaluation = "#009E73"), name = "Aspect") +
+    ggtitle(ttl) +
+    labs(x = xl, y = yl) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid.minor = element_blank(),
+          plot.title = element_text(face = "bold", hjust = 0.5),
+          legend.position = "bottom")
+}
+ggsave("manuscript/figures/fig-genre-map-d12.pdf",
+       mk_gm("d1", "d2", "d1", "d2", "Dimensions 1-2",
+             "Dimension 1 (volume)", "Dimension 2 (highbrow vs popular)"),
+       width = 5.2, height = 4.6)
+ggsave("manuscript/figures/fig-genre-map-d13.pdf",
+       mk_gm("d1", "d3", "d1", "d3", "Dimensions 1-3",
+             "Dimension 1 (volume)", "Dimension 3 (status valuation)"),
+       width = 5.2, height = 4.6)
+# the combined two-panel version is replaced by the two per-dimension figures
+unlink("manuscript/figures/fig-genre-map.pdf")
 
 # --- table: per-genre configuration profiles --------------------------------------
 esc <- gsub("&", "\\\\&", gnames)
