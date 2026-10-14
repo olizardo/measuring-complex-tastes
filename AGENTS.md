@@ -2194,3 +2194,49 @@ Generates three publication-ready figures showing demographic correlations with 
 2. **Author review**: Visual inspection of fig-omega-demographics for clarity/contrast
 3. **Supplementary materials**: Consider including fig-omega-demographics-heatmap in appendix
 4. **Robustness variants**: Optional omega-demographics variants (e.g., MCA vs. PCA decomposition)
+
+## Session: October 14, 2026 (Final) — Section 4.9 figures REDESIGNED (colored-value matrices)
+
+- **Author verdict on the two earlier 4.9 figure designs (both failed)**: (a) the 3×8 bar-panel
+  grid (12 demographic bars per panel) was "impossible to read" — clipped strip labels,
+  colliding value labels; (b) the fixed-limits ±0.4 heatmap was "mostly grayed out" — most
+  |effects| < 0.15, so color intensity carried almost no signal. ROOT CAUSE beyond layout:
+  the old script mixed UNCOMPARABLE quantities on one axis — continuous demographics as
+  Pearson r (±0.4 scale) vs class/race as raw-unit centered ω means (±0.07 scale) — so the
+  categorical rows were invisible slivers even in the bar design.
+- **New design (script 09 fully rewritten)**: colored-value matrices in the paper's own
+  diverging palette (#08519C–white–#A63603, as fig-signatures), with EVERY cell's value
+  printed (color only highlights; numbers carry the information — honest for small effects).
+  - `fig-omega-demographics.pdf` (6.8×3.5in): rows = 9 demographics, columns = 8 key genres
+    (Rap/Indie/Dance/Classical/Opera/Musicals/Big band/Latin), three dimension panels side
+    by side (patchwork). `fig-omega-demographics-heatmap.pdf` (7.0×6.0in): supplementary,
+    all 20 genres as rows × 7 demographic columns (Parents' educ., Class scale, Age, Woman,
+    White, Black, Hispanic; Asian/Multirace omitted from the figure, near-zero everywhere),
+    three dimension panels side by side.
+- **Single shared effect scale**: ALL cells are Pearson correlations — age/parentba/gender
+  as measured; subjective class on its 1–4 ordinal scale; race/ethnicity as category
+  INDICATORS (White shown for context). Verified this reproduces the prose: class numbers
+  match the 1–4 scale (rap −0.13, musicals 0.13, big band 0.12); BUT the prose RACE numbers
+  (Latin/salsa 0.31/0.18, rap 0.21, dance 0.20/0.15) match the ORDERED 0–4 race CODE, not
+  the indicators. The figure uses indicators (defensible; a linear correlation with an
+  unordered nominal code is not), so:
+  **PROSE DELTAS FLAGGED TO AUTHOR (not yet changed)**: (1) Hispanic×Latin/salsa d1:
+  indicator r = 0.39 (d2 0.25) vs prose 0.31/0.18 (race-code); recommend updating prose or
+  footnoting the encoding. (2) age×rap d1 = −0.424 → figure prints −0.42; prose says −0.43
+  (line 239 + fig paragraph) — rounding fix needed. (3) parentba×opera: recomputed
+  0.11 (d2) / 0.12 (d1) vs prose 0.15/0.14 — earlier session's encoding could not be
+  recovered; needs author decision. (4) Prose "Black respondents... mean difference +0.24"
+  is a centered-mean quantity; indicator r = 0.19 — different statistic, left as-is but
+  inconsistent with the figure's encoding.
+- **GOTCHA (cost us a scrambled figure)**: NEVER build aes() mappings via
+  `aes(x = eval(quote(...)))` with branch-specific quoted expressions — it silently
+  evaluated in the wrong environment and scrambled the supplementary matrix (Country×Age
+  showed −0.42 instead of 0.01). Caught by cross-checking the SAME cell across the two
+  figures (fig5 Latin×Age −0.11 vs fig6 +0.13). Fixed with two explicit builders
+  (mk_demo_rows / mk_genre_rows); 13 cells spot-verified against direct cor() calls.
+- main.tex: line-245 encoding sentence rewritten (cells = correlations; class scale; race
+  indicators; "blue/red cell" language); fig-omega-demographics age example updated to
+  −0.42; both captions rewritten for the matrix design; supplementary \includegraphics
+  switched to fig-omega-demographics-heatmap. Stale figures git-rm'd:
+  fig-omega-demographics-dim1/2/3.pdf, fig-omega-demographics-genres.pdf (the 42-inch
+  stack), fig-omega-demographics-heatmap-dim1/2/3.pdf. Compiles at 25 pp., 0 undefined refs.
