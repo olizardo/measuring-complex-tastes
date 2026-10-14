@@ -53,17 +53,17 @@ Table~\ref{tab:genre-rates} reports how often respondents are coded $1$ on each 
 
 \section{Analytic Strategy}
 
-Our data gives us three separate pictures of each person's taste: what they like, what they listen to, and what they think about the people who do. These three pictures might overlap heavily (a person who likes opera probably listens to it and respects the fans), or they might diverge sharply (someone might listen to hip-hop while considering it low-status). We need a method that asks: How much do these three pictures agree? Do they contribute equally to a single coherent picture of musical taste? And where, geometrically, do people end up when their three pictures don't line up?
+Our data gives us three separate pictures of each person's taste: what they like, what they listen to, and what they think about the people who do. These three pictures might overlap heavily (a person who likes opera probably listens to it and sees its fans as high status), or they might diverge sharply (someone might listen to hip-hop while considering it low status). We need a method that asks: How much do these three pictures agree? Do they contribute equally to a single coherent picture of musical taste? And where, geometrically, do people end up when their three pictures don't line up?
 
-Multiple Factor Analysis (MFA) \citep{pages2014mfa,abdi2013mfa} is built precisely for this kind of problem. It takes data organized into distinct blocks of variables---here, the three aspects of taste---and builds a single shared picture of the people while making sure no one block dominates. The MFA literature calls these variable sets ``groups''; we use \emph{blocks of variables}, or \emph{aspects} when referring specifically to preference, engagement, and evaluation, reserving ``group'' for its ordinary sociological meaning. In the geometric data analysis tradition, the distinct values a variable can take (here yes/no) are called \emph{categories}.
+Multiple Factor Analysis (MFA) \citep{pages2014mfa,abdi2013mfa} is built precisely for this kind of problem. It takes data organized into distinct blocks of variables---here, the three aspects of taste---and builds a single shared picture of the people while making sure no one block dominates. The MFA literature calls these variable sets ``groups''; we use \emph{blocks of variables}, or \emph{aspects} when referring specifically to preference, engagement, and evaluation, reserving ``group'' for its ordinary sociological meaning. In the geometric data analysis tradition, the distinct values a variable can take (here yes/no) are called \emph{categories}. The MFA approach proceeds in two steps, which we describe in the following sections. 
 
 \subsection{Constructing the Global Complex Taste Space}
 
-The raw data is a table with one row per respondent and sixty columns: twenty genres, each measured on three aspects. Each entry is binary: 1 if the person likes/listens to/evaluates the genre, 0 otherwise. The analysis has two steps, one per aspect, then a final combination.
+The raw data is a table with one row per respondent and sixty columns: twenty genres, each measured on three aspects. Each entry is binary, containing a 1 if the person likes/listens to/evaluates the genre highly, and 0 otherwise. 
 
-\emph{Step 1: Analyze each aspect separately.} We run a separate analysis on just the liking data (20 genres, 2,259 respondents), treating it as a two-way table of yes/no responses. This analysis reveals how respondents cluster based on what they like. We repeat the process independently for listening and for evaluations. In technical terms, each of these is a Multiple Correspondence Analysis (MCA) on one block of twenty binary variables. The result of each separate MCA is a map of the respondents, showing who is similar to whom in terms of liking alone, listening alone, or evaluations alone.
+\emph{Step 1: Analyze each aspect separately.} We run a separate analysis on just the liking data (20 genres, 2,259 respondents), treating it as a two-way table of yes/no responses. This analysis shows how respondents cluster by what they like. We repeat the process independently for listening and for evaluations. In technical terms, each of these is a Multiple Correspondence Analysis (MCA) on one block of twenty binary variables. The result of each separate MCA is a map of the respondents, showing who is similar to whom in terms of liking alone, listening alone, or evaluations alone.
 
-\emph{Step 2: Balance and combine.} Now we want to merge these three separate pictures into one. But we face a problem: if one aspect naturally has stronger patterns than another (if listening, say, reveals much sharper clustering than evaluations), it will dominate the combined picture. To prevent this, we weight each aspect inversely to its strength. Specifically, we use the weights $5.00$ for preference, $6.45$ for consumption, and $4.28$ for evaluation. The intuition is like handicapping in golf: the aspect with the strongest internal structure gets downweighted so that all three contribute equally to the final picture. The result is the ``complex taste space''---a single map of respondents where all three aspects are heard equally.\footnote{As a robustness check, we re-estimated the same MFA with each block analyzed by scaled PCA instead of MCA; the results hold. Eigenvalues, RV coefficients, and individual coordinates correlate at $r > 0.96$ across the first three dimensions. The main difference is how rare categories are weighted: MCA emphasizes rare (distinctive) answers, a feature we want here since unusual taste patterns carry theoretical interest.}
+\emph{Step 2: Balance and combine.} After the first step, the next step is to merge these three separate pictures into one. But we face a problem here because if one aspect naturally has stronger patterns than another (if listening, say, reveals much sharper clustering than evaluations), it will dominate the combined picture. To prevent this, we weight each aspect inversely to the strength of the first dimension of the separate MCA we just described. Specifically, we use the weights $5.00$ for preference, $6.45$ for consumption, and $4.28$ for evaluation. The intuition is like handicapping in golf: the aspect with the strongest internal structure gets downweighted so all three contribute equally to the final picture. The result is the ``complex taste space''---a single map of respondents where all three aspects are heard equally.\footnote{As a robustness check, we re-estimated the same MFA with each block analyzed by scaled PCA instead of MCA; the results hold. Eigenvalues, RV coefficients, and individual coordinates correlate at $r > 0.96$ across the first three dimensions. The main difference is how rare categories are weighted: MCA emphasizes rare (distinctive) answers, a feature we want here since unusual taste patterns carry theoretical interest.}
 
 \subsection{Independence or Redundancy of Aspects of Complex Tastes}
 
@@ -127,8 +127,8 @@ The category coordinates reveal what each dimension means. On the first dimensio
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.85\linewidth]{fig-categories12} \caption{Category map of the MFA (dimensions 1--2). Colored points are the ``yes'' categories of each aspect; grey points are the corresponding ``no'' categories. Preference and consumption ``yes'' categories array along the positive side of Dimension 1 (general affirmation); the evaluation ``yes'' categories barely spread along it, while splitting highbrow (top) from popular (bottom) on Dimension 2.}
-\label{fig:categories12}
+\includegraphics[width=.85\linewidth]{fig-categories} \caption{Category map of the MFA (dimensions 1--2). Colored points are the ``yes'' categories of each aspect; grey points are the corresponding ``no'' categories. Preference and consumption ``yes'' categories array along the positive side of Dimension 1 (general affirmation); the evaluation ``yes'' categories barely spread along it, while splitting highbrow (top) from popular (bottom) on Dimension 2.}
+\label{fig:categories1-2}
 \end{figure}
 
 Dimension 2 cuts across genres along a hierarchical line. The highbrow genres (opera, classical, big band, Broadway) sit at the positive pole, while popular genres (rap, heavy metal, indie, dance/club, reggae) sit at the negative pole. Strikingly, this opposition shows up identically across all three aspects. Whether you measure liking, listening, or evaluations, the same genres cluster together. This is the classic \emph{highbrow--popular hierarchy} that researchers have documented for decades \citep{bourdieu1984distinction}. Respondents move along this axis depending on where they fall in that genre hierarchy---older people tend toward highbrow (Section~\ref{sec:social}), younger toward popular.
@@ -193,21 +193,15 @@ Now we get to the core question: \emph{For each person, on each dimension, how m
 
 What's surprising is how much complex tastes matter geometrically. On Dimension 1, the disagreement score accounts for 56\% of respondents' variation on that dimension. On Dimension 2, it's 52\%. On Dimension 3, it's 63\%. This means disagreement is about as important as agreement in determining where respondents sit in the space. Complex tastes aren't a marginal phenomenon confined to a few unusual respondents. They're woven throughout the structure of the space.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=.7\linewidth]{fig-antinomy-map} \caption{Individual factor map (dimensions 2--3). Grey points: all respondents; orange points: the 20\% of respondents with the highest complex-taste score on Dimension 1 ($W_1$).}
-\label{fig:antinomy-map}
-\end{figure}
-
 We can also count complex tastes combinatorially: How many of a person's 20 genres fall into each of Ma's eight configurations? (Appendix~\ref{app:configurations} defines these.) The geometric and combinatorial measures are related but different. The geometric score on Dimension 1 correlates with the combinatorial count ($\rho = 0.31$), but on Dimensions 2 and 3 the correlation is much weaker ($0.19$ and $-0.06$). The reason: The geometric score measures \emph{how much} the aspects disagree on this dimension; the configuration count measures \emph{how many genres} a person holds in each configuration. They align on engagement (Dimension 1) but diverge on position (Dimension 2) and evaluation (Dimension 3).
 
 Each configuration type also has its own signature in the space. Distant praise---liking and evaluating highly but not listening---sits at the status-granting pole of Dimension 3, concentrated in prestige genres like opera. Guilty pleasures---liking and listening but not evaluating---sit at the popular and status-withholding poles (Dimensions 2 and 3), where genres like classic rock sit. Taste poses---liking and evaluating but not listening---sit toward the highbrow and engaged end of the space. The eight configurations form a consistent map of where complex tastes cluster geometrically.
 
-\begin{table}[htbp]
-\centering \caption{Spearman correlations between configuration counts (per respondent, out of 20 genres) and MFA coordinates and complex-taste scores ($N = 2{,}259$).}
-\label{tab:antinomy}
-\input{tables/tab-antinomy}
-\end{table}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.95\linewidth]{fig-signatures} \caption{Geometric signatures of Ma's eight configurations. Heatmap shows Spearman correlations between configuration counts (per respondent, out of 20 genres) and MFA coordinates and complex-taste scores ($N = 2{,}259$), across three dimensions and three score types (global coordinates, aspect-disagreement, genre-based complex taste).}
+\label{fig:signatures}
+\end{figure}
 
 \subsection{The Social Sources of Complex Tastes}
 \label{sec:social}
@@ -237,14 +231,6 @@ The highbrow--popular dimension (Dimension 2) is heavily shaped by age and educa
 The general-affirmation dimension is only weakly socially structured---no demographic variable exceeds $\eta^2 = 0.03$ on it---but the education pattern is instructive: the gradient concentrates at the bottom of the credential distribution (No diploma $-0.39$, HS/GED $-0.24$) and flattens from some college upward ($+0.05$ to $+0.13$). Generalized engagement with the genre system, in other words, is most sharply differentiated at the entry into credentials, not across their full range.
 
 Dimension 3 (status-valuation), by contrast, is \emph{socially flat}. No demographic variable predicts it ($\eta^2$ all below 0.011). All demographic groups cluster near the center, regardless of age, education, or class. Who grants status to genres' fans isn't predicted by who you are demographically. This fits what we learned earlier: evaluations are nearly independent of liking and listening (RV = 0.01). The status-valuation axis isn't a demographic gradient at all. It's structured by something else entirely---perhaps individual-level variation in the willingness to recognize different forms of cultural engagement.
-
-Dimension 4 (present in the supplementary analysis) reveals a different pattern. It's driven purely by engagement with specific genres and has a strong racial anchor ($\eta^2 = 0.26$). The positive pole features genres strongly engaged by Black and Hispanic respondents---reggae, Latin/Spanish/Salsa, rap/hip-hop, and Blues/R\&B. The negative pole features the rock--country cluster (heavy metal, indie rock, classic rock), more engaged by White respondents. This is a \emph{racialized segmentation} of engagement---not the same as the highbrow--popular hierarchy (which mixes genres across race). Evaluations barely vary on this dimension; all demographic groups grant similar status across these genres. The contrast is striking: liking and listening divide sharply by race; evaluations do not.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=.85\linewidth]{fig-dim4} \caption{Category map on dimensions 2 and 4. Colored points are the ``yes'' categories of each aspect; grey points are the corresponding ``no'' categories. Dimension 4 opposes engagement with reggae, Latin/Spanish/Salsa, rap/hip-hop, and Blues/R\&B (positive pole) to engagement with the rock--country cluster (negative pole); the evaluation categories cluster near the origin.}
-\label{fig:dim4}
-\end{figure}
 
 \subsection{Who Has Complex Tastes?}
 \label{sec:who}
