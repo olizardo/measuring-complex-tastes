@@ -14,7 +14,9 @@
       "git -C overleaf push *": "allow",
       "pdflatex *": "allow",
       "grep *": "allow",
-      "echo *": "allow"
+      "echo *": "allow",
+      "git -C overleaf log *": "allow",
+      "git -C overleaf rm *": "allow"
     }
   }
 }

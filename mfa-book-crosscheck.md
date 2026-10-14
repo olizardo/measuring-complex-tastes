@@ -14,14 +14,14 @@ counterpart (section + pages), and a status line.
 
 ## Notation dictionary
 
-| Manuscript | Pagès | Notes |
-|---|---|---|
-| aspect / block $h$, $h = 1,\dots,H$ ($H = 3$) | group of variables $j$, $j = 1,\dots,J$ | Book reserves "group" for the block; we reserve it sociologically (msq. decision 7/10) |
-| $F_s(i)$, global (compromise) coordinate | $F_s(i)$, mean individual | Book: "mean individual" $i$ appears at the barycentre of its $J$ partial points, all of equal weight (§5.2, pp. 104, 106) |
-| $F_{sh}(i)$, partial coordinate | $J \cdot F_s(i^j)$ | **Dilation convention.** Pagès' raw partial point $i^j$ has coordinate $F_s(i^j)$; for graphs partial points are *dilated by the $J$ coefficient* so that $i$ is the barycentre. Our $F_{sh}(i)$ **is** the dilated version (what FactoMineR stores in `ind$coord.partiel`). |
-| $W_s(i)$ | within-class inertia of $N_i^J$ along axis $s$ | §5.4 (see entry 6) |
-| $\lambda_{1h}$, separate first eigenvalue | $\lambda_1^j$ | |
-| balancing weight $1/\lambda_{1h}$ | variable weight $1/\lambda_1^j$ (qualitative: per-category $1/(Q_j \lambda_1^j)$) | |
+| Manuscript                                         | Pagès                                                                               | Notes                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| aspect / block$h$, $h = 1,\dots,H$ ($H = 3$) | group of variables$j$, $j = 1,\dots,J$                                           | Book reserves "group" for the block; we reserve it sociologically (msq. decision 7/10)                                                                                                                                                                                                                  |
+| $F_s(i)$, global (compromise) coordinate         | $F_s(i)$, mean individual                                                          | Book: "mean individual"$i$ appears at the barycentre of its $J$ partial points, all of equal weight (§5.2, pp. 104, 106)                                                                                                                                                                           |
+| $F_{sh}(i)$, partial coordinate                  | $J \cdot F_s(i^j)$                                                                 | **Dilation convention.** Pagès' raw partial point $i^j$ has coordinate $F_s(i^j)$; for graphs partial points are *dilated by the $J$ coefficient* so that $i$ is the barycentre. Our $F_{sh}(i)$ **is** the dilated version (what FactoMineR stores in `ind$coord.partiel`). |
+| $W_s(i)$                                         | within-class inertia of$N_i^J$ along axis $s$                                    | §5.4 (see entry 6)                                                                                                                                                                                                                                                                                     |
+| $\lambda_{1h}$, separate first eigenvalue        | $\lambda_1^j$                                                                      |                                                                                                                                                                                                                                                                                                         |
+| balancing weight$1/\lambda_{1h}$                 | variable weight$1/\lambda_1^j$ (qualitative: per-category $1/(Q_j \lambda_1^j)$) |                                                                                                                                                                                                                                                                                                         |
 
 ---
 
@@ -64,7 +64,9 @@ squared correlation.
 **Pagès:** §7.2 "Scalar Product and Relationship Between Groups of Variables",
 pp. 133–139, subsection "Lg and RV", pp. 137–138:
 
-$$RV(K_j, K_l) = \frac{\langle W_j, W_l\rangle_D}{\|W_j\|_D \|W_l\|_D}$$
+$$
+RV(K_j, K_l) = \frac{\langle W_j, W_l\rangle_D}{\|W_j\|_D \|W_l\|_D}
+$$
 
 - $RV = 0$ iff every variable of one group is uncorrelated with every variable of the
   other (p. 138) — matches our RV-0 gloss.
@@ -101,7 +103,10 @@ with cite p. 137.
 **Pagès:**
 
 - Formula, §7.2, p. 137:
-  $$Lg(K_j, K_l) = \frac{\langle W_j, W_l\rangle_D}{\lambda_1^j \lambda_1^l}$$
+  $$
+  Lg(K_j, K_l) = \frac{\langle W_j, W_l\rangle_D}{\lambda_1^j \lambda_1^l}
+  $$
+
   — the balancing appears explicitly in the denominator; with it absorbed into the
   global column weights (our setup), this is the same quantity as our
   $\mathrm{tr}(\mathbf{S}_h \mathbf{S}_k)/N^2$.
@@ -151,7 +156,10 @@ with cite p. 137.
   first axis, that is to say the sums of the contributions of the variables of a
   given group").
 - §7.5, p. 143 gives the groups-space version:
-  $$CTR(K_j, w_s) = \frac{Lg(F_s, K_j)}{\sum_j Lg(F_s, K_j)} = \frac{\text{projected inertia of } N_{K_j} \text{ on } v_s}{\text{projected inertia of } N_K \text{ on } v_s}$$
+  $$
+  CTR(K_j, w_s) = \frac{Lg(F_s, K_j)}{\sum_j Lg(F_s, K_j)} = \frac{\text{projected inertia of } N_{K_j} \text{ on } v_s}{\text{projected inertia of } N_K \text{ on } v_s}
+  $$
+
   — the same decomposition viewed in $\mathbb{R}^I$ (sums to 100% because
   $\sum_j Lg(F_s, K_j) = \lambda_s$).
 - Worked instance for qualitative groups: §8.4.2, p. 174, Table 8.6 "Decompositions of
@@ -194,15 +202,21 @@ points.
 ## 6. Equation eq:decomp — the aspect-disagreement score $W_s(i)$
 
 **Manuscript:** eq:decomp,
-$$\sum_{h=1}^{H} F_{sh}(i)^2 = H\,F_s(i)^2 + W_s(i), \qquad
-W_s(i) = \sum_h \left(F_{sh}(i) - F_s(i)\right)^2$$
+
+$$
+\sum_{h=1}^{H} F_{sh}(i)^2 = H\,F_s(i)^2 + W_s(i), \qquad
+W_s(i) = \sum_h \left(F_{sh}(i) - F_s(i)\right)^2
+$$
+
 plus the interpretive paragraph (aspect-disagreement read as complex taste).
 
 **Pagès:** §5.4 "Interpretation Aids", pp. 107–109 — **this is the source passage**:
 
 - p. 108: cloud $N_{IJ}$ of all partial points, partitioned into $I$ classes $N_i^J$
   (one class per individual); Huygens' theorem applied to this partition, axis by axis:
-  $$\mathrm{Inertia}[N_{IJ}/O] = \mathrm{Inertia}[N_I/O] + \sum_i \mathrm{Inertia}[N_i^J/i]$$
+  $$
+  \mathrm{Inertia}[N_{IJ}/O] = \mathrm{Inertia}[N_I/O] + \sum_i \mathrm{Inertia}[N_i^J/i]
+  $$
 - p. 108: "The within-class inertia of $N_i^J$ measures the heterogeneity, along an
   axis $u_s$, of the partial points associated with individual $i$." This sentence is
   the book's one-line statement of what $W_s(i)$ measures.
@@ -291,8 +305,12 @@ footnote. Nothing to check against the book beyond the §5.5 comparability cavea
 ## 10. Equation eq:genre — per-genre contributions, $\omega_s(i;g)$, cross-genre coherence
 
 **Manuscript:** eq:genre,
-$$W_s(i) = \sum_g \omega_s(i;g) + 2H^2 \sum_{g<g'}\sum_h d_{ighs} d_{ig'hs}, \qquad
-\omega_s(i;g) = H^2 \sum_h d_{ighs}^2$$
+
+$$
+W_s(i) = \sum_g \omega_s(i;g) + 2H^2 \sum_{g<g'}\sum_h d_{ighs} d_{ig'hs}, \qquad
+\omega_s(i;g) = H^2 \sum_h d_{ighs}^2
+$$
+
 with $c_{ighs} = \Delta_{ghs}(z_{igh} - p_{gh})$, $d_{ighs} = c_{ighs} - \bar{c}_{igs}$
 (centered per genre); footnote gives $F_{sh}(i) = H\sum_g c_{ighs}$ and
 $F_s(i) = \sum_{g,h} c_{ighs}$.
@@ -452,24 +470,24 @@ numbers are ours (script 08 / `output/robustness_pca.rds`).**
 
 ## Summary table
 
-| # | Manuscript item (location) | Pagès counterpart (§, pp.) | Status |
-|---|---|---|---|
-| 1 | Block weighting $1/\lambda_1$ (strategy 3.1, tab-groups) | §4.3, pp. 82–86; §8.2, p. 163 | Direct match |
-| 2 | RV coefficient + 0/1 glosses (strategy 3.2, tab-rv) | §7.2, pp. 133–139; Fig. 7.2 p. 137; §8.2 p. 164 | Direct match |
-| 3 | Lg coefficient + footnote (strategy 3.3, tab-groups) | §7.2, p. 137; §7.3 pp. 139–140 (Table 7.1); §7.4 pp. 140–141 | Match; **cite off by one** (phrase on p. 138); $Lg(h,\mathrm{MFA})$ is FactoMineR-level |
-| 4 | Aspect contributions ctr(h,s) (strategy 3.4, tab-groups) | §1.6.2 pp. 17–18; §4.3 p. 83; §7.5 p. 143; §8.4.2 p. 174 (Table 8.6) | Direct match |
-| 5 | Partial points, global = mean of partials (eq:decomp setup, figures) | §5.2, pp. 103–106; §8.2.3, p. 165 | Direct match (mind $J$-dilation) |
-| 6 | **eq:decomp** $W_s(i)$ | §5.4, pp. 107–109 (Huygens on $N_{IJ}$; Table 5.1) | Match; our per-individual packaging; **Table 5.2 caution** |
-| 7 | Per-aspect shares Wp/Wc/We (sec:aspect-shares) | §5.4, pp. 108–109 (last ¶) | Direct match |
-| 8 | Superimposed-representation caveat footnote | §5.5, pp. 110–116 (§5.5.2 pp. 112–114; §5.5.3 pp. 114–115; §5.6 p. 116) | Direct match; cite accurate |
-| 9 | Pairwise distances $\sum d^2 = H\,W_s$ (tab-pairs) | None explicit; §5.4 + §5.5–5.6 machinery | Paper's own identity (trivial algebra) |
-| 10 | **eq:genre** ($\omega$, coherence) | None; ingredients §5.2 pp. 105–106, §8.1–8.2 pp. 159–168, §2.4.2–2.5.2 pp. 45–51 | Paper's own; verify in script 04 §3b |
-| 11 | MCA rare-category upweighting (4.1, footnotes) | §2.4.2 pp. 45–47; §2.5.1 pp. 48–49 | Direct match |
-| 12 | Eigenvalues / percentages (tab-eigen) | §1.6.1 p. 16; §2.5.1 pp. 48–49; §8.4.2 p. 174 | Direct match |
-| 13 | Partial axes (tab-partial-axes) | §4.5, pp. 88–91; §8.4.3 p. 175 (Table 8.5 p. 174) | Direct match |
-| 14 | Supplementary elements, $\eta^2$ (tab-w-eta; script 05) | §1.8 pp. 23–25; §1.9 pp. 26–28; §2.7 pp. 54–55; §7.4 Remark p. 142 | Match; implementation gotchas are ours |
-| 15 | Transposed MFA (sec:duality) | No counterpart; §2.5.3 pp. 51–52, §4.3, §8.1–8.2 | Paper's own design; verify script 06 |
-| 16 | MCA-vs-PCA robustness (footnote, script 08) | §2.8.3 pp. 59–61 (nearest discussion) | Ours; consistent with book |
+| #  | Manuscript item (location)                                           | Pagès counterpart (§, pp.)                                                             | Status                                                                                         |
+| -- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1  | Block weighting$1/\lambda_1$ (strategy 3.1, tab-groups)            | §4.3, pp. 82–86; §8.2, p. 163                                                         | Direct match                                                                                   |
+| 2  | RV coefficient + 0/1 glosses (strategy 3.2, tab-rv)                  | §7.2, pp. 133–139; Fig. 7.2 p. 137; §8.2 p. 164                                       | Direct match                                                                                   |
+| 3  | Lg coefficient + footnote (strategy 3.3, tab-groups)                 | §7.2, p. 137; §7.3 pp. 139–140 (Table 7.1); §7.4 pp. 140–141                        | Match;**cite off by one** (phrase on p. 138); $Lg(h,\mathrm{MFA})$ is FactoMineR-level |
+| 4  | Aspect contributions ctr(h,s) (strategy 3.4, tab-groups)             | §1.6.2 pp. 17–18; §4.3 p. 83; §7.5 p. 143; §8.4.2 p. 174 (Table 8.6)                | Direct match                                                                                   |
+| 5  | Partial points, global = mean of partials (eq:decomp setup, figures) | §5.2, pp. 103–106; §8.2.3, p. 165                                                     | Direct match (mind$J$-dilation)                                                              |
+| 6  | **eq:decomp** $W_s(i)$                                       | §5.4, pp. 107–109 (Huygens on$N_{IJ}$; Table 5.1)                                    | Match; our per-individual packaging;**Table 5.2 caution**                                |
+| 7  | Per-aspect shares Wp/Wc/We (sec:aspect-shares)                       | §5.4, pp. 108–109 (last ¶)                                                            | Direct match                                                                                   |
+| 8  | Superimposed-representation caveat footnote                          | §5.5, pp. 110–116 (§5.5.2 pp. 112–114; §5.5.3 pp. 114–115; §5.6 p. 116)           | Direct match; cite accurate                                                                    |
+| 9  | Pairwise distances$\sum d^2 = H\,W_s$ (tab-pairs)                  | None explicit; §5.4 + §5.5–5.6 machinery                                              | Paper's own identity (trivial algebra)                                                         |
+| 10 | **eq:genre** ($\omega$, coherence)                           | None; ingredients §5.2 pp. 105–106, §8.1–8.2 pp. 159–168, §2.4.2–2.5.2 pp. 45–51 | Paper's own; verify in script 04 §3b                                                          |
+| 11 | MCA rare-category upweighting (4.1, footnotes)                       | §2.4.2 pp. 45–47; §2.5.1 pp. 48–49                                                   | Direct match                                                                                   |
+| 12 | Eigenvalues / percentages (tab-eigen)                                | §1.6.1 p. 16; §2.5.1 pp. 48–49; §8.4.2 p. 174                                        | Direct match                                                                                   |
+| 13 | Partial axes (tab-partial-axes)                                      | §4.5, pp. 88–91; §8.4.3 p. 175 (Table 8.5 p. 174)                                     | Direct match                                                                                   |
+| 14 | Supplementary elements,$\eta^2$ (tab-w-eta; script 05)             | §1.8 pp. 23–25; §1.9 pp. 26–28; §2.7 pp. 54–55; §7.4 Remark p. 142                | Match; implementation gotchas are ours                                                         |
+| 15 | Transposed MFA (sec:duality)                                         | No counterpart; §2.5.3 pp. 51–52, §4.3, §8.1–8.2                                    | Paper's own design; verify script 06                                                           |
+| 16 | MCA-vs-PCA robustness (footnote, script 08)                          | §2.8.3 pp. 59–61 (nearest discussion)                                                  | Ours; consistent with book                                                                     |
 
 ## Flags for the author (nothing urgent)
 
