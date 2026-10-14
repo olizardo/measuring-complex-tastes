@@ -201,29 +201,28 @@ ggsave("manuscript/figures/fig-omega-demographics.pdf", p_main,
 cat("Saved fig-omega-demographics.pdf (8 genres x 9 demographics x 3 dims, all values printed)\n")
 
 # ============================================================================
-# STEP 4: SUPPLEMENTARY FIGURE -- all 20 genres
-# Transposed for legibility: genres as rows (20), demographics as columns (7:
-# the variables the prose discusses; Asian and Multirace/Other, near-zero
-# everywhere, are omitted here and remain in the console output)
+# STEP 4: SUPPLEMENTARY FIGURES -- one full matrix per dimension (2026-10-14)
+# The combined three-panel heatmap was unreadable (cell text ~1pt after the
+# .95\linewidth downscale) and showed only 7 of 9 demographics. Splitting one
+# figure per dimension lets every cell print large enough to read, and ALL
+# nine demographic variables are shown as columns (no omissions).
 # ============================================================================
 
-demo_labels_supp <- demo_labels[1:7]
-demo_rows_supp <- demo_rows[1:7]
+demo_labels_supp <- demo_labels  # all nine demographics, no omissions
 
-panels20 <- lapply(seq_along(dim_labels), function(i) {
-  d <- corr_data |>
-    filter(dimension == dim_labels[i],
-           demographic %in% demo_labels_supp)
-  mk_genre_rows(d, y_labels = (i == 1), x_labels = (i == 1), text_size = 1.55) +
-    ggtitle(dim_titles[i])
-})
-
-p_supp <- (panels20[[1]] | panels20[[2]] | panels20[[3]]) +
-  plot_layout(nrow = 1)
-
-ggsave("manuscript/figures/fig-omega-demographics-heatmap.pdf", p_supp,
-       width = 7.0, height = 6.0, dpi = 300)
-cat("Saved fig-omega-demographics-heatmap.pdf (20 genres x 7 demographics x 3 dims)\n")
+for (i in seq_along(dim_labels)) {
+  d <- corr_data |> filter(dimension == dim_labels[i])
+  p_i <- mk_genre_rows(d, y_labels = TRUE, x_labels = TRUE, text_size = 3.0) +
+    ggtitle(dim_titles[i]) +
+    theme(
+      axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.4, size = 9),
+      axis.text.y = element_text(size = 9),
+      plot.title = element_text(size = 11.5, face = "bold", hjust = 0.5)
+    )
+  fname <- sprintf("manuscript/figures/fig-omega-demographics-genres-d%d.pdf", i)
+  ggsave(fname, p_i, width = 4.8, height = 6.6, dpi = 300)
+  cat("Saved", basename(fname), "(20 genres x 9 demographics)\n")
+}
 
 # ============================================================================
 # STEP 5: CONSOLE SUMMARY (number cross-check for the prose)
