@@ -9,6 +9,11 @@
 # distances between partial points sum to H times the dispersion term
 # (H = 3), giving aspect-pair-level disagreement shares.
 #
+# The partial points also decompose exactly over genres (each partial
+# point is 3 * the sum of twenty per-genre contributions), which splits
+# W_s into a genre-local dispersion part (omega) and a cross-genre
+# coherence part (same disagreement direction repeated across genres).
+#
 # Discrete complement: each genre x respondent is one of Ma's 8
 # configurations (+++ simple positive; --- simple negative; and the six
 # antinomies: guilty pleasure ++-, pre-acquired -++, taste pose +-+,
@@ -64,6 +69,17 @@ ant$share1 <- ant$W1 / ant$T1
 ant$share2 <- ant$W2 / ant$T2
 ant$share3 <- ant$W3 / ant$T3
 
+# per-aspect decomposition of the score (Pages 2014, sec. 5.4): each
+# aspect's partial point contributes its squared deviation from the
+# global point; the three contributions sum to W_s
+Wp <- (P - F)^2; Wc <- (C - F)^2; We <- (V - F)^2
+stopifnot(max(abs(Wp + Wc + We - W)) < 1e-10)
+for (s in 1:3) {
+  ant[[paste0("Wp", s)]] <- Wp[, s]
+  ant[[paste0("Wc", s)]] <- Wc[, s]
+  ant[[paste0("We", s)]] <- We[, s]
+}
+
 # --- 3. Ma's eight configurations per genre x respondent -----------------------
 types <- c("simple_pos", "guilty", "preacquired", "pose",
            "distanced", "justified", "distant", "simple_neg")
@@ -86,6 +102,98 @@ type_counts <- as.data.frame(type_counts)
 type_counts$n_complex <- rowSums(type_counts[, c("guilty", "preacquired", "pose",
                                                  "distanced", "justified", "distant")])
 
+# --- 3b. genre-level decomposition: localized antinomies vs coherence ---------
+# Each partial point is exactly 3 * (sum over genres of per-genre
+# contributions): c_ighs = Delta_ghs * (z_igh - p_gh), with z the binary
+# indicator, p its margin, and Delta = (w_yes * V_yes - w_no * V_no) /
+# sqrt(p * (1 - p)) taken from the global PCA (column weights w and
+# loadings V satisfy F = X %*% diag(w) %*% V). Deviating each genre's
+# three aspect contributions from their three-aspect mean gives
+# d_ighs, and W_s(i) = sum_g omega_s(i;g) + 18 sum_{g<g'} sum_h
+# d_ighs d_ig'hs, with omega_s(i;g) = 9 sum_h d_ighs^2 the genre-local
+# complex-taste score and the second term the cross-genre coherence.
+
+gp <- res$global.pca
+w  <- gp$call$col.w
+Vl <- gp$svd$V[, seq_len(NDIM)]
+enm <- paste0(rep(c("pref", "cons", "eval"), each = 40),
+              "_", rep(genres, each = 2, times = 3), "_", rep(0:1, times = 60))
+stopifnot(identical(colnames(gp$call$X)[seq_along(enm)], enm))
+Zb <- as.matrix(mfa_dat)
+stopifnot(identical(colnames(Zb), paste0(rep(c("pref", "cons", "eval"), each = 20),
+                                         "_", rep(genres, times = 3))))
+pm <- colMeans(Zb)
+stopifnot(all(pm > 0 & pm < 1))
+
+Dcoef <- array(0, c(20, 3, NDIM))
+Ccont <- array(0, c(nrow(Zb), 20, 3, NDIM))
+for (h in 1:3) for (g in 1:20) {
+  j1 <- 2 * (20 * (h - 1) + g)
+  p  <- pm[20 * (h - 1) + g]
+  Dcoef[g, h, ] <- (w[j1] * Vl[j1, ] - w[j1 - 1] * Vl[j1 - 1, ]) /
+                   sqrt(p * (1 - p))
+  Ccont[, g, h, ] <- (Zb[, 20 * (h - 1) + g] - p) %*% t(Dcoef[g, h, ])
+}
+cat("\n== Genre-level decomposition: exactness checks ==\n")
+cat("max |sum of 60 genre-aspect contributions - global coord| :",
+    max(abs(apply(Ccont, c(1, 4), sum) - F)), "\n")
+blk <- apply(Ccont, c(1, 3, 4), sum)
+cat("max |3 * block sum - partial point| :",
+    max(abs(3 * blk[, 1, ] - P), abs(3 * blk[, 2, ] - C),
+        abs(3 * blk[, 3, ] - V)), "\n")
+
+migs <- apply(Ccont, c(1, 2, 4), mean)
+Cdev <- Ccont
+for (h in 1:3) Cdev[, , h, ] <- Ccont[, , h, ] - migs
+omega <- 9 * apply(Cdev^2, c(1, 2, 4), sum)   # n x 20 x NDIM genre-local scores
+Wloc  <- apply(omega, c(1, 3), sum)           # localized part of W
+coh   <- W - Wloc                             # cross-genre coherence part
+
+# brute-force check of the decomposition on a few respondents
+chk  <- c(1, nrow(Zb) %/% 2, nrow(Zb))
+bmax <- 0
+for (i in chk) for (s in 1:NDIM) {
+  G  <- Cdev[i, , , s]
+  d2 <- rowSums(G^2)
+  bmax <- max(bmax, abs(sum(9 * d2) + 9 * (sum(G %*% t(G)) - sum(d2)) - W[i, s]))
+}
+cat("max |brute-force (sum_g omega + coherence) - W| :", bmax, "\n")
+
+# configuration held in each genre x respondent cell (rows in mfa_dat order)
+cell_cfg <- matrix("simple_neg", nrow(Zb), 20, dimnames = list(NULL, genres))
+pp <- Zb[, 1:20] == 1; cc <- Zb[, 21:40] == 1; vv <- Zb[, 41:60] == 1
+cell_cfg[pp &  cc &  vv] <- "simple_pos"
+cell_cfg[pp &  cc & !vv] <- "guilty"
+cell_cfg[!pp & cc &  vv] <- "preacquired"
+cell_cfg[pp & !cc &  vv] <- "pose"
+cell_cfg[!pp & cc & !vv] <- "distanced"
+cell_cfg[pp & !cc & !vv] <- "justified"
+cell_cfg[!pp & !cc & vv] <- "distant"
+stopifnot(all(sapply(setdiff(types, "n_complex"),
+                     function(t) sum(cell_cfg == t) == sum(type_counts[[t]]))))
+
+ant$Wloc1 <- Wloc[, 1]; ant$Wloc2 <- Wloc[, 2]; ant$Wloc3 <- Wloc[, 3]
+ant$coh1  <- coh[, 1];  ant$coh2  <- coh[, 2];  ant$coh3  <- coh[, 3]
+
+cat("\n== Localized antinomy vs cross-genre coherence (means) ==\n")
+sm <- round(rbind(W = colMeans(W), localized = colMeans(Wloc),
+                  coherence = colMeans(coh)), 2)
+colnames(sm) <- paste0("dim", 1:NDIM)
+print(sm)
+ncc <- type_counts$n_complex
+cat("corr(n_complex, W):    ", round(c(cor(ncc, W), total = cor(ncc, rowSums(W))), 3), "\n")
+cat("corr(n_complex, Wloc): ", round(c(cor(ncc, Wloc), total = cor(ncc, rowSums(Wloc))), 3), "\n")
+cat("bottom-third W3 but top-third localized:",
+    sum(W[, 3] < quantile(W[, 3], 1 / 3) & Wloc[, 3] > quantile(Wloc[, 3], 2 / 3)), "\n")
+
+exi <- which(rownames(ant) == "362")
+cat("\n== Worked example (respondent 362): local vs coherence ==\n")
+cat("W:", round(W[exi, ], 1), "| localized:", round(Wloc[exi, ], 1),
+    "| coherence:", round(coh[exi, ], 1), "\n")
+o <- order(-omega[exi, , 3])
+print(data.frame(genre = genres[o], config = cell_cfg[exi, o],
+                 omega3 = round(omega[exi, o, 3], 2))[1:5, ])
+
 # --- 4. relate antinomy scores and type counts to the MFA ----------------------
 cat("\n== Distribution of configurations (per genre x respondent) ==\n")
 print(round(colMeans(type_counts), 2))
@@ -99,6 +207,13 @@ print(round(summary(ant$W3), 3))
 cat("mean antinomy share of partial inertia: dim1",
     round(mean(ant$share1), 3), "| dim2", round(mean(ant$share2), 3),
     "| dim3", round(mean(ant$share3), 3), "\n")
+
+wshare <- function(s) {
+  round(c(mean(ant[[paste0("Wp", s)]]), mean(ant[[paste0("Wc", s)]]),
+          mean(ant[[paste0("We", s)]])) / mean(ant[[paste0("W", s)]]), 3)
+}
+cat("mean per-aspect shares of W_s (pref/cons/eval):\n")
+print(rbind(dim1 = wshare(1), dim2 = wshare(2), dim3 = wshare(3)))
 
 cat("\n== Pair-level disagreement, dim 3 (correlations with dims) ==\n")
 print(round(cor(ant[, c("dPC3", "dPV3", "dCV3")], ant[, c("F1", "F2", "F3")],
@@ -117,26 +232,125 @@ library(ggplot2)
 library(ggrepel)
 ant$n_complex <- type_counts$n_complex
 
-# table: Spearman correlations of type counts with MFA coords and antinomy scores
-cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3")],
+# figure: genre-specific tri-segment maps (kept in repo, not referenced in
+# main.tex). For each genre, each aspect's yes and no answers place the
+# respondent at the two endpoints of a segment in complex taste space,
+# c_yes = Dcoef_ghs * (1 - p) and c_no = -Dcoef_ghs * p, so the mass-weighted
+# barycenter sits at 0 and rare answers move further. Facets run down the
+# highbrow-popular rung; arrows point toward the yes endpoint.
+glab <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
+          "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
+          "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
+          "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
+          "Dance/Club", "Heavy Metal")
+stopifnot(length(glab) == length(genres))
+rung  <- sapply(1:20, function(g)
+  (Dcoef[g, 1, 2] * (1 - pm[g]) + Dcoef[g, 2, 2] * (1 - pm[20 + g])) / 2)
+ord   <- order(-rung)
+segdf <- do.call(rbind, lapply(ord, function(g) {
+  pgh <- pm[c(g, 20 + g, 40 + g)]
+  do.call(rbind, lapply(1:3, function(h) do.call(rbind, lapply(seq_len(NDIM), function(s) {
+    data.frame(genre  = factor(glab[g], levels = glab[ord]),
+               aspect = c("Preference", "Consumption", "Evaluation")[h],
+               s = s,
+               no  = -Dcoef[g, h, s] * pgh[h],
+               yes =  Dcoef[g, h, s] * (1 - pgh[h]))
+  }))))
+}))
+segdf$off <- unname(c(Preference = -0.24, Consumption = 0,
+                      Evaluation = 0.24)[segdf$aspect])
+lim  <- 1.08 * max(abs(c(segdf$no, segdf$yes)))
+pseg <- ggplot(segdf) +
+  geom_hline(yintercept = 0, color = "grey65", linewidth = 0.3) +
+  geom_segment(aes(x = s + off, y = no, xend = s + off, yend = yes, color = aspect),
+               linewidth = 0.8,
+               arrow = arrow(length = unit(0.055, "in"), type = "closed")) +
+  geom_point(aes(x = s + off, y = yes, color = aspect), size = 0.9,
+             show.legend = FALSE) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("Volume", "Highbrow\u2013popular",
+                                "Status valuation")) +
+  scale_y_continuous(limits = c(-lim, lim)) +
+  scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
+                                Evaluation = "#009E73"), name = NULL) +
+  facet_wrap(~genre, ncol = 5) +
+  labs(x = NULL, y = "Contribution to the global position") +
+  theme_minimal(base_size = 9) +
+  theme(panel.grid.minor = element_blank(), legend.position = "bottom")
+ggsave("manuscript/figures/fig-genre-segments.pdf", pseg, width = 10, height = 8)
+
+# figure: geometric signatures of the configurations — Spearman
+# correlations of the type counts with MFA coordinates,
+# aspect-disagreement scores, and genre-based complex taste, as a signed
+# heatmap (replaces the former tab-antinomy table). Rows are grouped by
+# which aspect stands against the other two (evaluation-odd, consumption-
+# odd, liking-odd), with the simple tastes and the total detached.
+cm <- cor(type_counts, ant[, c("F1", "F2", "F3", "W1", "W2", "W3",
+                               "Wloc1", "Wloc2", "Wloc3")],
           method = "spearman")
-labs <- c("Simple taste ($+++$)", "Guilty pleasure ($++-$)",
-          "Pre-acquired taste ($-++$)", "Taste pose ($+\\,-+$)",
-          "Distanced consumption ($-+\\,-$)", "Justified abstention ($+\\,--$)",
-          "Distant praise ($--+$)", "Simple non-taste ($---$)",
-          "Total complex tastes")
-fmt <- function(x) gsub("-", "$-$", sprintf("%.2f", x))
-tl <- c(
-  "\\begin{tabular}{lcccccc}", "\\toprule",
-  " & \\multicolumn{3}{c}{MFA coordinates} & \\multicolumn{3}{c}{Complex-taste scores} \\\\",
-  "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}",
-  " & Dim 1 & Dim 2 & Dim 3 & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
-for (i in seq_len(nrow(cm))) {
-  tl <- c(tl, paste0(labs[i], " & ", paste(fmt(cm[i, ]), collapse = " & "),
-                     " \\\\"))
+sigrows <- data.frame(
+  key = c("guilty", "distant", "pose", "distanced", "preacquired",
+          "justified", "", "simple_pos", "simple_neg", "", "n_complex"),
+  # the blank separator rows need distinct labels to be distinct factor
+  # levels — one and two spaces render blank on the axis
+  lab = c("Guilty pleasure (++-)", "Distant praise (--+)",
+          "Taste pose (+-+)", "Distanced consumption (-+-)",
+          "Pre-acquired taste (-++)", "Justified abstention (+--)",
+          " ", "Simple taste (+++)", "Simple non-taste (---)",
+          "  ", "Total complex tastes"))
+scols <- c("F1", "W1", "Wloc1", "F2", "W2", "Wloc2", "F3", "W3", "Wloc3")
+skeys <- paste0(rep(1:3, each = 3), ".", rep(c("F", "W", "O"), 3))
+slabs <- c(expression(F[1]), expression(W[1]), expression(omega[1]),
+           expression(F[2]), expression(W[2]), expression(omega[2]),
+           expression(F[3]), expression(W[3]), expression(omega[3]))
+sig <- do.call(rbind, lapply(seq_len(nrow(sigrows)), function(r) {
+  v <- if (sigrows$key[r] == "") rep(NA_real_, 9) else as.numeric(cm[sigrows$key[r], scols])
+  data.frame(cfg = sigrows$lab[r], score = skeys, value = v)
+}))
+sig$cfg <- factor(sig$cfg, levels = rev(sigrows$lab))
+sig$dim <- factor(rep(c("Dimension 1", "Dimension 2", "Dimension 3"),
+                     each = 3, times = nrow(sigrows)),
+                  levels = c("Dimension 1", "Dimension 2", "Dimension 3"))
+psig <- ggplot(sig, aes(score, cfg, fill = value)) +
+  geom_tile(color = "white", linewidth = 0.7) +
+  geom_text(aes(label = ifelse(is.na(value), "", sprintf("%.2f", value)),
+                color = abs(value) > 0.55), size = 3,
+            show.legend = FALSE) +
+  scale_color_manual(values = c(`FALSE` = "grey20", `TRUE` = "white"),
+                     na.value = "grey20") +
+  scale_fill_gradientn(
+    colors = c("#08519C", "#6BAED6", "white", "#FDAE6B", "#A63603"),
+    limits = c(-1, 1), breaks = seq(-1, 1, 0.5), na.value = "white") +
+  scale_x_discrete(labels = setNames(slabs, skeys)) +
+  # free_x is required: each facet holds only its dimension's 3 scores,
+  # otherwise all 9 x-levels appear in every panel and squeeze the tiles
+  facet_wrap(~ dim, nrow = 1, scales = "free_x") +
+  labs(x = NULL, y = NULL, fill = expression(rho)) +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid = element_blank(), legend.position = "bottom",
+        strip.text = element_text(face = "bold"))
+ggsave("manuscript/figures/fig-signatures.pdf", psig, width = 7, height = 3.8)
+
+# table: mean squared pairwise distances between partial points, dims 1-3
+pcols <- c("dPC1", "dPV1", "dCV1", "dPC2", "dPV2", "dCV2", "dPC3", "dPV3", "dCV3")
+pm  <- matrix(colMeans(ant[, pcols]), nrow = 3,
+              dimnames = list(c("pc", "pe", "ce"), c("dim1", "dim2", "dim3")))
+psh <- sweep(pm, 2, colSums(pm), "/")
+print(round(pm, 2))
+print(round(psh, 3))
+plabs <- c("Preference--consumption", "Preference--evaluation",
+           "Consumption--evaluation")
+tlp <- c("\\begin{tabular}{lccc}", "\\toprule",
+         " & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+for (k in seq_len(3)) {
+  cells <- sprintf("%.2f~(%.0f\\%%)", pm[k, ], 100 * psh[k, ])
+  tlp <- c(tlp, paste0(plabs[k], " & ", paste(cells, collapse = " & "), " \\\\"))
 }
-tl <- c(tl, "\\bottomrule", "\\end{tabular}")
-writeLines(tl, "manuscript/tables/tab-antinomy.tex")
+tlp <- c(tlp, "\\midrule",
+         paste0("$H \\cdot W_s$ (total) & ",
+                paste(sprintf("%.1f", colSums(pm)), collapse = " & "), " \\\\"),
+         "\\bottomrule", "\\end{tabular}")
+writeLines(tlp, "manuscript/tables/tab-pairs.tex")
 
 # figure: mean number of genres held in each configuration
 cfg <- type_counts[, setdiff(names(type_counts), "n_complex")]
@@ -157,63 +371,86 @@ p6 <- ggplot(mc, aes(type, mean, fill = complex)) +
         legend.position = "top")
 ggsave("manuscript/figures/fig-configurations.pdf", p6, width = 5.5, height = 3.6)
 
-# figure: individual map dim 2 x dim 3, colored by geometric score W1
-p7 <- ggplot(ant, aes(F2, F3, color = W1)) +
-  geom_point(size = 0.7, alpha = 0.5) +
+# figure: individual map dim 2 x dim 3; the 20% most complex respondents
+# (highest W1) highlighted over the full cloud. W1 is uncorrelated with
+# these dimensions, so the highlighted points blanket the plane — the
+# design makes that null pattern visible instead of fighting the overplotting
+hi80 <- ant$W1 >= quantile(ant$W1, .8)
+p7 <- ggplot(ant, aes(F2, F3)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  scale_color_viridis_c(option = "viridis",
-                        name = expression(Complex-taste~score~W[1])) +
-  labs(x = "Dimension 2 (highbrow vs popular)", y = "Dimension 3 (status valuation)",
-       title = "Individual map by complex-taste score") +
+  geom_point(data = ant[!hi80, ], color = "grey70", size = 0.6, alpha = 0.45) +
+  geom_point(data = ant[hi80, ], aes(color = "Top 20% most complex (W1)"),
+             size = 0.8, alpha = 0.75) +
+  scale_color_manual(values = c("Top 20% most complex (W1)" = "#D95F02"),
+                     name = NULL) +
+  labs(x = "Dimension 2 (highbrow vs popular)", y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank(), legend.position = "top")
 ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 
-# figure: worked example — partial points of the example respondent.
-# Two panels share the status-valuation axis (dim 3): left pairs it with
-# the general-affirmation axis (dim 1), right with the highbrow-popular
-# axis (dim 2, the plane of the paper's other maps). Respondent chosen
-# as the highest-W3 respondent holding guilty-pleasure, taste-pose,
-# and distant-praise configurations (original data row 1333)
-ex <- which(rownames(ant) == "1333")
+# figure: worked examples — partial points of two contrasting respondents,
+# used as running examples throughout Section "Measuring Complex Tastes
+# Geometrically". Rows = respondents, columns share the status-valuation
+# axis (dim 3): left pairs it with the volume axis (dim 1),
+# right with the highbrow-popular axis (dim 2, the plane of the paper's
+# other maps). Scales are free in both directions (respondent 362's dim-3
+# spread dwarfs 1881's; fixed axes would flatten the second row).
+#   362: high engagement + generous valuation (likes 15, listens 9,
+#        grants 18); highest-W3 respondent holding guilty-pleasure,
+#        taste-pose, and distant-praise configurations.
+#   1881: high engagement + withholding valuation (likes 14, listens 13,
+#        grants none); nearly the same rung as 362 on dim 2, reached by
+#        opposite materials (consumption above evaluation).
+exr <- c("362", "1881")
+rlab <- c("Grants 18 of 20 recognitions", "Grants none")
+ex <- match(exr, rownames(ant))
+stopifnot(!any(is.na(ex)))
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
-panes <- c("Dimension 1 (general affirmation)",
+panes <- c("Dimension 1 (volume)",
            "Dimension 2 (highbrow\u2013popular)")
-exd <- do.call(rbind, lapply(seq_along(panes), function(s) {
-  data.frame(
-    modality = factor(mods, levels = mods),
-    d = c(P[ex, s], C[ex, s], V[ex, s], F[ex, s]),
-    d3 = c(P[ex, 3], C[ex, 3], V[ex, 3], F[ex, 3]),
-    panel = factor(panes[s], levels = panes))
+exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
+  do.call(rbind, lapply(seq_along(panes), function(s) {
+    data.frame(
+      respondent = factor(rlab[r], levels = rlab),
+      modality = factor(mods, levels = mods),
+      d = c(P[ex[r], s], C[ex[r], s], V[ex[r], s], F[ex[r], s]),
+      d3 = c(P[ex[r], 3], C[ex[r], 3], V[ex[r], 3], F[ex[r], 3]),
+      panel = factor(panes[s], levels = panes))
+  }))
 }))
-segex <- do.call(rbind, lapply(seq_along(panes), function(s) {
-  k <- 4 * (s - 1)
-  data.frame(x = exd$d[k + 1:3], y = exd$d3[k + 1:3],
-             xend = exd$d[k + 4], yend = exd$d3[k + 4],
-             panel = exd$panel[k + 1])
+# each (respondent, panel) block holds 3 partial points then the global
+segex <- do.call(rbind, lapply(split(exd, interaction(exd$respondent,
+                                                     exd$panel, drop = TRUE)),
+                               function(b) {
+  data.frame(x = b$d[1:3], y = b$d3[1:3],
+             xend = b$d[4], yend = b$d3[4],
+             modality = b$modality[1:3],
+             respondent = b$respondent[1], panel = b$panel[1])
 }))
 pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend),
-               linetype = "dashed", color = "grey55", linewidth = 0.4,
+  # solid connectors colored by aspect, as in fig-genre-map
+  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend, color = modality),
+               linewidth = 0.5, alpha = 0.7,
                inherit.aes = FALSE, show.legend = FALSE) +
   geom_point(size = 3, show.legend = FALSE) +
   geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
                   show.legend = FALSE, box.padding = 0.6,
                   point.padding = 0.4, seed = 3) +
-  facet_grid(. ~ panel, scales = "free_x") +
+  facet_grid(respondent ~ panel, scales = "free") +
   scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
                                 Evaluation = "#009E73", Global = "black")) +
   scale_shape_manual(values = c(Preference = 16, Consumption = 17,
                                 Evaluation = 15, Global = 18)) +
   labs(x = NULL, y = "Dimension 3 (status valuation)") +
   theme_minimal(base_size = 10) +
-  theme(panel.grid.minor = element_blank())
-ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 3.8)
+  theme(panel.grid = element_blank())
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 6)
 
-saveRDS(list(ant = ant, type_counts = type_counts),
+saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
+             cell_cfg = cell_cfg, Dcoef = Dcoef),
         "output/antinomy_scores.rds")
 cat("\nsaved output/antinomy_scores.rds\n")
-cat("wrote manuscript/tables/tab-antinomy.tex and figures\n")
+cat("wrote manuscript tables and figures\n")

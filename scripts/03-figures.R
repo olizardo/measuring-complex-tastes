@@ -58,38 +58,48 @@ p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
   labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
        title = "Individual factor map (dimensions 2-3)",
        subtitle = "Points: respondents, colored by age group") +
-  theme(panel.grid.minor = element_blank())
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
-# --- Figure 3: category map ---------------------------------------------------
-cc <- as.data.frame(res$quali.var$coord[, 2:3])
-names(cc) <- c("dim2", "dim3")
-cc$name <- rownames(cc)
-cc$modality <- ifelse(grepl("^pref_", cc$name), "Preference",
-                 ifelse(grepl("^cons_", cc$name), "Consumption", "Evaluation"))
-cc$yes <- grepl("_1$", cc$name)
-cc$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cc$name)),
-                         gshort)]
-# "no" categories shown in light grey for reference
-p3 <- ggplot(cc, aes(dim2, dim3)) +
-  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
-  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cc, !yes), color = "grey65", size = 1) +
-  geom_point(data = subset(cc, yes), aes(color = modality), size = 1.8,
-             alpha = 0.9) +
-  ggrepel::geom_text_repel(data = subset(cc, yes),
-                           aes(label = genre, color = modality), size = 2.6,
-                           segment.color = NA, max.overlaps = 25,
-                           show.legend = FALSE) +
-  scale_color_manual(values = c(Preference = "#08519C",
-                                Consumption = "#A63603",
-                                Evaluation = "#006D2C")) +
-  labs(x = "Dimension 2", y = "Dimension 3",
-       color = "Aspect",
-       title = "Category map: 'yes' categories by taste aspect",
-       subtitle = "Grey points: 'no' categories") +
-  theme(panel.grid.minor = element_blank())
-ggsave("manuscript/figures/fig-categories.pdf", p3, width = 6, height = 5)
+# --- Figure 3: category maps, two panels (dims 1-2 and 2-3) --------------------
+# Left panel puts Dimension 1 on the x-axis and Dimension 2 on the y-axis;
+# right panel puts Dimension 2 on the x-axis and Dimension 3 on the y-axis.
+# Axis titles name the dimensions explicitly (with their readings), since the
+# horizontal/vertical assignment differs between panels.
+mk_cc <- function(dims, xl, yl) {
+  d <- as.data.frame(res$quali.var$coord[, dims])
+  names(d) <- c("x", "y")
+  d$name <- rownames(d)
+  d$aspect <- ifelse(grepl("^pref_", d$name), "Preference",
+               ifelse(grepl("^cons_", d$name), "Consumption", "Evaluation"))
+  d$yes <- grepl("_1$", d$name)
+  d$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", d$name)),
+                          gshort)]
+  # "no" categories shown in light grey for reference
+  ggplot(d, aes(x, y)) +
+    geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+    geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+    geom_point(data = subset(d, !yes), color = "grey65", size = 1) +
+    geom_point(data = subset(d, yes), aes(color = aspect), size = 1.8,
+               alpha = 0.9) +
+    ggrepel::geom_text_repel(data = subset(d, yes),
+                             aes(label = genre, color = aspect), size = 2.6,
+                             segment.color = NA, max.overlaps = 25,
+                             show.legend = FALSE, seed = 17) +
+    scale_color_manual(values = c(Preference = "#08519C",
+                                  Consumption = "#A63603",
+                                  Evaluation = "#006D2C")) +
+    labs(x = xl, y = yl, color = "Aspect") +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid.minor = element_blank(), legend.position = "right")
+}
+p3 <- mk_cc(c(1, 2), "Dimension 1 (volume)",
+            "Dimension 2 (highbrow vs popular)") +
+  mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
+        "Dimension 3 (status valuation)") +
+  patchwork::plot_layout(guides = "collect")
+ggsave("manuscript/figures/fig-categories.pdf", p3, width = 8.5, height = 4.4)
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
 rv <- res$group$RV

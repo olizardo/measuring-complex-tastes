@@ -1,8 +1,10 @@
 # 07-regression.R
-# Who has complex tastes? OLS regressions of the geometric complex-taste
+# Who has complex tastes? OLS regressions of the geometric aspect-disagreement
 # scores W_s(i) (script 04) on respondent demographics (script 05), with
 # robustness checks (log outcomes; pairwise disagreement components on
-# dimension 3). Writes the LaTeX table manuscript/tables/tab-regression.tex.
+# dimension 3; genre-based components; cross-genre coherence components).
+# Writes manuscript/tables/tab-regression.tex (partial effects) and
+# manuscript/tables/tab-w-eta.tex (bivariate correlation ratios).
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
 sup <- readRDS("output/supplementary.rds")$sup
@@ -11,7 +13,8 @@ stopifnot(nrow(ant) == nrow(sup))
 # interpretable reference categories
 sup$race <- relevel(sup$race, ref = "White")
 
-dat <- cbind(ant[, c("W1", "W2", "W3", "dPV3", "dCV3", "dPC3")], sup)
+dat <- cbind(ant[, c("W1", "W2", "W3", "dPV3", "dCV3", "dPC3",
+                     "Wloc1", "Wloc2", "Wloc3")], sup)
 
 preds <- c("gender", "race", "age6", "educ", "parentba",
            "income4", "sclass", "region")
@@ -76,6 +79,35 @@ tl <- c(tl,
         "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-regression.tex")
 
+# --- bivariate association: correlation ratios (eta^2) of each demographic
+# with the aspect-disagreement scores — the direct social-sources question
+# (positions in the space are anchored, e.g. age eta^2 = 0.33 on dim 2,
+# but W is a within-respondent quantity, so these are near zero)
+eta2 <- sapply(preds, function(v) sapply(ys, function(t) {
+  g <- droplevels(factor(dat[[v]]))
+  keep <- !is.na(g) & g != "Missing"
+  g <- droplevels(g[keep]); y <- dat[[t]][keep]
+  m <- tapply(y, g, mean); nh <- table(g)
+  mu <- sum(nh * m) / sum(nh)
+  sum(nh * (m - mu)^2) / sum((y - mu)^2)
+}))
+colnames(eta2) <- preds
+cat("\n== Correlation ratios (eta^2) with W scores ==\n")
+print(round(t(eta2), 3))
+elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
+          educ = "Education", parentba = "Parents' BA",
+          income4 = "Household income", sclass = "Subjective class",
+          region = "Census region")
+te <- c("\\begin{tabular}{lccc}", "\\toprule",
+        " & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
+for (v in preds) {
+  te <- c(te, paste0(elab[v], " & ",
+                     paste(sprintf("%.3f", eta2[, v]), collapse = " & "),
+                     " \\\\"))
+}
+te <- c(te, "\\bottomrule", "\\end{tabular}")
+writeLines(te, "manuscript/tables/tab-w-eta.tex")
+
 # --- robustness 1: log-transformed outcomes -------------------------------------
 cat("\n== Robustness: log outcomes ==\n")
 fitlog <- lapply(ys, function(y)
@@ -99,6 +131,47 @@ for (y in c("dPV3", "dCV3", "dPC3")) {
   s <- summary(m)$coefficients
   cat("most significant coefficients:\n")
   print(round(s[order(s[, 4])[1:6], c(1, 2, 4)], 2))
+}
+
+# --- robustness 3: genre-based components (Equation eq:genre) as outcomes ---------
+# Wloc_s = omega, the genre-based complex-taste part of W_s -- isolates the
+# configural component from the cross-genre coherence component.
+cat("\n== Robustness: genre-based components Wloc1-Wloc3 ==\n")
+ys_loc <- c("Wloc1", "Wloc2", "Wloc3")
+fits_loc <- lapply(ys_loc, function(y) lm(reformulate(preds, y), data = dat))
+print(round(sapply(fits_loc, function(m) summary(m)$r.squared), 3))
+for (i in seq_along(fits_loc)) {
+  cat("\n--", ys_loc[i], "--\n")
+  print(round(drop1(fits_loc[[i]], test = "F")[, "F value", drop = FALSE], 1))
+  s <- summary(fits_loc[[i]])$coefficients
+  sel <- grep("age6|parentba|sclass", rownames(s))
+  print(round(s[sel, c(1, 2, 4)], 3))
+}
+
+# --- robustness 4: cross-genre coherence components (Equation eq:genre) -----------
+# eq:genre is an identity, so coherence = W_s - Wloc_s exactly, and with the
+# same predictors/sample the three model sets decompose additively:
+# coef(W) = coef(Wloc) + coef(coherence). The coherence models therefore add
+# no new estimates, only the explicit attribution of each W coefficient.
+cat("\n== Robustness: coherence components coh1-coh3 ==\n")
+for (s in 1:3) {
+  dat[[paste0("coh", s)]] <- dat[[paste0("W", s)]] - dat[[paste0("Wloc", s)]]
+}
+ys_coh <- c("coh1", "coh2", "coh3")
+fits_coh <- lapply(ys_coh, function(y) lm(reformulate(preds, y), data = dat))
+print(round(sapply(fits_coh, function(m) summary(m)$r.squared), 3))
+for (i in seq_along(fits_coh)) {
+  cat("\n--", ys_coh[i], "--\n")
+  print(round(drop1(fits_coh[[i]], test = "F")[, "F value", drop = FALSE], 1))
+  s <- summary(fits_coh[[i]])$coefficients
+  sel <- grep("age6|parentba|sclass", rownames(s))
+  print(round(s[sel, c(1, 2, 4)], 3))
+}
+cat("\nadditivity check (max |coef(W) - coef(Wloc) - coef(coherence)|):\n")
+for (i in 1:3) {
+  cw <- coef(fits[[i]]); cl <- coef(fits_loc[[i]]); cc <- coef(fits_coh[[i]])
+  ok <- !is.na(cw) & !is.na(cl) & !is.na(cc)
+  cat("dim", i, ":", max(abs(cw[ok] - cl[ok] - cc[ok])), "\n")
 }
 
 cat("\nfigures and tables written\n")

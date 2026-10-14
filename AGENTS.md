@@ -44,18 +44,166 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    (middle OR upper class). Originally the inclusive OR version; changed at
    the author's request. Old-coding results are in git history; a robustness
    footnote comparing both codings is a planned addition.
+   **SUPERSEDED 2026-10-09 by decision 12.**
+12. **Evaluation v3 (author request, 2026-10-09): "unambiguous high
+    status" coding.** The fan-perception items are check-all-that-apply, so
+    the conjunctive coding passed check-everything respondents (65 had
+    eval = 20/20), which clumped the evaluation categories and leaked
+    21.6% of eval's contribution into Dim 1. New coding: eval = 1 iff
+    (grad AND NOT nocol) OR ((mc OR uc) AND NOT (lc OR wc)) — an
+    unambiguous high-status signal in at least one domain. Yes-rate
+    30.4% → 20.7%; agreement with conjunctive 72.5%; all-20 eval
+    respondents 65 → 5. Full pipeline (scripts 01–08) rerun; manuscript
+    numbers revised throughout. Key geometry changes: RV(eval,pref/cons)
+    0.049/0.060 → 0.013/0.014; eval contribution to dim 1 21.6% → 2.5%,
+    to dim 3 40.6% → 83.9%; dim 3 is now essentially the evaluation
+    aspect's own axis (eval leading partial axis +0.91); race anchoring
+    of dim 3 DISAPPEARS (η² 0.082 → 0.004) — dim 3 is socially flat
+    (max η² 0.011); race now weakly anchors dim 2 (η² 0.048, Hispanic
+    −0.42/Black −0.26/White +0.16). Worked-example respondent changed:
+    rowname 1333 → 362 (highest W3 among guilty+pose+distant holders;
+    likes 15, listens 9, evaluates 18; W1 0.8/3%, W2 13.5/60%,
+    W3 133.1/76%).
+13. **Terminology (author request, 2026-10-09): "complex-taste score" label
+    purged.** $W_s(i)$ is now called the **aspect-disagreement (score)** on
+    dimension $s$ throughout main.tex (prose, footnotes, figure and table
+    captions; 11 hyphenated uses plus pre-existing "aspect disagreement"
+    phrases). The eq:decomp paragraph replaces the old stipulation ("We
+    call $W_s(i)$ the individual's complex-taste score") with an explicit
+    interpretive move: $W_s(i)$ read strictly is the individual's
+    aspect-disagreement on dimension $s$ — how much the person's position
+    depends on which aspect is consulted — and we interpret that
+    disagreement as complex taste because a profile whose aspects place
+    the person in different locations cannot be summarized by any single
+    taste position. "Complex taste space" (the global MFA structure) and
+    "complex tastes" (the concept) are unchanged; script comments (04/08)
+    still say "complex-taste score" but never render. Rationale: the score
+    is literally aspect dispersion, not configural complexity (ρ with
+    config counts 0.31/0.19/−0.06; worked example 362 is 94% coherence;
+    all-yes respondents get W without configurations).
+14. **Terminology + table (author request, 2026-10-09): ω renamed
+    "genre-based complex taste"; tab-antinomy gains ω columns.** The
+    aggregate Σ_g ω_s(i;g) is "the genre-based component"; per-genre
+    ω_s(i;g) is introduced in the eq:genre where-clause as the
+    respondent's genre-based complex taste and "the geometric expression
+    of holding a complex configuration in that genre". Replaces
+    "localized antinomy/antinomies", "the localized component",
+    "genre-local part/dispersion" throughout main.tex (eq:genre
+    paragraph, worked example, 4.4, sec:who robustness paragraph).
+    Leftover "antinomy shares" in the robustness footnote →
+    "aspect-disagreement shares" (decision-5 cleanup). tab-antinomy
+    (script 04) now has 9 columns F1–3/W1–3/ω1–3, group headers "MFA
+    coordinates / Aspect-disagreement / Genre-based complex taste" —
+    the old "Complex-taste scores" header was a decision-13 leak, fixed;
+    \footnotesize + tabcolsep 2pt required for fit (overflows by 83pt at
+    \small, 27pt at \footnotesize/3pt). 4.4 signatures paragraph gains
+    the config→ω map sentence (guilty 0.53/0.43 on ω1/ω2; pose 0.47,
+    distant praise 0.38 on ω3; non-taste −0.75; simple-taste ω3 0.57 =
+    margin residue). Full type-ω Spearman map (script-04 console):
+    simple_pos .19/.35/.57, guilty .53/.43/−.22, preacquired
+    .21/.26/.25, pose .14/.23/.47, distanced .29/.25/.03, justified
+    .27/.16/−.18, distant −.13/−.05/.38, simple_neg −.75/−.75/−.36,
+    n_complex .71/.66/.18; dim-free Σω ↔ n_complex 0.61.
+15. **Style (author request, 2026-10-10): minimize colons in manuscript
+    prose.** Avoid colon-prefixed elaborations ("X: y z") in running text;
+    prefer separate sentences, "so that", "and", or em-dash appositives.
+    Applies to assistant-drafted prose; the author flagged this after the
+    RV paragraph rewrite. Semicolon-chained clauses are also best split.
+16. **Table 7 (tab-antinomy) REPLACED by fig-signatures heatmap (author
+    choice via AskUser, 2026-10-10; the 9×9 Spearman table was "busy").**
+    Script 04's table block became a figure block: `fig-signatures.pdf`
+    (label `fig:signatures`), .95\linewidth, 7×3.8in. Signed Spearman
+    heatmap of the SAME matrix (type_counts × F1–3/W1–3/ω1–3); rows
+    grouped by which aspect stands against the other two (evaluation-odd
+    guilty/distant, consumption-odd pose/distanced, liking-odd
+    preacquired/justified), then Simple taste, Simple non-taste, and
+    Total complex tastes, with blank separator rows. GOTCHAs (both bit us
+    in the first rendering): (a) gap rows must carry DISTINCT labels that
+    match the factor levels from the start (" " and "  " in sigrows$lab
+    directly) — patching `""` values to different levels AFTER factor() maps
+    them to NA and prints an "NA" row on the axis; (b) facet_wrap needs
+    `scales = "free_x"` — with 9 x-levels and fixed scales every panel
+    reserved space for all 9 scores and squeezed the 3 tiles to a third
+    of the panel width.
+    Columns F/W/ω within each Dimension 1/2/3 facet; diverging
+    #08519C–white–#A63603 fill with FIXED limits [−1,1]; values printed in
+    cells (white text when |ρ| > 0.55); plotmath x labels (F[1]…omega[3]);
+    ρ legend at bottom. `tab-antinomy.tex` git-rm'd (must also be deleted
+    from the Overleaf clone). main.tex: three refs updated (divergence
+    sentence, 0.71/0.66 sentence, "genre-based columns" sentence →
+    Figure~\ref{fig:signatures}); table env → figure env with adapted
+    caption. Script 04's console Spearman prints unchanged (still the
+    source of these numbers).
+17. **Dimension 4 fully REMOVED from the manuscript (author request,
+    2026-10-10) — decision 6's partial supersession reversed.** The
+    supplementary dim-4 paragraph in sec:social and the fig-dim4 env are
+    deleted; "across all four dimensions" → "across the three dimensions";
+    tab-eta and tab-sup-coord trimmed back to Dims 1–3 (captions "first
+    three MFA dimensions"; script 05 table blocks, with a comment noting
+    the manuscript no longer discusses dim 4). Script 05 STILL computes
+    d4 in eta/cc (supplementary.rds unchanged, script 07 unaffected) and
+    still generates fig-dim4.pdf — file kept in repo, unreferenced
+    (fig-scree pattern). The dim-4 numbers (race η² 0.255, racialized
+    engagement contrast) remain on file in AGENTS.md decision 6 for a
+    reviewer response if needed.
+18. **sec:social REBUILT around demographics vs. DISAGREEMENT (author
+    request, 2026-10-10; the demographic-position analysis "does not
+    really answer the question of the social sources of complex tastes"
+    because barycenter position is only indirectly connected to how many
+    complex tastes a person has).** The supplementary-position subsection
+    is DELETED from main.tex (projection-method paragraph, tab-eta,
+    tab-sup-coord, fig-supplementary envs, the three dimension-position
+    paragraphs incl. the dim-3 social-flatness reading); the files stay
+    in the repo unreferenced (fig-scree pattern) and script 05 still
+    computes/generates everything — supplementary.rds `sup` remains the
+    covariate source for script 07, so 05 must keep running in the
+    pipeline. The old sec:who subsection is merged into a single section
+    "The Social Sources of Complex Tastes" carrying BOTH labels
+    (\label{sec:social}\label{sec:who}) so the 4.1 dim-2 age pointer and
+    the [DRAFT] discussion enumeration still resolve (FLAGGED to author:
+    the draft's "social sources in Section X, their individual-level
+    correlates in Section X" now names the same section twice — fix when
+    writing the discussion). New opening paragraph states the
+    position-vs-disagreement distinction (positions are anchored — age
+    η² 0.33 on the highbrow–popular axis — but W_s is a within-respondent
+    quantity, so barycenters cannot answer the amount question) and
+    introduces the NEW tab-w-eta (script 07 block after tab-regression):
+    η² of each of the 8 demographics with W1–W3, uniformly tiny — max
+    age→W1 0.019, no variable reaches 0.02, quoted against the 0.33.
+    The old sec:who opening kept with fixes ("projected as supplementary
+    variables above" → "on the eight demographics jointly"; the
+    "(Section~\ref{sec:social})" self-ref dropped; the semicolon chiasmus
+    split into two sentences); partial-effects/log/pairwise/ω/coherence
+    paragraphs unchanged. tab-regression.tex re-run byte-identical.
+    Renumbering: tab-w-eta is Table 7, tab-regression Table 8. One of the
+    two pre-existing overfulls lived in the deleted prose and is gone;
+    the tab-genre-profile overfull remains. Compiles at 28 pp.
 4. Sample: complete cases on all 60 variables → **n = 2,259** of 2,276.
 5. Terminology (author preference): the manuscript says "complex tastes,"
-   not "antinomies"; $W_s(i)$ is the "complex-taste score." Table 3
+   not "antinomies." Table 3
    (tab-groups) is kept and the group-contributions figure was dropped as
    redundant. `manuscript/main.tex` is stored reflowed, one
    paragraph-per-line. Modality phrasing is "preference, engagement, and
    evaluation" — not "feeling, doing, praising"; Ma's configuration names
    (guilty pleasure, distant praise, taste pose, …) are kept as-is.
+   The $W_s(i)$ "complex-taste score" label was SUPERSEDED 2026-10-09 by
+   decision 13.
 6. Dimension 4 was explored (category and individual maps) and deliberately
    left out of the manuscript: consumption-heavy, categories near the
    origin, weak social anchoring — no clean reading. Figures use dims 2–3
-   only.
+   only. PARTIALLY SUPERSEDED 2026-10-09: under the unambiguous-status
+   coding dim 4 gained a strong race anchor (η² 0.255; old coding 0.171)
+   and a clean reading — racialized engagement contrast, reggae/Latin/rap/
+   Blues-R&B engagement (cons +0.77/+0.67/+0.52/+0.45) vs the rock–country
+   cluster (metal −0.74, indie −0.62, controck −0.61, crold −0.45).
+   λ4 = 0.788 (52% of λ1); aspect contributions cons 57%/pref 37%/eval 6%;
+   partial axes pref ax3 +0.83, cons ax3 +0.93; other demographics ≤0.03;
+   r(dim4, n likes) −0.005, r(n listens) −0.08 (not a volume artifact).
+   Now in the manuscript as a supplementary paragraph in sec:social with
+   fig-dim4 (category map dims 2×4, fig-categories design); tab-eta and
+   tab-sup-coord extended to d4; script 05 computes dims 1–4 throughout
+   (supplementary.rds cc/eta now include d4; script 07 reads only sup$sup,
+   unaffected). Compiles at 26 pp.
 7. **Terminology (author request, 2026-10-08): "group" is reserved for its
    sociological meaning.** MFA's variable groups are called "blocks of
    variables" (generic MFA mechanics) or "modalities" (the three blocks of
@@ -67,8 +215,11 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
    SUPERSEDED later the same day by decision 10: "modality" itself is now
    purged entirely; the three blocks are "aspects (of taste)".
 8. Figure designs (current): individual factor map = single dims-2–3 panel,
-   points colored by age group (referenced from the dim-2 paragraph with a
-   pointer to the social-sources section); supplementary figure =
+   points colored by age group — **DROPPED from main.tex 2026-10-10** (author
+   request after a keep/drop discussion; follows the fig-scree pattern —
+   script 03 still generates it, file kept in repo, unreferenced; the dim-2
+   prose clause now states the age anchoring directly with the
+   Section~\ref{sec:social} pointer); supplementary figure =
    demographic category barycenters ONLY on dims 2–3, no respondent cloud,
    axes spanning the category coordinates (the cloud otherwise compresses
    the barycenters near the origin); category map on dims 2–3 (switched
@@ -133,10 +284,10 @@ genres from the SSI-2012 survey. Manuscript draft is synced to Overleaf.
 | `scripts/01-prepare-mfa-data.R` | `data/mfa_input.rds` | builds 60 binary cols (pref_/cons_/eval_ prefixes) |
 | `scripts/02-run-mfa.R` | `output/mfa_results.rds` | FactoMineR MFA, `group=c(20,20,20)`, `type=c("n","n","n")` |
 | `scripts/03-figures.R` | 4 figs + 4 LaTeX tables | scree, individuals, category map, RV heatmap; tab-eigen/rv/groups/genre-rates |
-| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, tab-antinomy | W scores, pairwise disagreements, Ma's 8 configs |
-| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4 |
+| `scripts/04-antinomies.R` | `output/antinomy_scores.rds` + fig-configurations, fig-antinomy-map, fig-worked-example, fig-signatures, fig-genre-segments, tab-pairs | W scores, pairwise disagreements, Ma's 8 configs (tab-antinomy replaced by fig-signatures, decision 16). fig-genre-segments = per-genre tri-segment maps (yes/no endpoints of each aspect's contribution, arrows toward yes, facets down the highbrow–popular rung) — kept in repo, UNREFERENCED in main.tex (fig-scree pattern), added 2026-10-10 |
+| `scripts/05-supplementary.R` | `output/mfa_results_sup.rds`, `output/supplementary.rds` + fig-supplementary, tab-eta, tab-sup-coord | demographics as supplementary group 4; tables report dims 1–3 only (decision 17); manuscript outputs UNREFERENCED since decision 18 but the script must keep running (script 07 reads `sup`) |
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
-| `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds) |
+| `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex`, `manuscript/tables/tab-w-eta.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds); also the bivariate η² table of demographics with W1–W3 (decision 18) |
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
@@ -174,47 +325,153 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
   are NOT the weights — the original tab-groups "Weight" column and §4.3
   text mislabeled them; fixed 2026-10-08.
 
-## Current headline results (conjunctive coding)
+## Current headline results (unambiguous-status eval coding, 2026-10-09)
 
-- Yes-rates: preference 41.7%, consumption 22.9%, evaluation 30.3%
-  (conjunctive standard is the least-affirmed modality).
-- Eigenvalues: λ1 = 1.667 (12.3%), λ2 = 1.193 (8.8%); first 5 dims = 37.9%.
-- **RV coefficients** (central result): P–C 0.32; P–E 0.05; C–E 0.06 —
-  evaluation is geometrically independent of preference and consumption.
+- Yes-rates: preference 41.7%, consumption 22.9%, evaluation 20.7%
+  (unambiguous-status standard is the least-affirmed aspect).
+- Eigenvalues: λ1 = 1.509 (9.6%), λ2 = 1.178 (7.5%), λ3 = 0.982 (6.2%);
+  first 5 dims = 32.5%.
+- **RV coefficients** (central result): P–C 0.321; P–E 0.013; C–E 0.014 —
+  evaluation is essentially perfectly independent of preference and
+  consumption.
 - Dimension readings (signs are SVD-arbitrary — re-anchor pole claims to the
   category coordinates after ANY re-run):
-  - Dim 1 = general affirmation (all "yes" categories positive).
-  - Dim 2 = highbrow (+: opera/classical/big band/Broadway) vs popular
-    (−: rap, dance/club, indie, metal, reggae).
-  - Dim 3 = status valuation: all 20 eval "yes" categories on one side
-    (mean −0.63); positive pole = consecrated-genre consumption
-    (opera +0.90, reggae +0.65). Eval contributes 40.6% to dim 3.
-- **Partial axes** (correlations of each group's separate-analysis axes with
-  the global dims; tab-partial-axes, added 2026-10-08): dim 1 = consensus
-  (pref/cons/eval ax1: 0.79/0.81/0.60); dim 2 carried by pref ax2 (−0.89)
-  and cons ax2 (+0.89), no eval axis close; dim 3 = eval ax1 (−0.60, also
-  +0.60 on dim 1) plus pref ax3 (+0.57) and cons ax3 (+0.60) — evaluation-
-  led but not evaluation-alone.
-- Social anchoring (supplementary η²): dim 2 ← age 0.35 (six groups:
-  18–29 −0.76 → 70+ +1.23), education (No diploma −0.25 → Prof/PhD +0.59), subjective
-  class; dim 3 ← race 0.083 (Black +0.55 vs White −0.19), self-described
-  upper class +0.68, but education ~absent (0.008); dim 1 socially flat.
-- Antinomies: mean 9.6/20 genres per respondent in complex configurations;
-  only 19 respondents have zero. Justified abstention 2.8, distant praise
-  2.6, guilty pleasure 2.2, pose 1.5 per person. Antinomy dispersion ≈
-  51/51/62% of projected partial inertia (dims 1–3). n_complex ↔ W1
-  ρ = 0.58 but ~0 with W2/W3 — geometric vs combinatorial antinomy align on
-  engagement, diverge on hierarchical placement.
-- **Duality (transposed MFA, genres as targets)**: genre-level RVs are
-  HIGH — P–C 0.92, P–V 0.77, C–V 0.73 — the mirror image of the individual
-  level. Modality disagreement lives within individuals, not in divergent
-  audience structures. Transposed dims: λ1 = 2.31 (13.2%), λ2 = 2.13
-  (12.1%). Dim 2 = configuration axis: negative pole = guilty-pleasure
-  targets (classic rock −3.8, top 40 −2.5, country −2.0; guilty ρ = −0.90),
-  positive pole = distant-praise targets (opera +2.3, folk +1.4, bluegrass
-  +1.3; distant ρ = +0.59). Dim 1 = devoted-minority vs generalized
-  non-engagement. Partial points: consecrated genres' evaluation partials
-  displaced positive on dim 3 (classical +2.6 vs ~+1.0), country reverse.
+  - Dim 1 = general affirmation, now carried by liking/listening only
+    (pref_yes +0.57, cons_yes +0.83; eval_yes mean only +0.29, range
+    +0.03 Broadway to +0.53 rap).
+  - Dim 2 = highbrow (+: big band +0.98, opera +0.86, Broadway +0.84,
+    classical/bluegrass +0.73) vs popular (−: rap cons −0.91/pref −0.84,
+    indie −0.84, metal −0.78, dance/club −0.75, reggae −0.63).
+  - Dim 3 = status valuation, evaluation-owned: all 20 eval "yes"
+    categories positive (mean +1.12; range +0.20 opera to +1.87 rap);
+    ordered by rarity — granting status to popular-genre fans is the
+    distinctive position, granting it to consecrated-genre fans is nearly
+    universal. Pref/cons "yes" categories collapse near the origin on
+    dim 3. Eval contributes 83.9% to dim 3 (8.0/8.1% for pref/cons);
+    2.5% to dim 1, 11.0% to dim 2. Separate λ1s: 0.200/0.155/0.234
+    (weights 5.004/6.452/4.277).
+- **Partial axes**: dim 1 = pref/cons ax1 (0.84/0.86), eval ax1 only 0.19;
+  dim 2 = pref ax2 (−0.87) + cons ax2 (+0.89) + eval ax2 (+0.35);
+  dim 3 = eval ax1 (+0.91), pref/cons ax3 negligible (−0.14/−0.11) —
+  dim 3 is evaluation's own axis.
+- Social anchoring (supplementary η²): dim 2 ← age 0.331 (18–29 −0.74 →
+  70+ +1.23), education 0.053 (No diploma −0.26 → Prof/PhD +0.67),
+  subjective class 0.055 (upper +0.39), race 0.048 (Hispanic −0.42,
+  Black −0.26, White +0.16), income 0.016; dim 3 SOCIALLY FLAT (max η²
+  0.011, all barycenters within ±0.2) — the race gradient on dim 3 is
+  GONE under the new coding; dim 1 weak (max η² 0.026, education
+  concentrated at bottom: No diploma −0.39, HS −0.24, then +0.05..+0.13).
+- Antinomies: mean 10.2/20 genres per respondent in complex configurations;
+  only 12 respondents have zero. Justified 3.3, guilty 3.2, distant 2.2,
+  pose 1.0, distanced 0.4, pre-acquired 0.1, simple_neg 8.9. Antinomy
+  dispersion ≈ 56/52/63% of projected partial inertia (dims 1–3).
+  n_complex ↔ W1 ρ = 0.31 (W_tot 0.27), W2 0.19, W3 −0.06. Pair-level
+  dim-3 decomposition: dPV3 ρ = +0.16, dCV3 +0.14 (weakly concentrated
+  at the status-granting pole). Config signatures: distant praise +0.79
+  on dim 3; guilty −0.25 dim 2 / −0.24 dim 3; justified −0.33 dim 3;
+  pose 0.22/0.34/0.37.
+- **Genre-level decomposition (added 2026-10-09; script 04 section 3b)**:
+  each partial point is exactly H·Σ_g c_ighs with per-genre contribution
+  c = Δ_ghs·(z−p), Δ = (w_yes·V_yes − w_no·V_no)/√(p(1−p)) from the global
+  PCA (F = X·diag(col.w)·svd$V; NOTE svd.triplet stores V/√w, so the weights
+  enter linearly, not as √w). With d_ighs = c minus the genre's 3-aspect
+  mean (center per GENRE — centering on the respondent's overall mean
+  inflates the local part; first-pass numbers with that bug were 53/85/34%
+  local shares), W_s(i) = Σ_g ω_s(i;g) + 2H²Σ_{g<g'}Σ_h d d', ω = H²Σ_h d².
+  Mean local shares of W: 29/48/23% (dims 1–3); coherence 71/52/77%.
+  Worked example 362: W3 133.1 = 8.5 local (max cell 1.0, a pose in
+  latspsal) + 124.6 coherence (94%); W1 0.8 = 2.4 local + (−1.6) coherence
+  (cancellation). corr(n_complex, Wloc) 0.69/0.63/0.17 vs corr(n_complex, W)
+  0.44/0.18/0.08 — the localized part is the geometric counterpart of the
+  combinatorial measure (ω renamed "genre-based complex taste"
+  2026-10-09, decision 14). 196 respondents in bottom-third W3 but top-third
+  localized (masked complexity). Script 04 saves omega (2259×20×3),
+  cell_cfg (per-cell config labels), Dcoef in antinomy_scores.rds; ant gains
+  Wloc1–3, coh1–3 columns (script 07 unaffected). Manuscript: new paragraph
+  + Equation eq:genre in the Measuring Complex Taste at the Individual
+  Level subsection (defines genre-local dispersion and cross-genre
+  coherence); worked-example paragraph gains the 362 split (8.5 vs 94%
+  coherence) after the combinatorial footnote. Spearman version of the
+  localized-combinatorial link: corr(n_complex, Wloc) 0.71/0.66/0.18
+  (dims 1–3) vs 0.31/0.19/−0.06 for W. Results 4.4 gains a paragraph
+  after the divergence discussion reporting the 29/48/23% local shares
+  and the 196 bottom-third-W3/top-third-localized respondents (9%).
+  Compiles at 26 pp., no undefined refs.
+- Author web edit `2bc1c30` (2026-10-09, adopted before the sync):
+  Analytic Strategy opening ("like this one, namely"); RV subsection
+  sentence split + new citation jæger2024from-a4b (Jæger & Larsen 2024,
+  added to references.bib) + "more likely" rewording; worked example
+  "In the second dimension (right panel...)" phrasing (my genre-split
+  sentences re-inserted before it); 4.1 figure-reference rewordings
+  ("As Figure~\ref{fig:categories12} shows" ×2, fig:categories now cited
+  only in the 4.1 opening; the Bourdieu 1984 citation was DROPPED from
+  the dim-2 paragraph — author's edit, flagged to author); Partial Axes
+  and Composition subsections restructured (tab-partial-axes floated
+  before Partial Axes; balancing-weights sentence moved to a footnote;
+  new interpretation sentences; Composition split into several
+  paragraphs); 4.4 opening "provide/cover" rewording.
+- Regression (sec:who): R² 0.052/0.020/0.021. W1: parents' BA +1.32***,
+  upper class +3.67***, >1 race +2.51**, age decline (−1.09 → −2.09).
+  W2: only 70+ +0.63*. W3: upper class +7.70***, age +2.04..+2.73*,
+  Hispanic +1.89*, Associate −3.79*. Log robustness: parentba F 5.2,
+  sclass 2.3, gender F 11.8 (women lower log-W1). Pairwise dim-3:
+  dPV3/dCV3 ← upper class (F 3.9/4.9); dPC3 ← parentba (15.2) + sclass
+  (9.3). Localized-component robustness (added 2026-10-09, script 07
+  robustness 3 + new final sec:who paragraph): ω models R²
+  0.085/0.080/0.033; upper-class premium on ALL THREE dims (+0.25/
+  +0.25/+0.58, p = .002/.002/.005 — incl. dim 2, where W2 shows none);
+  parentba on ω1/ω2 (+0.10/+0.11***); age: ω3 RISES (+0.24..+0.48, same
+  direction as W3) while ω1/ω2 decline; the W2 70+ premium (+0.63) is a
+  coherence effect — ω2 declines with age in every cohort (−0.08..−0.28,
+  all significant). WARNING for future sessions: an earlier assistant
+  reply misread the ω3 age coefficient as NEGATIVE (−0.48, confused with
+  n_complex's −0.54) and told the author there was a dim-3 age flip —
+  there is NOT; the real flip is dim 2 (W2 vs ω2).
+- **Interpretive quantities now in the manuscript (2026-10-09)**:
+  (1) 4.4 dimension-readings sentence covers all three scores (W1 =
+  liking vs listening, eval near-inert on dim 1: partial sd 0.46 vs
+  2.07/2.11; W2 = rung placement on the shared ladder; W3 = attribution
+  reach beyond a positionless engagement profile) + W3 footnote (behaves
+  partly like a squared position score: cor(W3,|F3|) 0.72 vs 0.37 for
+  W2; mean W3 = 5.7 among grant-none, 156 among grant-all-20);
+  (2) pair-share sentence in 4.4 after the dim-3 pair-level sentence:
+  dim-2 pairwise shares pref-cons 18%/pref-eval 35%/cons-eval 47%,
+  cor(pref,cons partials on dim 2) 0.73 vs 0.09/0.06 with eval — new
+  \label{sec:rv} on the Independence subsection supports the ref;
+  (3) toy-contrast paragraph after eq:genre where-clause (single-genre
+  complex taste vs twenty aligned per-genre tilts reaching the same
+  total disagreement from opposite materials);
+  (4) pairwise-decomposition paragraph gains the Ma mapping: each of the
+  six complex configurations = one aspect standing against the other two
+  (guilty/distant = evaluation odd; pose/distanced = consumption odd;
+  pre-acquired/justified = liking odd), so the pair distances indicate
+  which aspect is standing apart;
+  (5) new tab-pairs (script 04, after tab-antinomy): mean squared pair
+  distances on dims 1–3 with within-dimension shares — P–C 4.31/1.50/
+  0.38 (33/18/2%), P–E 4.37/2.89/8.15 (33/35/49%), C–E 4.50/3.91/8.15
+  (34/47/49%); totals 13.2/8.3/16.7 = 3·mean W_s; dim-3 P–C share 2%
+  quoted in the 4.4 pair-share sentence, which also gains the dim-1
+  contrast sentence (equal thirds → no aspect stands apart on the
+  affirmation axis; liking vs listening around a near-inert eval point,
+  unlike dims 2–3 where evaluation is the odd aspect out).
+- **Duality (transposed MFA, genres as targets)**: genre-level RVs
+  P–C 0.92, P–V 0.53, C–V 0.49 vs 0.32/0.01/0.01 individual level.
+  Transposed dims: λ1 = 2.27 (14.6%), λ2 = 1.95 (12.5%). Constant
+  respondent-variables dropped: 83/84/326 (eval constant includes the
+  5 all-1 respondents). Dim 2 = configuration axis: positive pole =
+  actively-held genres (simple_pos ρ +0.77, pose +0.55, guilty +
+  justified +0.44): crold +3.7, moodez +2.0, country +1.8, toppop +
+  classical +1.3; negative pole = simple-non-taste genres (ρ −0.73):
+  rap −1.7, reggae −1.5, latspsal/metal −1.3, plus opera −1.2 (58.9%
+  distant praise). Dim 1: negative = status-without-engagement genres
+  (classical −3.6, opera −3.0, bwayst −2.1; distant ρ −0.82, pose
+  −0.58), positive = guilty/distanced targets (crold, toppop, rap,
+  controck; ρ +0.75/+0.80). Partial points dim 3: classical/opera eval
+  partials +2.3 vs pref/cons ~+1.0/−0.0; country eval −0.8 vs
+  pref/cons −3.1/−4.1.
+- Robustness (MCA vs PCA, script 08): eigen 1.504/1.188/0.997 vs
+  1.509/1.178/0.982; RV 0.32/0.013/0.015; coord ρ 0.98/0.97/0.84;
+  W ρ 0.96/0.89/0.77; shares 56/53/61 vs 56/52/63.
 
 ## Manuscript & Overleaf sync
 
@@ -252,7 +509,1110 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 - `manuscript/.gitignore` uses paths RELATIVE to its own location
   (`main.aux`, …) — earlier commit accidentally included build artifacts;
   these were removed in commit "Remove LaTeX build artifacts from repo".
-- Last Overleaf sync: `0f3b436` (2026-10-08) — three batched changes:
+- Last sync (2026-10-11): Pagès Lg-quote citation fixed — `[p.~137]` →
+  `[pp.~137--138]` on the "number of common dimensions, each 'weighted' by
+  its inertia" sentence (the phrase is on printed p. 138; p. 137 carries the
+  Lg/RV formulas). Found by the book cross-check; two author web edits
+  (`22ea47a` + `30792b4`, stylistic rewordings in sec:antinomies meanings/
+  pair paragraphs — "interpretive caution", "indicates", "vertical
+  dimension", "two opposed ends", "it grants" for the respondent, "A large
+  score indicates disagreement"; no numbers changed) adopted as the local
+  base, citation fix re-applied on top. Also added `mfa-book-crosscheck.md`
+  at the workspace root — a 16-entry cross-reference of every manuscript
+  measure/equation to Pagès (2014) sections and printed pages, from a
+  full-text extraction of the book PDF (page mapping: PDF page = printed
+  page + 15 in this copy). Key contents: eq:decomp ↔ §5.4 pp. 107–109;
+  superimposed caveat ↔ §5.5–5.6 pp. 110–116; RV/Lg ↔ §7.2 pp. 133–139
+  (+ §7.3 pp. 139–140 for Lg(h,h), §7.5 p. 143 for CTR(K_j,w_s));
+  weighting ↔ §4.3 pp. 82–86 + §8.2 p. 163; partial axes ↔ §4.5 pp. 88–91;
+  eq:genre, pairwise identity, transposed MFA, aggregate Lg(h,MFA) have NO
+  book counterpart (paper's own / FactoMineR-level). Workspace-only file,
+  not mirrored to Overleaf.
+- 2026-10-09 (later): fig-scree dropped from main.tex as redundant with
+  tab-eigen (author request; same pattern as fig-rv) — `fig:scree` was
+  never referenced in prose. fig-scree still generated by script 03 (file
+  kept in repo, unreferenced). Then: new fig-categories12 added — category
+  map on dims 1–2 in the fig-categories design (script 03 block after
+  fig-categories, seed 17), supporting the 4.1 opening paragraph
+  (`fig:categories12` referenced from its first sentence; figure env placed
+  after that paragraph). Compiles at 26 pp.
+- 2026-10-09 (later): figure restyling to white backgrounds (author request,
+  prompted by the grey panel on the new fig-categories12): fig-categories,
+  fig-categories12, fig-dim4, fig-individuals now use theme_minimal
+  (panel.grid.minor blank, legend right); fig-worked-example connectors
+  changed from dashed grey to solid aspect-colored segments (linewidth 0.5,
+  alpha 0.7, fig-genre-map style) with panel.grid removed. Script 03/04/05
+  blocks updated. GOTCHA: FactoMineR ind$coord.partiel is stacked PER
+  INDIVIDUAL (rownames "362.pref", "362.cons", "362.eval"; row =
+  3*(i-1)+h), not by group — a session-side reconstruction initially
+  grabbed group-stacked rows and produced wrong coordinates; script 04's
+  own P/C/V/F extraction is correct. Author web edit `ab16e48` (\footnotesize
+  on the worked-example caption) re-applied locally. Compiles at 26 pp.
+- Synced 2026-10-10 (overleaf 90a99b2): section 4.5 (sec:antinomies) restructured
+  into five question-framed \subsubsections (author request: 4.5 too dense; each
+  subsection = one measure framed by a natural-language substantive question,
+  not GDA technicalities). Structure now: untitled opening (score intro +
+  56/52/63% headline + two running respondents + fig-worked-example; the
+  examples-intro enumeration gains a fifth clause "and how the geometric
+  scores relate to counting configurations") → "How Far Does a Person's Taste
+  Come Apart?" (W-score meanings, dims 1–3, running-example anchors) →
+  "Which Aspects of Taste Disagree With Each Other?" (NEW heading + one lead
+  sentence "A large score says that the aspects disagree, but not which of
+  them are pulling against each other..."; pair-level decomposition +
+  running-example pair distances + tab-pairs) → "Which Aspect Stands Apart?"
+  (existing heading, question mark ADDED for consistency; per-aspect shares
+  unchanged) → NEW "Is the Disagreement Attached to Particular Genres?" (ω +
+  coherence; one new lead paragraph poses the local-vs-transposable question
+  and points to eq:genre; then the two genre-split paragraphs MOVED here from
+  the comparison subsection — 211's opener now "The running respondents show
+  how differently the two components can behave", 213 minus its
+  combinatorial-signal sentence) → "Do the Two Measures Find the Same Complex
+  Tastes?" (RETITLE of "The Two Measures Compared"; divergence paragraph with
+  the combinatorial-signal sentence MOVED IN from 213, de-colonized and
+  appended after the factor-of-forty sentence so ρ 0.31/0.19 precede the
+  0.71/0.66 "against" callback; then signatures paragraph + fig-signatures
+  env). All moved text otherwise verbatim. ALSO local-only from the same
+  session: two new Discussion paragraphs after the [DRAFT] placeholder
+  (two-measures recap; genre-based-vs-coherence answer to the propensity
+  question — genre-based component cannot answer "who is prone to complex
+  tastes", coherence is the geometric counterpart of the propensity,
+  person-type framing dissolves into separable quantities, orientation not
+  disposition). Compiles at 29 pp., 0 undefined refs, 1 pre-existing
+  overfull (tab-genre-profile).
+- Synced 2026-10-10 (overleaf 90a99b2): NEW main-text paragraph in the
+  4.5 dim-2 block (after "In the first case... consumption outruns valuation",
+  before the dim-3 paragraph) clarifying what the evaluation point's dim-2
+  position means — author chose main text over footnote after asking whether
+  positive = "evaluates highbrow genres highly" and negative = "extends high
+  evaluation to popular genres". BOTH readings are WRONG (verified numerically;
+  numbers below must not be contradicted in future prose). (a) All 20 eval-yes
+  categories sit POSITIVE on dim 2 — granting status to ANY genre moves the
+  eval partial point toward the highbrow side; per-grant push (partial-point
+  units = 3×move_yes) is rarity-weighted: opera 0.06 (eval-yes rate 0.74),
+  classical 0.06 (0.67), vs Latin/Salsa 0.42 (0.06), Blues/R&B and dance/club
+  0.39 — roughly 7x. (b) eval partial d2 correlates 0.98 with TOTAL grant
+  count; partial cor(pd2, eH−eP | total) = −0.66 — at equal totals a
+  popular-HEAVY grant profile sits MORE positive (opposite of the naive
+  reading); eval-yes rates average 0.29 highbrow vs 0.10 popular. (c) All-no
+  baseline = −1.02 (321 zero-grant respondents share it; 1881 sits exactly
+  there). (d) Selection mechanism: granters skew highbrow-demographic (mean
+  grants rise 3.3→4.9 across age6, 3.6→5.1 across education; cor(global F2,
+  total grants) 0.35; granters of any genre sit higher on global F2 than
+  non-granters, e.g. latspsal +0.75 vs −0.05, rap +0.39 vs −0.02). Paragraph
+  wording: sign does not say which genres a respondent thinks highly of;
+  position records how many genres recognition extends to; generous evaluators
+  are older/more educated and sit highbrow; 362's +4.31 = eighteen grants of
+  every kind, not special valuing of consecrated genres. The
+  generous/withholding reading belongs to DIM 3 (rap eval-yes +1.87, opera
+  +0.20 there).
+- Synced 2026-10-10 (overleaf 90a99b2): TWO connected changes from the
+  category-cloud discussion. (1) The dim-2 clarification paragraph gains the
+  cloud reference after the seven-times clause — "The category map shows the
+  pattern directly (Figure~\ref{fig:categories})---all twenty evaluation
+  ``yes'' categories sit on the positive side of the highbrow--popular axis,
+  and the rare grants sit furthest out, $+0.75$ for Latin/Salsa against
+  $+0.10$ for opera." Verified cloud numbers: eval-yes d2 range +0.09
+  (classical) to +0.75 (latspsal), all 20 positive; eval-no all negative
+  (−0.02 to −0.28); the per-grant push is EXACTLY proportional to the
+  eval-yes cloud coordinate (constant ratio 5.5 across all 20 genres — the
+  eval partial d2 is literally a rarity-weighted grant tally). Negative side
+  = 1,395 respondents: the 321 zero-grant at the shared −1.02 point plus
+  few/consecrated-only granters (granting only opera+classical still sits at
+  about −0.9; nobody is positive with fewer than 3 grants; some 5-grant
+  respondents remain negative). (2) FIG-CATEGORIES REDESIGNED (author
+  request — readers could not tell which dimension was horizontal vs
+  vertical): script 03's category-map block replaced the facet_grid two-panel
+  version with two mk_cc plots composed via patchwork::plot_layout(guides =
+  "collect"); explicit axis titles "Dimension 1 (volume)" /
+  "Dimension 2 (highbrow vs popular)" / "Dimension 3 (status valuation)";
+  facet strips DROPPED (the titles carry the info); same 8.5×4.4in, seed 17
+  per panel (repelled label positions can shift slightly vs the faceted
+  version). ASCII "vs" in titles also eliminates the mbcsToSbcs ggsave
+  warnings. main.tex caption: "The left panel shows dimensions 1--2 and the
+  right panel dimensions 2--3" sentence DELETED as redundant with the axis
+  titles; rest of caption unchanged. fig-individuals/fig-rv/fig-scree
+  regenerated byte-only and REVERTED; tables byte-identical. Compiles 29 pp.,
+  0 undefined refs, 1 pre-existing overfull (tab-genre-profile).
+- Last sync (2026-10-10, later): sec:social regression-motivation sentence
+  REWRITTEN (author request — the old claim was wrong: counts CAN be modeled,
+  as Ma does in his Socius piece). Old: "Measuring complex tastes
+  geometrically has one further advantage: W_s(i) is a continuous,
+  dimension-specific quantity, so it can serve directly as the outcome of a
+  standard regression model---something the combinatorial count, a single
+  coarse integer, can't do." New passage (opens the tab-regression
+  paragraph): concedes the count can be modeled directly, citing NEW bib
+  entry `ma2026deep` (Ma, Xiangyu. 2026. "On the Deep, Surprising, and
+  Persistently Gendered Dynamics in Complex Music Tastes." Socius,
+  doi 10.1177/23780231251410969 — the author's count-model companion piece;
+  SAGE paywalls the article page, so the entry has NO volume/article number —
+  fill in from the published version), then states the geometric measure's
+  actual regression-relevant advantages: (1) dimension-specificity — W_s(i)
+  is one quantity per dimension of the taste space, so the regressions ask
+  WHERE social location moves disagreement (volume, highbrow–popular, or
+  status-valuation axis) not just how many complex tastes a person holds;
+  (2) magnitude — each configuration enters the score weighted by how
+  distinctive its answers are in that genre, so same count can give very
+  different scores (the session-verified rarity weighting). Colon from the
+  old sentence gone (decision 15). SIDE EFFECT: ma2026deep disambiguates as
+  Ma 2026a and ALL existing ma2026tastes citations now display "Ma 2026b"
+  throughout (plainnat author-year, required) — flagged to author. Compiles
+  at 28 pp. (was 29, paragraph reflow), 0 undefined refs. main.tex +
+  references.bib changes are LOCAL-ONLY, pending commit and Overleaf sync
+  (this AGENTS.md note goes out with them).
+- Last sync (2026-10-10, later): NEW fig-genre-segments (per-genre tri-segment
+  maps) from a new script-04 figure block (placed after library(ggplot2), before
+  the fig-signatures block — ggplot2 loads at line 231, so section-3b placement
+  would break; the block uses script-04's own pm margins, NOT the session's
+  stray pm matrix). Design: for each genre x aspect, the yes/no endpoints of
+  the contribution c on dims 1-3 drawn as vertical segments (c_yes =
+  Dcoef*(1-p), c_no = -Dcoef*p, barycenter 0, so rare answers move further),
+  arrows toward yes, aspect palette, facets ordered down the highbrow-popular
+  rung (Big Band ... Rap/Hip-Hop), 10x8in. Kept in repo, UNREFERENCED in
+  main.tex (fig-scree pattern). Verified: formula endpoints match Ccont's
+  unique values to 5e-11; genre order on Ccont dim 2 confirmed CANONICAL via
+  barycentric-mass matching against yes-rates (identity permutation — the two
+  exactness identities sum over genres, so they cannot detect a permutation).
+  Session findings behind the figure: Ma's 8 configurations are exactly the 8
+  possible endpoint-triples per genre, all holders of a config in a genre
+  sharing IDENTICAL local geometry (within-cell spread 0); same config,
+  different local magnitude by genre (distant praise omega3 1.03 in rap,
+  0.00 in opera); rap's granting cells cluster omega3 ~0.9-1.0 incl.
+  simple_pos 0.92 (margin dispersion, not configuration — local face of
+  decision 13). Three-file copy (figure + scripts/04-antinomies.R + AGENTS.md);
+  main.tex untouched, no compile check needed. Outer commit also records the
+  gitlink.
+- Last sync (2026-10-10, later): sec:social REBUILT per decision 18 (author
+  request after a methodological critique — the barycenter/η²-with-dimensions
+  analysis answered where groups sit, not who has complex tastes). The
+  supplementary-position subsection is gone (tab-eta, tab-sup-coord,
+  fig-supplementary envs deleted; files kept in repo unreferenced; script 05
+  unchanged and still required by script 07); the section now titled "The
+  Social Sources of Complex Tastes" merges the regression material and OPENS
+  with the position-vs-disagreement distinction plus the NEW tab-w-eta
+  (η² of demographics with W1–W3; max 0.019, no variable reaches 0.02,
+  against age-position 0.33). Both \label{sec:social} and \label{sec:who}
+  live on the merged section (the [DRAFT] discussion sentence now names the
+  same section twice — flagged to author). Script 07 gains the tab-w-eta
+  block. Compiles at 28 pp., 0 undefined refs, 1 pre-existing overfull
+  (tab-genre-profile) + pre-existing tab-regression float warning.
+  ADOPTED MID-SYNC web edit `ca49461` (author, 22:42 UTC; landed at pull
+  and was briefly clobbered by the manuscript copy, re-applied): shares-
+  vs-contributions paragraph — "an aspect supplies" → "an aspect is
+  responsible for"; the extreme-case sentence rewritten axis-first
+  ("The first global axis is the extreme case, contributing only
+  $2.5\%$ to the dimension yet carrying a third of the disagreement") —
+  REPAIR re-applied on top (flagged to author, second time): the 2.5%
+  supplier is EVALUATION, not the axis, so the clause now reads "with
+  evaluation contributing only $2.5\%$ of the dimension yet carrying a
+  third of the disagreement" (keeps the author's axis-first structure;
+  they reverted to an axis subject once before — see the 2026-10-09
+  repairs note — if they insist on their exact wording, restore it).
+  AUTHOR CONFIRMED THEIR WORDING (2026-10-10, immediately after the
+  push): the repair was REVERTED; the sentence now reads exactly as in
+  web edit `ca49461`. DO NOT re-repair this sentence in future sessions
+  — the author has now written an axis subject three times and has
+  explicitly chosen it.
+- Last sync (2026-10-10, later): TWO TRIMS the author requested back to
+  back (decisions 16 + 17). (1) tab-antinomy (Table 7) replaced by
+  fig-signatures — the signed Spearman heatmap of the same 9×9 matrix
+  (see decision 16 for design + the duplicated-factor-level gotcha);
+  tab-antinomy.tex git-rm'd from workspace AND the clone (Overleaf compile
+  would break on the stale \input otherwise — the 2026-10-09 lesson).
+  (2) Dimension 4 fully removed from the manuscript (decision 17):
+  dim-4 paragraph + fig-dim4 env deleted, tables trimmed to dims 1–3,
+  captions and the "all four dimensions" clause updated. Reran scripts
+  04 + 05; regenerated figures/RDS byte-identical values reverted
+  (fig-antinomy-map/configurations/worked-example/supplementary/dim4,
+  mfa_results_sup/supplementary.rds — the RDS re-runs differ only at
+  1e-6 cross-session SVD noise); antinomy_scores.rds byte-identical.
+  PAGE-COUNT NOTE: prior "29 pp." sync notes were stale — HEAD (pre-
+  change, with tab-antinomy and dim-4 material) compiles at 31 pp.
+  (verified in a clean git worktree); after both trims the manuscript
+  compiles at 30 pp., 0 undefined refs, 2 pre-existing overfulls +
+  pre-existing tab-regression float warning. Figures now: 1 categories,
+  2 worked-example, 3 signatures (p. 19 with its discussion), 4
+  supplementary, 5 genre-map, 6 configurations. No web edits at pull
+  time (clone at bab1234; clean rebase).
+- Last sync (2026-10-10, later): DIM-1 AXIS RENAMED "volume" (author request:
+  "general-affirmation axis" was wordy/stilted). Author chose "volume" via
+  AskUser (over breadth, extensity, keep-but-shorten); 12 label occurrences
+  in main.tex now read "volume axis"/"volume dimension", the 4.1 coinage is
+  "Dimension 1 is thus a \emph{volume} axis" (gloss sentence unchanged),
+  fig-categories caption "Dimension 1 (volume)", script-04 worked-example
+  strip "Dimension 1 (volume)" (fig regenerated). ALSO swept the plural
+  noun "affirmations" for yes responses per the same request (→ "yes
+  categories" for MCA category weighting, "yes answers" for responses:
+  the "two affirmations" footnote, 1881's listening-yes-weighs-2x
+  sentence, "consumption yes categories" ×2 in 4.1, "most distinctive yes
+  categories" in the strategy MCA footnote, "supplying any of the yes
+  answers" in standing-apart). KEPT: the ordinary VERB "affirm" ("the
+  respondents who affirm it", duality section; "propensity to like and to
+  listen" in the coinage). "Volume" had no prior collisions in main.tex.
+  MID-SYNC WEB EDITS (54e9657..256c0b0, four commits) landed while the
+  rename was local-only; adopted the Overleaf main.tex as base and
+  re-applied the rename to the author's wording. Author changes adopted:
+  dim-3 example block SPLIT into its own paragraph between the meanings
+  paragraph and the pair-level paragraph; "To make the geometric
+  measurement machinery concrete"; "The two running examples are cases of
+  low and high disagreement on the first global axis"; "which pairs of
+  aspects disagree" (trimmed); "An aspect's share of disagreement differs
+  from its contribution... Table 5 records..."; "compared with 20% for
+  preference... making evaluation the outlier"; "closer to the middle of
+  the axis; the further..."; "On the other two dimensions, it is
+  typically evaluation"; "Both have many complex configurations,
+  thirteen and seventeen, respectively, yet their status-valuation scores
+  differ by more than a factor of forty"; "sharpen both readings";
+  "one repeated pattern: engagement without valuation" (author's colon,
+  kept); fig ref in standing-apart ("shows this clearly"); W3 footnote
+  "best measures" + "not how many per-genre contradictions". THREE REPAIRS
+  on top (flagged to author): (1) the author's "The first global
+  affirmation axis is the extreme case. It supplies only 2.5%..." broke
+  the referent (the 2.5% supplier is EVALUATION, not the axis) →
+  "Evaluation on the first global axis is the extreme case"; (2) the
+  author's 1881 weighting sentence was tangled ("a more significant
+  ``yes'' than liking because listening is globally rarer ... than
+  liking, carrying...") → "a more significant ``yes'' than liking---it is
+  globally rarer and represents a more meaningful investment---so it
+  carries roughly twice the weight in the separate MCA"; (3) the dangling
+  bridge sentence "The two running respondents sit at the two ends of
+  this axis" (left at the end of the meanings paragraph after their
+  example-block move) moved to OPEN the new example paragraph.
+  Compiles at 31 pp., 0 undefined refs, same 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): sec:antinomies (4.5) restructured as a
+  RUNNING-EXAMPLE section (author request: the example used to come at the
+  end, after too many new ideas, leaving the reader lost). Author chose via
+  AskUser: (1) TWO respondents, 362 + a new mirror contrast 1881;
+  (2) fig-worked-example redesigned 2×2 (rows = respondents); (3) the two
+  hypothetical dim-2 portraits replaced by the real examples.
+  **Respondent 1881 (new second example; original row index; verified
+  this session)**: likes 14 (classical, jazz, moodez, crold, country,
+  blueg, folk, hymgos, latspsal, blurb, reggae, toppop, controck,
+  danclub), listens 13 (incl. opera, Broadway, big band — highbrow-
+  leaning), grants eval-yes to ZERO genres (not even opera); 17 complex
+  configs (10 guilty, 3 distanced, 4 justified). W = 17.6/23.1/3.1
+  (inertia shares 47/71/18%). Partials d1 2.78/5.46/−0.47 (global 2.59),
+  d2 0.73/5.54/−1.02 (global +1.75), d3 −0.73/−2.96/−2.80 (global −2.16).
+  KEY MIRROR FACT: F2 +1.72 (362) vs +1.75 (1881) — nearly the same rung
+  reached by opposite materials; opposite poles of dim 3 with hugely
+  unequal W3 (133.1 vs 3.1, factor >40 — the generous-side asymmetry made
+  concrete). GOTCHAS for future sessions: (a) 1881's dim-2 aspect shares
+  are pref 4.5/cons 62/eval 33 — CONSUMPTION stands apart for 1881, not
+  evaluation; the "evaluation typically stands apart on dim 2" claim is
+  sample-level only (do not misstate for this respondent); 362's d2
+  shares are 50/0/50 (consumption sits exactly at the average). (b) All
+  zero-eval respondents share one fixed eval partial point
+  (−0.47/−1.02/−2.80 on dims 1–3). (c) 362 d3 pair MSd 0.45/190/209
+  (pc/pe/ce); 1881 d2 pair MSd 23.1/3.1/43.0 — the two consumption pairs
+  carry 95% of 1881's pairwise sum (modal C–E pattern). (d) 1881 Wloc
+  1.7/1.3/0.7 (<10% of W1/W2) — their 10 guilty pleasures are coherence,
+  not genre-based disagreement. (e) 362 does NOT like bwayst — the old
+  worked-example prose said "Broadway/show tunes" among 362's likes, an
+  error (fixed; likes are classical/opera/jazz/bband/crold/country/folk/
+  latspsal/raphiphop/blurb/reggae/toppop/controck/indalt/hvymtl).
+  New 4.5 structure: P1 opening (unchanged) → P2 NEW examples intro
+  (profiles + "instructive pair" sentence) + figure env moved UP (2×2,
+  free scales, 7×6in, row strips "Grants 18 of 20 recognitions"/
+  "Grants none") → meanings dims 1/2/3 each anchored on the examples
+  (dim 1: 362 same-side small W1, 1881 shows the listening-weighs-2x
+  effect; dim 2: same-rung different-materials, old portraits deleted;
+  dim 3: 362 generous + the W3 arithmetic sentence + 1881 withholding
+  mirror, squared-position footnote kept at the passage end) → pair
+  paragraph + example pair distances → tab-pairs env moved here →
+  Which Aspect Stands Apart (362's 66/19/14 d3 split after the
+  construction para; 1881's "53% of W1 without supplying affirmation"
+  after the shares-vs-contributions para; the varies-by-respondent
+  sentence after the d2 mechanism; classification footnote now anchored
+  at the substantive close) → Two Measures Compared (factor-of-40
+  divergence sentence; genre-level split paragraph now opens with the
+  362 8.5/94% + 1881 ten-guilty-pleasures-as-coherence examples, split
+  into two paragraphs at "That is typical rather than exceptional").
+  The "A Worked Example" subsubsection is DISSOLVED (heading deleted;
+  its material distributed). Strategy bridge (3.5) updated to "follows
+  two worked respondents". 1881 was found as the top-W2 respondent who
+  likes classical with ≤3 eval-yes (search cand2); chosen over the
+  popular-omnivore candidate 1066 (rap/reggae/dance/metal liker, zero
+  evals, W 6.9/8.7/10.3, F2 −3.32 — weaker numbers) and over 362-only.
+  Compiles at 31 pp., 0 undefined refs, same 2 pre-existing overfulls +
+  pre-existing tab-regression float warning. Script 04 figure block
+  rewritten (exr/rlab, split-by-interaction segex); rerun produced
+  byte-identical tables/RDS (fig-antinomy-map/fig-configurations
+  regenerated byte-only, reverted).
+- Last sync (2026-10-10, later): plain-language W2/W3 glosses in the
+  sec:antinomies meanings paragraph (author request: dim 1 had a full plain
+  treatment, dims 2–3 only one abbreviated sentence each). Dim-2 expansion:
+  "A respondent high in $W_2$ is one whose liking and listening usually
+  agree on a rung while their evaluations place them on a
+  different one" + the two concrete portraits (rap/rock/pop listener who
+  credits classical/opera fans with high status; classical-music listener
+  who grants that recognition to few audiences) + "about equally often".
+  Dim-3 expansion: existing reach sentence kept, then "Liking and
+  listening place the high-$W_3$ respondent nowhere in
+  particular on this axis, so the score mostly records how far their
+  evaluations travel away from that middle" + generous/mirror-image split.
+  STYLE RULE (author request, same day): "in plain terms" purged — plain
+  writing should not announce itself, so never use the phrase in drafted
+  prose. The purge itself was done by the AUTHOR on Overleaf (web edits
+  `6cbec83` + `e3d6b8a`) while the same removal was being made locally —
+  the Overleaf version was adopted as base (overleaf main.tex copied BACK
+  into the workspace; the local removal was discarded, redundant). Author
+  edits adopted with it: dim-1 sentence reworded ("rank higher on the
+  liking than on the listening side"), dim-2 opening replaced with "On
+  the second global axis disagreement reflects where respondents sit on
+  the highbrow--popular ladder shared by the preference and consumption
+  spaces", "at best the consecrated ones", pair-paragraph tweaks ("Where
+  evaluation varies, it reflects disagreement", "the level of engagement"),
+  and the meanings material SPLIT into three paragraphs (dim 1 / dim 2 /
+  dim 3), pair-paragraph after. Fixed one author typo in the new dim-3
+  opener (comma placement, "On the third, global dimension where" → "On
+  the third global dimension, where").
+  DIM-3 PASSAGE REWRITTEN (same day, after the author flagged the whole
+  dim-3 treatment as unclear twice, and asked whether W3-disagreement is
+  "just scoring high on the first dimension of the separate evaluation
+  analysis, e.g. being more ecumenical"): answer is YES, essentially —
+  verified numerically: cor(sep-eval ax1, global F3) = 0.907; cor(W3,
+  eval-partial³²... squared eval partial coordinate) = 0.986; with
+  pref/cons partials pinned (sds 0.69/0.70 vs eval 2.75), W3 ≈ (2/3)e²;
+  generous side sits at +5.3 (mean W3 26.5), withholding at −2.7 (mean
+  W3 6.8) — asymmetric, generous carries 82% of top-quartile mass;
+  withholding group grants eval-yes to opera at only 12%. New dim-3
+  passage says it in prose: dimension = essentially the evaluation
+  aspect's own first axis (tab:partial-axes ref), ranks respondents by
+  how far down the hierarchy recognitions reach; opera nearly universal,
+  rap/metal the distinctive move; liking and listening leave every
+  respondent near the middle, "they can neither support nor contradict
+  those recognitions"; "Evaluation alone decides the position, and the
+  score measures how far it travels from the middle that the other two
+  aspects share"; generous side (ten of twenty on average) + opposite
+  form ("not even to opera's fans"). "Engagement profile" phrase purged
+  (all three occurrences were in this passage + its footnote); footnote
+  last clause now "how far a respondent's status recognitions travel
+  down the hierarchy". NOTE for future sessions: the author's question
+  shows the squared-position footnote IS the honest caveat — W3 is
+  closer to a squared eval-axis position than to a contradiction
+  measure; do not let prose drift back toward "contradictions" language
+  for dim 3. Compiles at 29 pp., no undefined refs, 2 pre-existing
+  overfulls.
+  DIM-2 CONTRIBUTION-VS-DISAGREEMENT mechanism added (same day, author
+  question: why does evaluation carry 49% of W2 when Table 5 says it
+  contributes only 11% to dim 2 — the dim-1 extreme case was in the
+  aspect-split paragraph but the dim-2 instance was numbers-only). Three
+  verified facts now behind a new 3-sentence insert after the
+  "49%/64% vs 18% each" sentence: (a) pref+cons supply 88.9% of dim-2
+  variation (contribs 40.0/48.9/11.0) and their partial positions
+  correlate 0.73, so they hug the personal average (shares 19.6/31.9%);
+  (b) eval partial sd on dim 2 is the SMALLEST of the three (0.97 vs
+  1.48/1.78) and correlates only 0.08 with the engagement rung;
+  (c) eval's deviation from the personal average correlates 0.83 with the
+  rung position — wherever engagement carries a person far out on the
+  ladder, eval (centered at the middle) is left behind and shows up as
+  the standing-apart aspect. So the dim-2 mechanism = the dim-1
+  "left behind near the origin" logic in milder form: eval moves a bit
+  (sd 0.97 vs 0.46 on dim 1) but independently, and the rung's spread
+  generates its distance. Insert wording avoids re-quoting r = 0.73
+  (already one paragraph up in the pair-level paragraph). Author trims
+  adopted (web edit `c787808`, which also fixed their own "evaluation
+  aspect's separate MCA" possessive flagged to them): "agree closely, so
+  each sits near", "so it typically stands apart". Author-approved tweaks
+  applied on top: "shows the same pattern as the affirmation axis in a
+  milder form" → "repeats that logic in a milder form"; gradient clause
+  added ("and the further liking and listening carry the respondent to a
+  rung, the farther evaluation sits from that respondent's average" —
+  the cor 0.83 rung↔eval-deviation link, author approved both via chat).
+  PAIR-PARAGRAPH closing sequence rewritten (same day, author flagged
+  "Where evaluation varies, it reflects disagreement... unlike the second
+  and third dimensions, where evaluation is the aspect that stands apart"
+  as hard to understand): cryptic gloss → "Wherever evaluation takes a
+  position of its own, it disagrees with both of the other aspects at
+  once"; "The first dimension is the contrast" → "the exception"; long
+  final sentence split into short ones ("a third each" = the 33/33/34
+  dim-1 pair shares; "There the disagreement runs between liking and
+  listening, each placing the person at a different level of engagement,
+  while evaluation stays near the middle and barely moves"; closing
+  contrast its own sentence). PLUS author catch (correct): "where all
+  three aspects place respondents on a shared ladder" was WRONG — the
+  ladder is shared by preference and consumption only (eval contributes
+  11% to dim 2, partial sd 0.97 vs 1.48/1.78, r = 0.08 with the rung;
+  nuance: eval is not mute — its second separate axis reappears weakly,
+  partial axis +0.35 — but it does not rank respondents on the ladder).
+  Sentence now reads "On the second dimension, preference and consumption
+  place respondents on a shared highbrow--popular ladder, and their
+  positions correlate at $r = 0.73$, so their pair accounts for only
+  18%..., against 47% for consumption--evaluation alone" — consistent
+  with the meanings paragraph's "ladder shared by the preference and
+  consumption spaces". Compiles at 30 pp. (float reflow), no undefined
+  refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): "Which Aspect Stands Apart" subsection
+  created (author request: the aspect-split paragraph needed its own
+  subsection explaining the geometry, the substantive question, and the
+  interpretation in plain language). New \subsubsection with
+  \label{sec:aspect-shares} has four paragraphs: (1) question + geometry
+  (partial points cluster around the global point = their average; score
+  measures cluster spread; since the global point is the average, each
+  point contributes its squared distance from it and the three sum to
+  the score — Pagès pp. 108–109 cite; share large = odd one out);
+  (2) shares vs Table-5 contributions + dim-1 extreme case + NEW
+  clarifier ("That third is not evidence of any contradiction in the
+  evaluations. A respondent could like exactly the genres they listen
+  to, and evaluation would still carry a large share..."); (3) results
+  by dimension — NOTE dim-2 shares now stated correctly as 49/20/32
+  (eval/pref/cons), fixing the old ambiguous "against 18% each" which
+  was true of W3 only (17.8/17.8); (4) substantive close linking to
+  Ma's configurations ("which aspect of taste stands against the other
+  two") + per-dimension answer summary. The "Complex tastes are not
+  concentrated in any region of the space" pair of sentences MOVED from
+  the end of the aspect paragraph to the end of the 4.5 opening
+  paragraph (they are about the score generally, not the aspect
+  attribution). Two delimiting headings added because LaTeX headings
+  extend forward: \subsubsection{A Worked Example} before the example
+  and \subsubsection{The Two Measures Compared} before the
+  divergence paragraph — the worked example's prose ("here it is liking
+  that stands apart", "now it is evaluation") fits the new subsection
+  frame but the genre-level split belongs outside it; the divergence/
+  genre-level/signatures block is the geometric-vs-combinatorial
+  comparison. 4.5 structure now: [untitled: opening + meanings +
+  pair-level] → Which Aspect Stands Apart → A Worked Example → The Two
+  Measures Compared → sec:social. The pair-level paragraph could get a
+  mirror heading later (strategy has "Pairwise Distances Across
+  Aspects"). Compiles at 30 pp., no undefined refs, 2 pre-existing
+  overfulls.
+  ADOPTED MID-EDIT web commits
+  `3d6e501` + `50c9cd9` (author rewriting the two-direction sentences as a
+  single "For instance, ..." sentence — as of this sync it ends mid-word
+  ("...as being high statu") and drops the "about equally often" sentence;
+  author still typing, do not "complete" it for them; also author added the
+  comma in "On the second global axis, disagreement reflects" themselves).
+  The existing squared-position footnote now anchors at the END of the dim-3
+  passage (explains why the generous form dominates). Empirical basis
+  (verified from partial points, extraction: res$ind$coord.partiel rownames
+  are "2.Preference"/"2.Consumption"/"2.Evaluation" — capital-P/C/E, NOT
+  "362.pref"): among top-quartile W2, eval is the largest-share aspect 67%
+  and the two directions split 51/49; eval_above group = popular engagement
+  (top40 .82/crold .78/rap .69 liked) yet eval-yes classical .83/opera .86;
+  eval_below group = classical liked .91/listened .72 yet eval-yes avg only
+  2.7/20 (classical .59, opera .67, all else ≤.29). Dim 3: among top-quartile
+  W3, pref/cons partial sds .71/.73 vs eval sd 4.56; generous (eval partial
+  > 0) carries 82% of top-quartile W3 MASS (54% of count — text says "most
+  of the disagreement", mass not count, deliberately), mean 10.2 eval-yes
+  ("ten of the twenty genres on average"), withholding group avg 0.28
+  eval-yes while still liking 5.8/listening 3.1. Pair-share quantities
+  (r 0.73, cons–eval 47%) stay in the NEXT paragraph per author's note —
+  the new material is qualitative. Compiles at 29 pp., no undefined refs,
+  2 pre-existing overfulls.
+- Last sync (2026-10-10, later): sec:contrib question-mapping FIXED (author
+  flagged that the 4.4 opening claimed Table 5 alone answers Q2+Q3). The
+  strategy's own assignment is Lg→Q2 (participation), contributions→Q3
+  (which aspect organizes each dimension); the author's instinct that
+  partial axes bear on Q2 is right — they show each aspect's leading
+  separate axes reappearing in the global space, i.e., participation
+  dimension by dimension. Repairs: (1) 4.4 opening now acknowledges "The
+  partial axes of the previous subsection (Table~\ref{tab:partial-axes})
+  already spoke to the second question at the level of specific
+  dimensions"; (2) the Lg paragraph — which WRONGLY said Lg "answer[s] the
+  dimension composition question from the other direction" (a Q3 label
+  contradicting the opening) — now says "answer the second question for
+  the compromise as a whole"; (3) Lg paragraph MOVED before the
+  contributions paragraph so the subsection runs Q2 (Lg) then Q3
+  (contributions), matching the strategy order; (4) the balancing-weights
+  footnote moved from the deleted "answer to the second question is yes"
+  sentence to the Lg paragraph's "none is present in name only" sentence
+  (its content — equal footing going in, not equal presence coming out —
+  belongs there); (5) the redundant "Each aspect contributes to each of
+  the three global dimensions" sentence dropped (the Q3 paragraph's "while
+  all aspects appear in the first three global dimensions" carries it).
+  Colon in the opening ("posed above: does each aspect...") de-colonized
+  per decision 15. Follow-up (same day): the Partial Axes subsection (4.3)
+  now opens with its own question echo — "The second question posed above is
+  whether each aspect actually contributes to the common representation, and
+  the partial axes answer it at the level of specific dimensions" — so 4.3
+  self-frames rather than being retroactively framed by 4.4; the 4.4 opening
+  callback ("already spoke to the second question at the level of specific
+  dimensions") is unchanged and now deliberately echoes 4.3's phrasing.
+  Web edit `6edd9d1` landed mid-sync and was adopted:
+  4.3 dim-2 sentence "independent" → "partially independent", and the dim-3
+  sentence gains a closing clause ("suggesting that the third global
+  dimension is a specialized status-evaluation axis with little input from
+  people's preferences or consumption behavior"). Compiles at 29 pp.,
+  0 undefined refs.
+- Last sync (2026-10-10, later): partial-axes/contributions SEPARATION (author
+  choice via AskUser — "Clean separation" over merging the subsections).
+  The Partial Axes subsection (4.3) quoted two aspect-contribution numbers
+  ("matching its modest 2.5% contribution" / "matching its 11.0% contribution")
+  from tab-groups (Table 5) without citing it; both parentheticals DELETED so
+  4.3 is purely partial-axis correlations (tab-partial-axes) and contributions
+  live entirely in the Composition subsection (sec:contrib, tab-groups).
+  Web edit `e1d5aad` landed mid-sync and was adopted as base: the author
+  reworded the same 4.3 paragraph opening ("We represent a given aspect's
+  partial axis by correlating…", "captures maximal consensus in preference
+  and consumption") and appended a clause to the RV paragraph ("thus people
+  can evaluate highly genres that they neither like nor consume"); the author
+  KEPT the contribution clauses in their rewrite — the separation was
+  re-applied on top of their wording. Compiles at 29 pp., 0 undefined refs.
+- Last sync (2026-10-10, later): fig-categories12 + fig-categories COMBINED into
+  one two-panel figure (author request; single figure sits next to its
+  discussion). Script 03's two category-map blocks replaced by one
+  mk_cc/facet_grid block: left panel dims 1–2, right panel dims 2–3, facet
+  strips name the dimensions (fig-worked-example style), free scales, labs
+  x/y NULL, shared Aspect legend, 8.5×4.4in, saved as
+  fig-categories.pdf (.95\linewidth in main.tex). fig-categories12.pdf is no
+  longer generated; the stale file was git-rm'd from BOTH the workspace repo
+  and the Overleaf clone. main.tex: single \label{fig:categories} (the
+  fig:categories12 label purged); caption merged from both old captions
+  (left/right panel sentences); prose refs updated ("As the left panel of
+  Figure~\ref{fig:categories} shows" in the 4.1 opening; "The right panel's
+  vertical axis also previews Dimension 3" in the dim-2 paragraph); figure
+  env placed after the dim-2 paragraph. Compiled placement: ref end of p.8,
+  dim-2 discussion p.9 (Table 2 takes the p.9 float slot — encountered
+  earlier, float order is preserved), figure top of p.10, directly after its
+  discussion; [!htb] placement tried and reverted to house [htbp] (made no
+  difference). Adopted web edits `fcaca6c`/`98163ec`/`5ac0b7a`: strategy
+  "Measuring Complex Taste at the Individual Level" gains \subsubsections
+  ("Aspect Disagreement Across Global Dimensions", "Pairwise Distances
+  Across Aspects", "Genre-Specific Disagreement Across Dimensions" — the
+  stray duplicate \subsection{Aspect Disagreement} became the first
+  subsubsection) and the toy-contrast paragraph closing reworded
+  ("provides a toy example of a single respondent across all three scores
+  and the genre-level split ... once the space dimensions are empirically
+  specified"). ggsave prints benign mbcsToSbcs warnings (en dash → hyphen in
+  the pdf device's strip labels). Compiles at 29 pp., 0 undefined refs,
+  2 pre-existing overfulls.
+- Last sync (2026-10-10, later, small): the dim-1 volume-tracking symbol
+  fixed from $\rho$ to $r$ in the meanings paragraph — it is a PEARSON
+  correlation (signed P1−C1 placement gap vs n_likes − n_listens per
+  respondent, N = 2,259; Pearson 0.957, Spearman 0.951, both round to
+  0.96). The paper's convention is r = Pearson (e.g., the 0.73 pref/cons
+  partial correlation on dim 2), ρ = Spearman (tab-antinomy); the ρ was a
+  labeling error in the drafted sentence. Follow-up (same day): the
+  tracking sentence rewritten to specify the two correlated quantities
+  explicitly in plain language — "Correlating the two quantities across
+  all respondents---the gap between where liking and listening place a
+  person on the axis, and the difference between how many genres that
+  person likes and how many they listen to---yields $r = 0.96$." Compiles
+  at 29 pp.
+- Last sync (2026-10-10, later): DIM-1 GLOSS MOVED FROM FOOTNOTE TO TEXT and
+  the margin footnote rewritten in plain English (author request: the
+  footnote "is totally obscure"; wanted a clean in-text sentence). The
+  meanings-paragraph dim-1 block now reads: sentence 1 unchanged (author
+  web edit `acb670e` "how many genres respondents choose" adopted);
+  sentence 2 NEW in text — "In plain terms, respondents who like many
+  genres but listen to few are placed higher on the axis by their liking
+  than by their listening, and the reverse holds for those who listen to
+  more genres than they like."; sentence 3 NEW — "The liking--listening
+  gap tracks the difference between how many genres a respondent likes
+  and how many they listen to almost exactly ($\rho = 0.96$)." (the
+  signed-gap↔volume-difference correlation, cor 0.96). Footnote (plain
+  rewrite, anchored after the ρ sentence) now explains the scale effect
+  concretely: MCA weighs rare affirmations more; listening (22.9%) rarer
+  than liking (41.7%) so one listening moves the consumption point ~2x as
+  far; worked example INSIDE the footnote = the 7 like-all-AND-listen-all
+  respondents (zero contradictions) with liking points near +5.6 and
+  listening points near +10.7 on dim 1 (verified: mean P1 5.63, C1 10.68,
+  E1 0.01 among them; set-equal mean signed gap −1.95, i.e., listening
+  point systematically further out). Dropped from the footnote: the
+  "on average slightly more than the sample as a whole" claim (author
+  found it obscure; the all-yes example carries the point better).
+  The earlier gloss-swap footnote ("difference in level, not a tally of
+  contradictions...") is fully replaced — its content split between the
+  in-text sentences (volume reading, ρ 0.96) and the new footnote
+  (scale effect + all-yes example). Compiles at 29 pp., no undefined
+  refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): two interpretation-repair insertions in
+  sec:antinomies, from a session vetting the author's proposed concrete
+  glosses of the disagreement scores. BOTH proposed glosses were wrong and
+  were replaced with corrected ones:
+  (1) DIM-2 GLOSS: "respondents like highbrow genres but listen to popular
+  ones and vice versa" — right TYPE of reading (rung disagreement) but
+  P–C is only 18% of dim-2 disagreement (pair MSd 1.50 vs P–E 2.89, C–E
+  3.91; pref/cons partial r 0.73) — the modal dim-2 disagreement is
+  evaluation vs engagement; directions balanced (302 vs 263 top-quartile).
+  Not added to the manuscript; the abstract "rung placement" phrasing kept.
+  (2) DIM-1 GLOSS: the author inserted "This indicates that many
+  respondents like genres they don't listen to and vice versa" on Overleaf
+  (web edit `c97f48a`) — DELETED and replaced with a corrected footnote.
+  Verified: the signed P–C dim-1 gap is a VOLUME contrast, not a
+  contradiction tally — cor(P1−C1, n_likes − n_listens) = 0.96; the 120
+  set-equal respondents (likes ≡ listens, zero mismatches) have
+  ABOVE-AVERAGE P–C disagreement (mean sq 4.84 vs 4.31 overall), the
+  margin effect (yes-rates 41.7 vs 22.9% → different MCA weights, echoes
+  the W3 "not a count of per-genre contradictions" footnote); directions
+  balanced (305 vs 260); |gap|↔mismatch count cor only 0.51. New footnote
+  anchored at "liking and listening" in the meanings-paragraph dim-1
+  sentence carries the volume reading. (3) CONTRIBUTION-VS-DISAGREEMENT
+  reconciliation (author question "need to indicate somewhere that
+  disagreement can be driven by an aspect that doesn't contribute much to
+  that dimension"): new sentences in the aspect-split paragraph after the
+  Pagès cite — shares (distance from the person's average, within-person)
+  ≠ contributions (spread around the origin, between-respondent); eval on
+  dim 1 the extreme case, 2.5% contribution vs a third of W1; mechanism
+  verified: eval partial sd 0.46 vs 2.07/2.11, eval's squared deviation
+  from the personal average grows with |F1| (0.27/0.77/3.44 across |F1|
+  terciles, cor 0.78) — eval is the point left behind near the origin.
+  Adopted web edit `c97f48a` as base (subsection retitled "Measuring
+  Complex Tastes Geometrically"; opening rewritten in author voice —
+  "As noted in the analytic strategy section..."; NOTE: the author's
+  rewrite DROPPED the Ma-configurations complement sentence from the
+  opening — flagged to them, their call; meanings paragraph tweaked
+  "corresponding dimension", "respondents"). Compiles at 29 pp., no
+  undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): sec:antinomies "Measuring Complex Tastes"
+  restructured (author request: first paragraph incomplete, "three scores"
+  unannounced, paragraphs long/convoluted). The old 4-paragraph block
+  (opening, meanings, pairs+aspects, worked example) became 7 paragraphs:
+  (1) NEW opening introduces the scores explicitly ("The measure of the
+  analytic strategy gives each respondent one aspect-disagreement score per
+  dimension... On the first three dimensions, this is three scores per
+  respondent, $W_1$, $W_2$, and $W_3$."), moves the 56/52/63% magnitude
+  headline UP from the old meanings paragraph into the opening ("Disagreement
+  is substantial"), and keeps the Ma-configurations complement sentence; the
+  old opener ("We measure complex tastes geometrically... read directly off
+  the MFA") is gone. (2) Meanings paragraph now pure — colon/semicolon chains
+  split into sentences, footnote unchanged. (3) Pair-level paragraph: dim
+  order now 2→3 (was 3/2/3 zigzag), shares-echo sentence now AFTER the
+  numbers with tab-pairs ref, dim-1 contrast split into short sentences.
+  (4) NEW aspect-split paragraph (per-aspect shares + Pagès cite + region-null
+  closing, colon de-colonized). (5–7) Worked example split into three
+  paragraphs (intro+dim 1 / dims 2–3 / genre-level split); four prose colons
+  de-colonized per decision 15. ALL numbers, refs, cites, footnotes preserved
+  (verified by token-multiset diff against HEAD; the only number-token
+  additions are the 1/2/3 from the new "$W_1$, $W_2$, and $W_3$" sentence;
+  footnote colons in the two worked-example footnotes kept — definitional
+  lists, author has kept them through edits). Compiles at 29 pp., no
+  undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): Lg magnitude GUARD added to the Composition
+  subsection (sec:contrib), from a session diagnosing whether the Lg
+  coefficients' magnitudes can be read comparatively. Verified numerically:
+  (a) the Lg(pref/cons/eval, MFA) pref-cons gap is entirely the diagonal
+  Lg(h,h) — cross-aspect terms 0.822 vs 0.828; (b) exact binary-block
+  identity Lg(h,h) = [J + 2Σ_{g<k}φ²]/(J·λ1h)², where φ = Pearson r among
+  the block's 20 indicators — so preference has MORE raw internal
+  association (Σφ² 6.94 vs 3.99; mean φ² 0.037 vs 0.021) but consumption's
+  smaller λ1g (0.155 vs 0.200) gives it a bigger balancing multiplier and
+  hence a bigger Lg (2.91 vs 2.12; with-MFA 2.48 vs 1.95) — the ordering is
+  normalization arithmetic, and the rarity-free association picture is
+  inverted; (c) each block's first axis in the global metric is ≈ 1 by
+  construction (0.981/0.983/0.953), so Lg(h,MFA) has a floor ≈ 0.66 for any
+  block and the excess above the floor (Σ_{s≥2}λ² = 1.08/1.85/0.61) is
+  secondary-spectrum mass; (d) Lg shares 35.0/44.5/20.5% vs λ-weighted
+  share of dims-1–3 inertia 34.8/38.2/27.0% — same rank order, distorted
+  magnitudes (pref-cons gap 10 pts in Lg is really 3; evaluation is 70% of
+  consumption, not half, because it owns dim 3). Manuscript revision: the
+  "but unevenly" clause dropped; the sentence now ends at the presence
+  claim, then two new sentences — the three coefficients differ with
+  evaluation's link weakest of the three, "but we read them as
+  establishing presence and rank order rather than degree", and "MFA's
+  balancing gives every aspect a first axis of near-unit inertia, so no
+  aspect can score near zero, and the differences above that baseline
+  reflect how spread an aspect's structure is across its own secondary
+  dimensions rather than the intensity of its participation." The balancing
+  weights footnote moved to the end of the guard sentence (its natural
+  anchor). tab-groups unchanged. CONSOLE-GOTCHA for future sessions: in R,
+  `gcont/100*l3` recycles l3 across ROWS (aspects) not columns (dims) —
+  use `sweep(gcont, 2, l3, "*")`; an earlier output with pref 39.6/cons
+  34.3/eval 26.1 was that bug, corrected values 34.8/38.2/27.0.
+  Adopted web edit `048d922` (landed mid-sync; did not touch the Lg
+  sentence, clean merge): "ordered by rarity:" → "ordered by rarity, as"
+  + dropped the "Dimension 3 is thus a distinct axis..." closing sentence
+  of the Composition paragraph; commas after "On the affirmation axis,",
+  "On the highbrow--popular axis,"; "Nor are" → "Complex tastes are not";
+  "what these scores are made of" → "what these scores include".
+  Compiles at 29 pp., no undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): fig-individuals (individual factor map)
+  DROPPED from main.tex (author choice via AskUser after a keep/drop
+  analysis). Rationale: it was referenced exactly once (dim-2 paragraph,
+  "first look at this axis's social anchoring") and its whole quantitative
+  claim — the age gradient on dim 2 (cohort means −0.74 → +1.23, ~2.3 pooled
+  within-sds end to end, adjacent cohorts only 0.2–0.5 sd apart; pooled
+  within-sd 0.88) — is covered better by sec:social (η² 0.331, tab-eta,
+  tab-sup-coord) and fig-supplementary on the same dims-2–3 plane; the
+  overplotted blob couldn't fully cash "strongly ordered by age". The
+  only argument for keeping (only individual-level cloud in the paper; GDA
+  convention) was outweighed by the paper's each-figure-earns-its-place
+  criterion. Dim-2 clause rewritten: "The same axis is strongly anchored in
+  respondents' ages, with the youngest cohorts toward the popular pole and
+  the oldest toward the highbrow pole (Section~\ref{sec:social})." Script
+  03 still generates fig-individuals.pdf (kept in repo, unreferenced);
+  figures renumber automatically (fig-worked-example is now Figure 2).
+  Web edit `96c8cda` landed mid-sync and was adopted as the local base:
+  Partial Axes opening reworded ("The second question is whether...",
+  "little connection to"); Composition subsection restructured (opening now
+  carries the Lg paragraph + second-axes clause; the contributions and
+  dim-3-content paragraphs merged into one; author re-introduced a colon in
+  "questions posed above: whether..." — their own text, kept). Two-file
+  copy (main.tex + AGENTS.md). Compiles at 29 pp., no undefined refs,
+  2 pre-existing overfulls.
+- Last sync (2026-10-10, later): per-aspect decomposition of the
+  aspect-disagreement score, from a Pagès-2014 chapter-5 audit. Script 04
+  gains the book's §5.4 decomposition after the ant frame (each aspect's
+  partial point contributes its squared deviation from the global point;
+  ant gains Wp1–3/Wc1–3/We1–3 columns, contributions sum to W_s via
+  stopifnot; console prints mean per-aspect shares). Numbers: dim 1
+  pref/cons/eval 32.5/33.5/34.0% of W1 (even thirds — individual-level
+  counterpart of the tab-pairs equal-thirds claim), dim 2
+  19.6/31.9/48.6%, dim 3 17.8/17.8/64.4% (evaluation carries two-thirds;
+  absolute mean deviation 3.58 vs 0.99/0.99). main.tex: the 4.4 pair-share
+  paragraph gains apportionment sentences after the "evaluation is the
+  aspect that stands apart" sentence (citing pp. 108–109); the eq:decomp
+  paragraph gains a footnote after "grows as the aspects disagree more"
+  defending W_s against Pagès' §5.5 superimposed-representation distortion
+  caveat (cross-aspect partial distances meaningful only when the partial
+  clouds have comparable inertia along the studied dimensions; the MFA
+  balancing gives each aspect's partial cloud unit maximal inertia in the
+  global metric), citing pp. 112–116. Script 04 rerun: figures regenerated
+  byte-only and reverted (values verified identical against console
+  output); tab-antinomy/tab-pairs unchanged; antinomy_scores.rds
+  legitimately gains the Wp/Wc/We columns. Verified in-session that W_s is
+  exactly the book's §5.4 within-class inertia (Huygens identity and
+  barycentric property hold to 1e-13). CAUTION for future sessions:
+  Pagès' Table 5.2 between/total ratio is an aggregate ratio-of-inertias
+  (49/44/65% on our data per dimension), which is NOT the same quantity as
+  our mean-of-individual-ratios shares (56/52/63%) — don't conflate them
+  when quoting the book by name. Compiles at 29 pp., 0 undefined refs,
+  2 pre-existing overfulls.
+- Last sync (2026-10-10, later): RV 0/1 passage de-jargoned (author request:
+  "super-obscure"). "The two clouds share no direction" and "homothetic---one
+  is a stretched or shrunken copy... order respondents identically and differ
+  only in how sharply they differentiate them" replaced with plain distance
+  language: RV 0 = "two respondents who are close together in one cloud are
+  then no more likely to be close in the other than any two respondents
+  chosen at random"; RV 1 = "the two clouds have exactly the same shape: the
+  distance between any pair of respondents in one cloud is a fixed multiple
+  of their distance in the other. The aspects then agree completely about
+  who resembles whom; they differ only in how far apart they spread the
+  respondents." The word "homothetic" is now gone from main.tex. Also adopted
+  author web edit `223c59e` (landed before this revision and preserved in
+  full): RV material split into two paragraphs; "The comparison relies on the
+  geometry each aspect imposes on the individuals"; added closeness example
+  "(e.g., individuals who like the same genres are close in genre space and
+  individuals who consume the same genres are close in the consumption
+  space)"; "inter-individual distance structures". Fixed the author's "ann
+  aspect's" typo. Mid-sync web edit `6f5594c` (final clause "possible at the
+  level of the data structure---" → "possible empirically;") also adopted.
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): RV footnotes 2 and 3 COMBINED (author
+  request/question). The config-matrix note and the RV formula note are now
+  one footnote at the end of the RV paragraph (deac304 had already moved the
+  formula note there), definition first, formula second, restoring the
+  one-footnote-per-quantity pattern (Lg and contributions each have one).
+  Footnote auto-numbering shifts for everything after. During this sync
+  THREE web edits landed and were all adopted: `a6be12b` (RV extremes
+  sentences each gain a concrete parenthetical example — "a person's
+  preferences are unrelated to the genres they consider high status" /
+  "a person's engagements are perfectly predictable from their
+  preferences"; "high RV coefficients between them" added; RV-0/1 sentences
+  re-merged with a semicolon — author's own, kept), `6859a87` (Lg
+  footnote reworded — "normalizes the global analysis as a block by its
+  first eigenvalue"; "in Pagès' phrase" dropped for "or"; "link to the
+  global complex taste space"), `95e0d97` (Lg closing sentences — "In
+  principle, an aspect... present in name only in the global structure";
+  "drops one in favor of the other two"). Push races handled by rebase;
+  my footnote merge touched only RV lines so the final rebase was clean.
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): colon sweep of the Lg and contributions
+  strategy paragraphs (decision 15 applied; author request). Four fixes:
+  "and the global structure: how much..." → "...global structure, that is,
+  how much..."; "not equal presence in the result; an aspect..." split into
+  two sentences; "apportion each dimension...: the share of the dimension's
+  variance each one carries" → "apportion the variance of each dimension of
+  the common representation among the three aspects"; "different quantity
+  from $Lg$: $Lg$ assigns..." split into two sentences. Footnote formulas
+  left as-is (colon after a display formula is standard and unflagged).
+  Compiles at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-10, later): RV closing sentence rewritten + colon purge
+  (author requests). Final sentence now reads "Small RV coefficients mean
+  the opposite. Each aspect carries information the others lack, so no
+  single aspect can speak for a person's tastes. Taste profiles whose
+  aspects do not line up---complex tastes---then become an empirical
+  reality rather than a conceptual possibility." De-colonized the rest of
+  the paragraph too (decision 15): "unrelated to every indicator of the
+  other. Then two respondents..."; "same shape, so that the distance...";
+  "agree completely about who resembles whom, and differ only in...".
+  Adopted author web edit `deac304` (RV formula footnote moved to the end
+  of the paragraph). Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  overfulls.
+- Last sync (2026-10-10): RV and Lg descriptions revised from the Pagès book
+  (author request: "hard to follow, omit important information"). RV paragraph
+  now opens with the geometric basis (each aspect's twenty indicators generate
+  a cloud of the same N respondents, fully described by interindividual
+  distances; config-matrix footnote notes S and the squared-distance matrix
+  carry the same info), then RV compresses the similarity of the two distance
+  structures: 0 iff every indicator of one aspect is unrelated to every
+  indicator of the other; 1 iff the two clouds are homothetic; single-variable
+  blocks reduce RV to squared Pearson r (split into two footnotes: config
+  matrix + formula). Lg paragraph gains the choice rule (RV compares aspects
+  with one another, Lg gauges each aspect's link to the compromise) and the
+  Pagès "number of common dimensions, each weighted by its inertia" phrase
+  (p. 137 cite). **IMPORTANT CORRECTION**: the old Lg footnote formula was
+  WRONG — it claimed Lg(h,k) = tr(S_hS_k)/√tr(S_h²), asymmetric. Verified
+  numerically against FactoMineR (2026-10-10): Lg is the SYMMETRIC unnormalized
+  numerator of RV — Lg(h,k) = tr(S_hS_k)/N² (respondents equally weighted;
+  equal to the book's ⟨W_j,W_k⟩/(λ1jλ1l) with balancing absorbed into the
+  global column weights); Lg(h,h) = Σ_s λ_s² of the separate analysis in the
+  global metric (2.1206/2.9127/1.6640); Lg(h, MFA) = Σ_k Lg(h,k)/λ1(MFA)
+  (the compromise enters as a pseudo-block normalized by its own λ1 = 1.509).
+  All reported values were already correct (only the formula text was wrong);
+  RV formula verified to 1e-15. Also this sync: adopted author web edits
+  `3dc9a6f` (4.4 paragraph split at "On the third dimension..."; "respondent
+  engages" → "respondent chooses genres"; added "itself an argument for the
+  idea of complex tastes") and `2e1dd42` (two-step MCA description: "the
+  three analyses", weight "obtained from the separate MCA", "regardless of
+  the prominence of the first dimension in the separate analysis"); plus the
+  cross-aspect Lg trim from the results prose (see previous entry). Compiles
+  at 29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-09, later): cross-aspect $Lg$ coefficients TRIMMED from
+  the results prose (the §4.3 sentence now ends at "…weaker than the links of
+  preference (1.95) and consumption (2.48)") per the Pagès choice rule (RV
+  for the between-aspect similarity question, Lg only for aspect-vs-compromise
+  participation; book §7.2 pp. 137–138: "RV or Lg is chosen according to
+  whether we want to distinguish…" / "the two measurements complement each
+  other perfectly"). NOTE: tab-groups was ALREADY clean — it never carried
+  the cross-aspect Lg matrix, only the "Lg with MFA" column; the 0.80/0.02/
+  0.03 cross-aspect values lived in one prose sentence (an earlier assistant
+  note wrongly said they were in tab:groups). No script rerun, table unchanged.
+  The Lg strategy footnote keeps its general Lg(h,k) definition (still
+  accurate, and the asymmetry note applies to Lg(h, MFA) too). Compiles at
+  29 pp., 0 undefined refs, 2 pre-existing overfulls.
+- Last sync (2026-10-09, later): read-through trims in 4.4 — the circular
+  opening sentence of the aspect-disagreement paragraph ("The
+  aspect-disagreement scores tell us how much of each respondent's
+  position...") deleted (author verdict: not useful; the paragraph now opens
+  on "The three scores differ in what disagreement means..."); fig-antinomy-map
+  DROPPED from main.tex as redundant with prose (author request; the
+  fig-scree/fig-rv pattern — the figure's only content was the null result
+  W1↔dims 2–3 ρ = 0.01/−0.07, already stated in text, and a 2,259-point
+  cloud can't visually verify "blanketing"). Closing sentence rewritten
+  figure-free: "Nor are complex tastes concentrated in any region of the
+  space... high-disagreement respondents are spread across the hierarchical
+  and status-valuation axes rather than clustered anywhere in particular."
+  Figure env removed; figures renumber automatically (worked-example is now
+  Figure 4). Script 04 still generates fig-antinomy-map (file kept in repo,
+  unreferenced). Compiles at 29 pp., 0 undefined refs, 2 pre-existing
+  overfulls. Two-file copy (main.tex + AGENTS.md).
+- Last sync: worked example moved from strategy 3.5 to results 4.5
+  (2026-10-09, later) — the worked-example paragraph + fig-worked-example
+  env now live in 4.5 "Measuring Complex Tastes" (inserted after the
+  fig-antinomy-map env, before tab-pairs), fixing the forward dependency
+  on the dimension readings (4.1); the example names all three axes and
+  previously presupposed results material. Strategy 3.5 keeps
+  eq:decomp/pairwise/eq:genre/toy (dimension-free) and ends with a bridge
+  sentence forward-referencing sec:antinomies and the figure. Figure
+  renumbering: fig-worked-example is now Figure 5 (was Figure 1). Doc grew
+  29→30 pp from float reflow (map p.14, example text p.15, fig+tab-pairs
+  p.16, tab-antinomy p.17 — clean sequence, no stranding).
+- Last sync: worked example walks dims 1-2-3 (2026-10-09, later) — the
+  dim-2 material moved from the end of the worked-example paragraph to
+  between the dim-1 and dim-3 sentences and sharpened: named the
+  highbrow--popular hierarchy axis, read the disagreement as rung
+  placement rather than engagement level, and made "here it is liking that
+  stands apart from the other two" explicit; the dim-3 opening now
+  completes the contrast ("now it is evaluation that stands apart from the
+  other two"). Classification footnote moved with the dim-2 sentence, so
+  the scheme is now defined BEFORE the 13-configurations footnote uses it.
+  Footnote-7 counts re-verified against cell_cfg for respondent 362
+  (1 guilty bband, 7 poses, 4 distant, 1 distanced = 13); latspsal pose
+  ω3 = 1.0 max, genre-based sum 8.5 — all current. Compiles at 29 pp.
+- Last sync: eq:genre underbrace labels (2026-10-09, later) — Equation 2
+  (eq:genre) gains horizontal underbraces visually separating the two
+  components: the $\sum_g \omega_s(i;g)$ term labeled "genre-based complex
+  taste", the cross term labeled "cross-genre coherence" (same underbrace
+  style as eq:decomp). Where-clause prose unchanged; the "first term/second
+  term" sentences still read correctly. No new overfulls — the two
+  pre-existing ones (sec:social prose ~line 213, tab-genre-profile) are
+  untouched. Compiles at 29 pp. Author web edit `ac383e8` (toy-contrast
+  paragraph opening: "Consider two hypothetical respondents: The first
+  holds...") landed mid-sync and was adopted locally before the copy.
+- Last sync: coherence-component regressions + transposable-orientation
+  paragraph (2026-10-09, later) — script 07 gains robustness 4: coherence
+  models (coh_s = W_s − Wloc_s, exact by eq:genre identity; coef
+  additivity check ~1e-14; R² 0.048/0.021/0.020; tab-regression.tex
+  unchanged). New final sec:who paragraph: full-score coefficients
+  decompose additively and the split is one-sided (W3 upper-class +7.12 of
+  +7.70; W3 age +1.37..+2.25, two oldest cohorts significant; W1 upper
+  +3.42 of +3.67, parentba +1.23 of +1.32); framing: genre-based component
+  = local accommodations to specific objects, coherence = transposable,
+  disposition-like orientation (negative coherence = genre-based tastes
+  that cancel); "social location tracks the transposable part". NOTE from
+  the framing discussion: avoid calling coherence a full "disposition" —
+  it is signed (disposition reading covers only the positive regime), it
+  is one cross-section (stability untested; response-style rival), and
+  both components are within-person. Manuscript hedges with
+  "disposition-like" + the parenthetical negative-coherence clause.
+  Paragraph then gains two sentences on why the localized/transposable
+  split is unavailable to the combinatorial measure: configurations are
+  nominal types — they can recur (same distant praise genre after genre)
+  but carry no magnitude or direction, so they can neither accumulate
+  into a total nor cancel; the how-much-is-transposable question has no
+  combinatorial answer. Extends 4.4's "the coherence component has no
+  combinatorial counterpart at all" claim; deliberately concedes that
+  type-recurrence is visible categorically (avoids overclaiming).
+- Last sync: `d_{ighs}` passage slowed down (2026-10-09, later) — the
+  eq:genre lead-in in the Measuring Complex Taste at the Individual Level
+  subsection now spells out all four subscripts before using them: a new
+  sentence glosses $c_{ighs}$ ($i$ individual, $g$ genre, $h$ aspect, $s$
+  dimension), defines $\bar{c}_{igs} = H^{-1}\sum_h c_{ighs}$ explicitly,
+  and reads $d_{ighs} = c_{ighs} - \bar{c}_{igs}$ with a signed gloss
+  (positive = aspect $h$ carries individual $i$ further along dimension $s$
+  in genre $g$ than the three-aspect average), before "In terms of these
+  deviations, the aspect-disagreement score splits exactly into...". Merged
+  on top of author web edit `98d5ba3`, which landed mid-edit and reworked the
+  same paragraph: "Moreover, each partial individual point in complex taste
+  space..." opening (two sentences, "respondent chose" wording) and the
+  pairwise paragraph's "speaks Ma's typology" / "standing apart from the
+  others" rewordings — both adopted; fixed the author's double space in
+  "that otherwise would be mixed up" (invisible in LaTeX). Compiles at
+  29 pp., no errors, no undefined refs. A second web edit `322666d` landed
+  during the push race (post-equation paragraph: "repeats across the genre
+  portfolio"); adopted locally and rebased cleanly on top.
+- Overleaf fix sync (2026-10-09, later): Overleaf compile broke because the
+  `e6b9103`/`2497b8f` syncs pushed main.tex changes but NOT the regenerated
+  table files — `tab-pairs.tex` was never copied to the clone, and
+  `tab-antinomy.tex` there was still the pre-decision-13/14 6-column
+  "Complex-taste scores" version. Copied both from workspace
+  `manuscript/tables/`; clone now compiles clean (29 pp., no errors, no
+  undefined refs). LESSON: the sync checklist copies `manuscript/` wholesale,
+  but regenerated tables land in `manuscript/tables/` AFTER the last sync
+  commit only if script 04 is rerun post-sync — after any script rerun that
+  writes tables/figures, diff `manuscript/` against `overleaf/manuscript/`
+  before declaring a sync done.
+- Last Overleaf sync: `09a234f` (2026-10-09, later) — the 4.4 pair-share
+  sentence gains the dim-1 contrast sentence: disagreement splits almost
+  evenly across the three pairs on the affirmation axis (no aspect
+  stands apart; liking vs listening around a barely moving eval point),
+  unlike dims 2–3 where evaluation is the odd aspect out. Compiles at
+  29 pp. Previous sync: `2497b8f` (2026-10-09, later) — two additions to the
+  pairwise-decomposition material: (1) strategy paragraph after the
+  d² footnote gains the Ma mapping sentence (each complex configuration
+  = one aspect standing against the other two; pair distances indicate
+  which aspect stands apart); (2) new tab-pairs (script 04 block after
+  tab-antinomy; 3×3 mean squared pair distances + within-dimension
+  shares; totals = H·mean W_s) placed after fig-antinomy-map, referenced
+  from the 4.4 pair-share sentence, which gains the dim-3 clause (P–C
+  share 2%). Compiles at 29 pp., no undefined refs.
+  Previous sync: `124289b` (2026-10-09, later) — four clarifying
+  additions (author request): toy-contrast paragraph after the eq:genre
+  where-clause; 4.4 dimension-readings sentence extended to W1
+  ("inherits its interpretation from its dimension"); 4.4 pair-share
+  sentence (dim-2 shares 18/35/47, pref-cons partial r 0.73, new
+  sec:rv label); W3 position-admixture footnote (cor 0.72 vs 0.37,
+  grant-none 5.7 vs grant-all 156). Compiles at 29 pp., no undefined
+  refs (two small pre-existing overfulls remain).
+  Previous sync: `e6b9103` (2026-10-09, later) — ω renamed "genre-based
+  complex taste" per decision 14: eq:genre where-clause names the first term;
+  all "localized antinomy/component" wording replaced in eq:genre paragraph,
+  worked example, 4.4, sec:who; "antinomy shares" → "aspect-disagreement
+  shares" in the robustness footnote; tab-antinomy gains ω1–ω3 columns
+  (9 cols, \footnotesize/2pt fit; stale "Complex-taste scores" header fixed);
+  4.4 signatures paragraph gains the config→ω map sentence + margin-residue
+  clause; caption updated. Script 04 table block rewritten. Compiles at
+  28 pp. Previous sync: `005906f` (2026-10-09, later) — localized-component
+  robustness added to sec:who as its final paragraph: same OLS models with
+  the genre-localized component Σ_g ω_s(i;g) (the combinatorial-signal part
+  of the score) as outcome; R² 0.085/0.080/0.033; upper-class premium on all
+  three dims (incl. dim 2 where W2 shows none); parentba on ω1/ω2; age:
+  ω3 rises like W3, ω2 declines across every cohort — the W2 70+ premium
+  (+0.63) is a coherence effect. Script 07 gains robustness 3 (Wloc1–3
+  models; dat gains Wloc columns; tab-regression.tex unchanged).
+  CAUTION: the assistant's earlier summary of these results to the author
+  contained a sign error (claimed a dim-3 age flip) — corrected before the
+  paragraph was written; paragraph numbers verified against script output.
+  Compiles at 27 pp., no undefined refs.
+  Previous sync: `e60b577` (2026-10-09, later) — one sentence added
+  to the 4.4 opening paragraph distinguishing the two disagreement readings:
+  W2 = aspects disagreeing about rung placement on the shared highbrow–popular
+  ladder; W3 = status attributions reaching further down the genre hierarchy
+  than an engagement profile with no position on that axis (evaluation is
+  nearly the only aspect that varies on dim 3: partial sds 0.69/0.70/2.75;
+  cor(W3,|F3|) 0.72 vs 0.37 for W2; pairwise dim-2 shares pref-cons 18%,
+  eval pairs 82%, dominated by cons–eval 47%). Compiles at 27 pp.
+  Previous sync: `e0b7952` (2026-10-09, later) — "complex-taste
+  score" label purged per decision 13: eq:decomp paragraph replaces the
+  "We call W_s(i) the complex-taste score" stipulation with the explicit
+  interpretive sentence (aspect-disagreement read strictly; disagreement
+  interpreted as complex taste because no single taste position summarizes
+  the profile); all 11 other label uses (robustness footnote, pairwise
+  footnote, eq:genre paragraph, 4.4 prose, fig-antinomy-map caption,
+  tab-antinomy + tab-regression captions, sec:who prose) now say
+  "aspect-disagreement score" or $W_s(i)$. No web edits since `448a39e`
+  (pull was clean); two-file copy (main.tex + AGENTS.md). Compiles at
+  26 pp., no undefined refs (pre-existing tab-regression float warning).
+  Previous sync: `448a39e` (2026-10-09, later) — genre-level
+  decomposition of the complex-taste score: new Equation eq:genre +
+  defining paragraph (per-genre contributions, genre-local dispersion
+  ω, cross-genre coherence) in the Measuring Complex Taste at the
+  Individual Level strategy subsection; worked-example paragraph gains
+  the 362 split (W3 133.1 = 8.5 local, max cell a latspsal pose at 1.0,
+  94% coherence); new results 4.4 paragraph after the divergence
+  discussion (29/48/23% local shares; Spearman corr(n_complex, Wloc)
+  0.71/0.66/0.18 vs 0.31/0.19/−0.06 for W; 196 bottom-third-W3/
+  top-third-localized respondents, 9%); script 04 section 3b computes
+  the decomposition (exactness checks ~1e-15; antinomy_scores.rds gains
+  omega/cell_cfg/Dcoef, ant gains Wloc1–3/coh1–3). Merged author web
+  edit `2bc1c30` BEFORE copying (adopted as local base; my two
+  insertions re-applied on top): strategy opening rewording, RV
+  subsection sentence split + jæger2024from-a4b citation (references.bib
+  entry adopted), worked-example "In the second dimension (right
+  panel...)" phrasing, 4.1 figure-reference rewordings, Partial Axes +
+  Composition subsection restructuring (tab-partial-axes floated
+  earlier, balancing weights moved to a footnote, new interpretation
+  sentences), 4.4 opening rewording. NOTE: the author's edit DROPPED
+  the \citep{bourdieu1984distinction} from the dim-2 paragraph —
+  author's choice, flagged to them. Also: earlier conversation
+  first-pass local shares (53/85/34%) used a WRONG centering (respondent
+  overall mean, not per-genre aspect mean) — corrected numbers are
+  29/48/23%; see the genre-decomposition bullet under Current headline
+  results. Compiles at 26 pp., no undefined refs. Previous sync:
+  `d348520` (2026-10-09) — full prose revision
+  (author request: "less stilted and robotic... clearer and more
+  conversational") applied throughout main.tex: cut throat-clearing
+  openers ("Accordingly, for the global MFA analysis, we consider..."),
+  nominalized/passive constructions, and over-qualified sentences; no
+  numbers, citation keys, labels, \ref targets, or \input paths changed
+  (verified by diffing the sorted multiset of numeric tokens and of
+  label/ref/cite/input commands against the pre-revision text — both
+  identical). Also fixed a stale detail: the worked-example caption still
+  said "Dashed segments connect each partial point to the compromise"
+  from before the `897803f` restyle switched those connectors to solid
+  aspect-colored lines; caption now matches. MERGE NOTE: a web edit
+  (`6170dc9`, landed between the prose-revision draft and this sync)
+  restructured the aspect-independence/partial-axes/composition region
+  (new subsection "Independence or Redundancy Among Complex Taste
+  Aspects" merging the RV + near-orthogonality paragraphs; "Partial Axes"
+  moved before "Composition of the Dimensions of Complex Taste Space";
+  RV table floated earlier) — adopted verbatim (not reflowed into the
+  rest of the draft's voice, since it was the author's own just-made
+  edit) and the surrounding paragraphs polished to match. Compiles at
+  26 pp., no undefined refs. Previous sync: `897803f` (2026-10-09) — white-figure restyle +
+  worked-example connectors (see note above). One author web edit since
+  `348896c` (`ab16e48`, \footnotesize on the worked-example caption),
+  re-applied locally before the copy. Previous sync: `348896c` (2026-10-09) — merged 20 author web-edit
+  commits (`5d039e2..89ce214`): Analytic Strategy restructured into five
+  \subsections (Constructing the Global Complex Taste Space; Independence
+  or Redundancy of Aspects of Complex Tastes; Interpretation of Complex
+  Taste Space Dimensions; Composition of Complex Taste Space Dimensions;
+  Measuring Complex Taste at the Individual Level); Measures description
+  list converted to prose; "Overall Structure of the Complex Taste Space";
+  "coherent interpretation of the first three dimensions" opening; RV
+  footnote rewritten (complex-taste motivation); ctr footnote moved to the
+  contributions paragraph end; pairwise-distance material reworded with
+  d²(i)_{s,pc/pe/ce} notation; worked-example sentence reworded + configs
+  footnote moved to the W2 sentence; "conducted in R" sentence moved into
+  a footnote at the eigenvalue paragraph. Re-apply method: adopted the
+  Overleaf main.tex as the local base (the web edits did not touch the
+  scree figure or 4.1 opening structure my local changes modified), then
+  re-applied locally: fig:scree env removed; fig:categories12 reference
+  added to the new "coherent interpretation" sentence; fig:categories12
+  figure env inserted after the 4.1 opening paragraph. Author edits did
+  not touch AGENTS.md. Compiles at 26 pp., no undefined refs. Previous
+  sync: `5d039e2` (2026-10-09) — dim-4 supplementary section:
+  script 05 extended to dims 1–4 (tab-eta and tab-sup-coord gain a Dim 4
+  column; new fig-dim4 = category map on dims 2×4 in the fig-categories
+  design; supplementary.rds cc/eta now include d4), new paragraph in
+  sec:social reading dim 4 as a racialized engagement contrast (race
+  η² 0.255; Black +0.98 vs White −0.30; reggae/Latin/rap/Blues-R&B cons
+  +0.77/+0.67/+0.52/+0.45 vs metal/indie/controck/crold −0.74/−0.62/−0.61/
+  −0.45; eval flat), fig:dim4 environment, captions updated to "first four
+  MFA dimensions". Decision 6 marked partially superseded in AGENTS.md.
+  No author web edits since `0fdead3` — nothing to re-apply. Compiles at
+  26 pp., no undefined refs. Previous sync: `60d3145` (2026-10-09).
+- Previous sync: `0f3b436` (2026-10-08) — three batched changes:
   (1) technical footnote on the pairwise-distance decomposition
   (d²_s(h,k) = (F_sh − F_sk)²; the three distances sum to H·W_s) plus a
   main-text sentence stating the sum-to-H·W_s identity; (2) two-panel
@@ -456,8 +1816,88 @@ R implementation gotchas (all fixed in scripts; keep them fixed):
 ## Key references
 
 - Ma, X. 2026. "Tastes and Complex Tastes." *Cultural Sociology* 20(2):311–333.
+- Ma, X. 2026. "On the Deep, Surprising, and Persistently Gendered Dynamics
+  in Complex Music Tastes." *Socius* (bib key `ma2026deep`; cited in
+  sec:social for the count-model concession — do not reuse the old
+  "continuous so regressable" advantage claim; the count CAN be modeled).
 - Pagès, J. 2014. *Multiple Factor Analysis by Example Using R*. CRC.
 - Abdi, Williams & Valentin 2013. "Multiple factor analysis…" WIREs CS 5:149–179.
 - Lizardo & Skiles 2012. SSI Cultural Tastes Survey [dataset].
 - Le Roux & Rouanet GDA volumes (added to `references.bib` by the author on
   Overleaf: keys `rouanet2000geometric-a44`, `roux2004geometric-65c`).
+
+- Reconciliation sync (2026-10-08, later): found the local tree BEHIND the
+  Overleaf clone (decisions 10–11 work had been committed from the clone
+  side in `abbe68e`/`0f3b436` plus web edit `3572d4c`, never copied back to
+  the local tree). Copied manuscript/ sources, figures, tables, scripts,
+  and AGENTS.md from the clone into the workspace; the only local-only
+  script differences were comment wording. Reverse fix: the clone's
+  tracked `data/mfa_input.rds` and `output/mfa_results.rds` were stale
+  OLD-CODING (inclusive-OR) binaries uploaded from the web on Oct 7
+  (`bd6fbf1`) — replaced with the current conjunctive-coding versions from
+  the workspace. Lesson: syncs must go both ways — after a clone-side
+  commit, copy back into the workspace so the trees never diverge.
+
+- GitHub update (2026-10-08, after the reconciliation): origin/main was 6
+  commits ahead of local (7e30198..58b87fc — the same decisions-10/11 work,
+  committed to the outer repo in an earlier session but never fetched into
+  this checkout; local had diverged at 47f927a). Since the local tree was
+  already the reconciled state, rebased by soft-reset onto origin/main and
+  recommitted the true increment (AGENTS.md note, refreshed gitlink →
+  58e1401, regenerated mfa_results_transposed.rds) as ae0572f; pushed.
+  The pre-reset local history is preserved on branch
+  `backup-pre-gh-reconcile` (47f927a) — safe to delete once confirmed.
+
+- Sync `47cecc2`/`7507174` (2026-10-09): dropped fig-rv (RV heatmap) as
+  redundant with tab-rv (Table 3); §4.2 now cites the table only
+  (author request). A web edit `63b8036` landed mid-sync and was briefly
+  clobbered by the copy; restored in `7507174`. That web edit: the author
+  rewrote the dim-3 forward reference themselves ("...status-valuation
+  axis, opposing the evaluation aspect to both the preference and
+  consumption aspects." — replacing the Section-4.3 pointer sentence), and
+  reworded §4.2 ("complex taste idea"; "form a structurally independent
+  aspect of taste that people's likes and actions cannot recover";
+  "empirically distinct from their preference and consumption profiles").
+  Compiles at 24 pp., no undefined refs. fig-rv still generated by script 03
+  (file kept in repo, just unreferenced).
+
+- Sync `0108a31`/`c10aed7` (2026-10-09): redesigned fig-antinomy-map per
+  author request — the old viridis W1-colored map read as "one big purple
+  blob" (2,259 overplotted points). New design: grey translucent cloud for
+  all respondents, orange points marking the top 20% (quintile) of W1;
+  the highlighted points blanket the plane, visualizing the ρ≈0.01/0.02
+  null result. Script 04 p7 rewritten; prose sentence and caption updated.
+  Author web edit `4fd2b19` landed mid-sync ("Operationalizing Complex
+  Tastes" → "Measuring Complex Tastes"; "We measure complex tastes
+  geometrically, as the dispersion…") and was briefly clobbered by the
+  copy; re-applied in `c10aed7`.
+
+- Sync `482564c`/`49287ea` (2026-10-09): moved tab-antinomy (Spearman
+  correlations of Ma's eight configurations with MFA dims and W-scores)
+  from Appendix A into §4.4, immediately after the geometric-vs-
+  combinatorial divergence paragraph, together with its interpreting
+  paragraph (first sentence reworded to follow the divergence discussion:
+  "The configuration counts themselves have distinct geometric
+  signatures…"). Divergence-paragraph citation now "(Table~\ref{tab:antinomy})"
+  only. Appendix keeps definitions + fig-configurations. Compiles at
+  25 pp., no undefined refs.
+
+- Coding change + full revision sync (2026-10-09, later): adopted the
+  "unambiguous high status" evaluation coding (decision 12) — eval = 1 iff
+  (grad & !nocol) | ((mc|uc) & !(lc|wc)) — because the check-all-that-apply
+  perception items let check-everything respondents pass the conjunctive
+  standard (65 all-20 eval respondents), clumping the eval categories and
+  leaking 21.6% of eval into Dim 1. Reran scripts 01–08; revised every
+  number in main.tex (measures, robustness footnote, worked example →
+  respondent 362, §4.1–4.6, appendix prevalence). Headline shifts: RV
+  P–E/C–E 0.05/0.06 → 0.013/0.014; eval contrib dim1 21.6% → 2.5%, dim3
+  40.6% → 83.9% (dim 3 is now essentially the evaluation aspect's own
+  axis); dim-3 race anchoring GONE (η² 0.082 → 0.004, dim 3 socially
+  flat); race now weakly anchors dim 2 (Hispanic −0.42/Black −0.26/
+  White +0.16); λ1 1.51 (9.6%). Web edit `91291b8` (author restructured
+  the partial-axes passage: new \subsection{Partial Axes}, two
+  paragraphs, footnote dropped, "evaluation-dominant but not exclusively
+  evaluative" → re-applied with NEW numbers; also "The two measurement
+  approaches") landed mid-sync and was briefly clobbered; merged in the
+  same commit. Overleaf `60d3145`; compiles at 25 pp., no undefined refs.
+  tab-groups Weight column updated (eval weight 4.277, λ1 0.234).
