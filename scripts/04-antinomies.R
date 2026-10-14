@@ -429,25 +429,30 @@ segex <- do.call(rbind, lapply(split(exd, interaction(exd$respondent,
              respondent = b$respondent[1], panel = b$panel[1])
 }))
 pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
-  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
-  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+  geom_hline(yintercept = 0, linetype = 2, color = "grey60", linewidth = 0.3) +
+  geom_vline(xintercept = 0, linetype = 2, color = "grey60", linewidth = 0.3) +
   # solid connectors colored by aspect, as in fig-genre-map
   geom_segment(data = segex, aes(x, y, xend = xend, yend = yend, color = modality),
-               linewidth = 0.5, alpha = 0.7,
+               linewidth = 0.6, alpha = 0.8,
                inherit.aes = FALSE, show.legend = FALSE) +
-  geom_point(size = 3, show.legend = FALSE) +
-  geom_text_repel(aes(label = modality), size = 3, segment.color = NA,
-                  show.legend = FALSE, box.padding = 0.6,
-                  point.padding = 0.4, seed = 3) +
-  facet_grid(respondent ~ panel, scales = "free") +
+  geom_point(size = 4, stroke = 0.5, show.legend = FALSE) +
+  geom_text_repel(aes(label = modality), size = 3.2, segment.color = NA,
+                  show.legend = FALSE, box.padding = 0.8,
+                  point.padding = 0.5, seed = 3, fontface = "bold") +
+  facet_grid(respondent ~ panel, scales = "free", labeller = labeller(
+    panel = c("Dimension 1 (volume)" = "Dimension 1 (volume)",
+              "Dimension 2 (highbrow–popular)" = "Dimension 2 (highbrow–popular)"))) +
   scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
                                 Evaluation = "#009E73", Global = "black")) +
   scale_shape_manual(values = c(Preference = 16, Consumption = 17,
                                 Evaluation = 15, Global = 18)) +
   labs(x = NULL, y = "Dimension 3 (status valuation)") +
-  theme_minimal(base_size = 10) +
-  theme(panel.grid = element_blank())
-ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 6)
+  theme_minimal(base_size = 11) +
+  theme(panel.grid = element_blank(),
+        strip.text = element_text(face = "bold", size = 10),
+        axis.text = element_text(size = 9),
+        axis.title.y = element_text(size = 10, face = "bold"))
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 6.5)
 
 saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
              cell_cfg = cell_cfg, Dcoef = Dcoef),
