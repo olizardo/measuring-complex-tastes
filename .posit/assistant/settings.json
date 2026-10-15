@@ -17,6 +17,9 @@
       "echo *": "allow",
       "git -C overleaf log *": "allow",
       "git -C overleaf rm *": "allow"
+    },
+    "edit": {
+      "*.md": "allow"
     }
   }
 }
