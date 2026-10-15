@@ -16,7 +16,9 @@
       "grep *": "allow",
       "echo *": "allow",
       "git -C overleaf log *": "allow",
-      "git -C overleaf rm *": "allow"
+      "git -C overleaf rm *": "allow",
+      "ls *": "allow",
+      "git diff *": "allow"
     },
     "edit": {
       "*.md": "allow"
