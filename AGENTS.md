@@ -285,6 +285,25 @@ with the global Zotero export.
     discussion, §4.6 duality) — kept as plain English, not the label.
     "Conjunctive" stays in the Measures/data-section coding description.
 
+## Statistical caution: ω-demographics correlations (2026-10-14)
+
+**All Pearson correlations reported in section 4.9 (ω-demographics figures and
+prose) are point estimates WITHOUT confidence intervals.** They are derived from
+script 09 using pairwise complete cases (N = 2,259). For typical effect sizes
+reported (r ≈ 0.10–0.20), standard errors at this sample size are SE ≈ 0.020, so
+95% CIs overlap substantially for nearby values. **Do NOT claim that one correlation
+is "stronger" or "more important" than another without either (a) computing and
+citing CIs, (b) testing formal equality (e.g., via Fisher z-test), or (c) using
+hedging language ("slightly", "similar though slightly", "comparable to").**
+Examples of problematic claims: "education is stronger than parents' education"
+(diff 0.17 vs 0.15 on D1 is ≈ 1 SE), "X correlates more with genre A than genre B"
+(requires test). This matters because readers may interpret prose rank-orderings as
+evidence of mechanism when they reflect sampling noise. Conversely, small but stable
+differences across the full sample (e.g., age effect on rap consistently −0.42 across
+runs) are reliable. When in doubt, phrase results as "gender shows X correlation
+with genre Y, with a similar/comparable/slightly different pattern for race" rather
+than "X shows a stronger effect than race."
+
 ## Pipeline (run in order, from project root)
 
 | Script | Output | Notes |
@@ -297,6 +316,7 @@ with the global Zotero export.
 | `scripts/06-transposed-mfa.R` | `output/mfa_results_transposed.rds` + fig-genre-map, tab-genre-profile | transposed MFA (genres as individuals, 3 modality groups of respondent-indicators) |
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex`, `manuscript/tables/tab-w-eta.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds); also the bivariate η² table of demographics with W1–W3 (decision 18) |
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
+| `scripts/09-omega-demographics.R` | `manuscript/figures/fig-omega-demographics-dim1/2/3.pdf`, `fig-omega-demographics-genres-d1/2/3.pdf` | Pearson correlations of 16 demographics (education and class as four category indicators each) with genre-based ω per genre; colored-value matrices (added 2026-10-14; see the 4.9 redesign session and the 2026-10-14 audit/final sessions below for design history) |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
 - RDS columns are `haven_labelled` → `haven::zap_labels()` on load.
@@ -2314,3 +2334,378 @@ Generates three publication-ready figures showing demographic correlations with 
   (byte-noise from embedded creation dates) — git status shows M on fig-individuals/
   fig-rv/fig-scree etc. with identical content; revert or commit freely. Tables
   (.tex via writeLines) are byte-identical.
+
+## Session: October 14, 2026 (clarity pass) — Clarifications and supplementary figure
+
+**Focus**: Improve clarity of geometric-vs-combinatorial comparison; add within-configuration variation evidence.
+
+### Manuscript revisions (main.tex)
+
+1. **Line 202: "Global position" defined explicitly** — "the average location of those three aspect-specific coordinates" added to make the geometric concept concrete and grounded.
+
+2. **Lines 204-206: Dimension-level aggregation formula added as footnote** — Footnote explains how individual W_s(i) scores sum to dimension level: $\sum_i W_s(i) / \sum_i \sum_h F_{sh}(i)^2$, with citation to eq:decomp showing the exact partition.
+
+3. **Line 204: "Respondents' positions" terminology clarified** — Changed "respondents' actual positions on the dimension" and "respondents' positions in shaping the structure" to explicitly reference "global position" to avoid ambiguity (position ≠ disagreement).
+
+4. **Lines 125-130 (Strategy § 3.5): Combinatorial alternative anticipated** — New paragraph introduces Ma's eight configurations and configuration counts as an alternative to W_s(i); explicitly names what question each measure answers ("how many" vs "how much") and why both perspectives matter. Prevents the sudden introduction of configurations in Results § 4.5.
+
+5. **Lines 208-216 (Results § 4.5): Weak correlation explained with dimension clarity** — Rewrote to explicitly state what is being correlated ("the configuration count and $W_s(i)$") and which dimensions ("on Dimension 1 (volume), 2 (highbrow–popular), 3 (status valuation)"). Added narrative interpretation: "The alignment weakens considerably as we move from the volume axis to the positioning dimensions."
+
+6. **Lines 208-216: Within-configuration variation quantified** — Added concrete example: "Respondents with guilty pleasures, for instance, have mean $W_3$ of $4.1$, but the distribution ranges widely (SD $= 8.9$), with some respondents showing minimal status-valuation disagreement and others showing far more." Grounds the unsupported claim with actual data and connects to weak correlations.
+
+7. **Terminology standardized: "volume" axis throughout** — Replaced inconsistent "engagement," "affirmation," "engagement volume," and "general-affirmation axis" with consistent "volume" for Dimension 1. All instances updated in strategy, results, figure captions, and supplementary sections.
+
+8. **Figure references standardized to LaTeX cross-references** — Changed "As the signatures figure shows" to "Figure~\ref{fig:signatures} shows this:" and verified all other figure references use proper `Figure~\ref{}` syntax throughout.
+
+9. **Figure caption redundancy removed (lines 208-216)** — Consolidated two consecutive sentences both referring to fig-signatures into a single coherent sentence combining their key points.
+
+10. **Line 209: Reference added to supplementary variation figure** — Added "The supplementary Figure~\ref{fig:config-variation} in the appendix visualizes the full range of within-configuration variation across all eight configurations and three dimensions."
+
+### New supplementary figure: fig-config-variation.pdf
+
+**Purpose**: Visualize within-configuration variation in W_s scores across all three dimensions.
+
+**Data**: For each of Ma's eight configurations × 3 dimensions, computed mean and SD of W_s.
+
+**Design**: 
+- Horizontal bar chart (configurations on y-axis, mean W_s on x-axis)
+- Error bars show ± 1 SD
+- Three panels (one per dimension with free x-scales)
+- Color-coded by configuration type
+- Dimension labels: "Volume", "Highbrow–popular", "Status valuation"
+- Size: 11" × 4"
+
+**Key findings shown**:
+- Pre-acquired taste shows highest mean W on all three dimensions
+- Substantial within-configuration overlap (supports weak ρ = 0.31/0.19/−0.06)
+- W₃ (status valuation) shows largest variation across configurations
+- Simple positive and simple non-taste show lowest means across all dimensions
+
+**Appendix integration**: New section `\label{app:config-variation}` before app:configurations, with introductory paragraph explaining why variation exists and how it relates to the weak geometric-combinatorial correlation.
+
+### Compiles: 29 pp., 0 undefined refs, 2 pre-existing overfulls (tab-genre-profile, tab-regression float warning).
+
+## Session: October 14, 2026 (audit) — Section 4.9 accuracy audit, own education added, genre-selection justification
+
+**Focus**: audit sec:genre-specificity prose for accuracy against the data; add
+respondent's OWN education to the omega-demographics figures (it had been
+omitted); state the eight-genre selection rule explicitly. Author decisions
+made via AskUser: region = prose-only null result (not in figures); education
+paragraph leads with own education.
+
+### 1. Prose accuracy fixes (sec:genre-specificity)
+
+- **Class/rap sentence (former "Lower positions on the class scale show
+  negative correlation with rap...")** — author flagged it as confusing
+  (conflates scale direction with correlation sign). Rewritten to
+  "Working-class respondents show more genre-specific disagreement in rap and
+  hip-hop ($r = -0.13$)..."; the second sentence now reads "Respondents with
+  higher subjective class show more disagreement in musicals and big band..."
+  Numbers unchanged.
+- **Opening claim of the education paragraph rewritten (was FALSE)**: the old
+  sentence "The educated and affluent do not simply hold *more* disagreement
+  overall; they concentrate it in specific cultural objects" is CONTRADICTED
+  by the data — verified: parents'-BA respondents have HIGHER mean W2 (2.91 vs
+  2.67) and W3 (5.83 vs 5.38) and only marginally lower W1 (4.32 vs 4.44); on
+  the class scale upper-class mean W1 = 8.94 vs lower-class 4.85 and W3 = 12.29
+  vs 4.65 (upper class has MUCH more disagreement, all three dims). New
+  wording: "The affluent show substantially elevated overall disagreement on
+  the status-valuation dimension, and this disagreement concentrates
+  particularly in prestige genres like opera and classical music."
+  **WARNING for future sessions: do not reintroduce the "not more, just
+  elsewhere" framing — the affluent/educated DO have more disagreement,
+  especially W3; the genre-concentration point is about WHERE, layered on top
+  of a level difference.**
+- **Rounding error fixed**: appendix paragraph said class × big band D1 = 0.12;
+  actual 0.1148 → now "musicals $0.13$, big band $0.11$".
+- **Gender claims verified correct** (subtle but right): gender coded
+  1 = woman, 0 = man (script 09 line ~38), so negative r for big band (−0.12)
+  and metal (−0.09) correctly means men have MORE disagreement there; women ×
+  hymns/gospel +0.08. No change needed. All other race/age/education numbers
+  in the section verified accurate.
+
+### 2. Own education added to script 09 (author: "weirdly enough... missing")
+
+- `educ7` = ordinal 1–7 from the SAME credential battery script 05 uses
+  (nodipdeg < hsged < somcol < aadeg < bach < ma < docprof), 0 NAs among the
+  2,259. Row label "Education", placed FIRST in demo_rows (before Parents'
+  educ.). Figures regenerated: main three now 10 demographics × 8 genres
+  (4.6×3.4in), supplementary three now 20 genres × 10 demographics (5.0×5.8in).
+- **Key numbers** (console cross-check): educ7 × ω — D1: opera 0.17, musicals
+  0.17, folk 0.14, jazz 0.12; D2: opera 0.16, musicals 0.15, classical 0.15,
+  folk 0.13; D3: weak only (big band 0.12, musicals 0.11, jazz 0.11).
+  parentba × ω — D1: opera 0.14, musicals 0.12, indie 0.11, classical 0.11;
+  D2: opera 0.15, indie 0.12, classical 0.12. **Own education is STRONGER than
+  parents' education for the prestige genres**; cor(educ, parentba) = 0.232,
+  so they are distinct signals, not proxies.
+- **Prose rewritten to lead with own education** (author choice): education
+  paragraph now opens "Respondents' own education concentrates genre-specific
+  disagreement in the consecrated genres (opera and musicals $r = 0.17$ on
+  Dimension 1, classical music $0.15$ on Dimension 2), and does so more
+  strongly than their parents' education ($0.15$ for opera and $0.12$ for
+  classical music on Dimension 2)." Folk dropped from the main-text sentence
+  (supplementary-only genre). Encoding sentence, dim-1 caption variable list,
+  and the appendix "All nine demographic variables" → "All ten" + educ7 all
+  updated; appendix dim-2 education numbers now "(own education $0.16$ for
+  opera and $0.15$ for classical music, parents' education $0.15$ and $0.12$)".
+
+### 3. Region: prose-only null result (author choice via AskUser)
+
+- Region coded as in script 05 (census 1–9 → Northeast/Midwest/South/West).
+  As INDICATORS (race precedent), correlations are essentially null: only
+  Midwest × Latin/salsa D1 reaches |r| = 0.104; nothing else ≥ 0.10 on any
+  dimension. Author chose prose-only over adding rows/columns. New sentence in
+  the figures paragraph: "Census region, by contrast, shows no genre-specific
+  concentration anywhere in the taste space (no correlation reaches
+  $|r| = 0.10$), so it is omitted from the matrices." Region NOT added to
+  script 09.
+
+### 4. Genre-selection justification (author: "still not clear why those
+particular genres")
+
+- The figures paragraph now states the rule explicitly: "The eight genres
+  shown are those in which the demographic patterns discussed above
+  concentrate---rap/hip-hop, indie rock, and dance/club for the age gradient,
+  big band at its older pole, classical music, opera, and musicals for the
+  education and class effects, and Latin/salsa for the largest race-indicator
+  effect in the survey." Dim-1 caption: "spanning the taste hierarchy" →
+  "representing the demographic patterns discussed in the text".
+- **Verified per-genre rationale**: rap (age −0.42, class −0.13, Black 0.20),
+  indie (−0.34), dance (−0.24), big band (LARGEST POSITIVE age effect on all
+  three dims +0.19/0.18/0.19, class +0.11), opera/musicals/classical (educ
+  0.15–0.17), Latin/salsa (Hispanic 0.39/0.25, largest race effect).
+- **Deliberate hedging (do not "sharpen" later)**: the wording says the
+  patterns "concentrate" in these genres, NOT that they are strictly top-ranked
+  per demographic — heavy metal's age effect (−0.25 D1) essentially ties
+  dance/club (−0.24) and folk (educ 0.14 D1) edges classical on D1; both
+  appear only in the supplementary matrices. The paragraph's existing closing
+  pointer to the all-twenty appendix matrices covers this.
+
+### 5. Compile state & pending
+
+- Compiles at 33 pp., 0 undefined refs. THREE overfulls, ALL pre-existing
+  relative to this session: (a) 2.78pt prose (~line 1–289 range, long-standing);
+  (b) 29.24pt = the app:config-variation section heading "Within-Configuration
+  Variation in Disagreement Scores" (bold 17.28pt title can't hyphenate the
+  compound; heading is from the PREVIOUS session's uncommitted work, NOT from
+  this session — verified by compiling HEAD in a scratch dir); (c) 10.42pt =
+  the app:omega-genres heading "Genre-Specific Disagreement Across All Twenty
+  Genres" (same failure mode). Both heading overfulls are trivially fixable by
+  rewording if the author wants a clean log (flagged, not yet fixed).
+- **UNCOMMITTED at session end**: manuscript/main.tex, scripts/09-omega-
+  demographics.R, the six regenerated fig-omega-demographics*.pdf, AND the
+  previous session's untracked manuscript/figures/fig-config-variation.pdf
+  (plus its app:config-variation main.tex section — the Oct-14 clarity-pass
+  session's work was never committed). No Overleaf sync yet.
+
+## Session: October 14, 2026 (final) — class and education switched to category indicators (sec:genre-specificity)
+
+- **MOTIVATION (author)**: prose claims like "Working-class respondents show
+  more genre-specific disagreement in rap" were not licensed by a correlation
+  with the ORDINAL 1–4 subjective-class scale — a negative r pools all class
+  contrasts under a monotonicity assumption and cannot say whether the working
+  class specifically differs. Same issue for the 7-point education credential
+  scale ("own education stronger than parents' education" was an
+  ordinal-vs-binary comparison on top of it). **Fix (author request): own
+  education and subjective class both enter the script-09 matrices as BINARY
+  CATEGORY INDICATORS** — education as 4 groups (HS or less = nodipdeg+hsged;
+  some college = somcol+aadeg; bachelor's = bach; postgraduate = ma+docprof),
+  class as 4 identities (lower/working/middle/upper, from ssi$lower/working/
+  middle/high). Demographic rows: 10 → 16. Race precedent (indicators) applied
+  to both variables. Script 09 validates that every respondent sums to exactly
+  one education group and one class identity (0 NAs, no partial id). Script 07
+  was ALREADY factor-based (educ/sclass as dummies) — regression results
+  unaffected and now consistent with the figure encoding.
+- **NEW NUMBERS (cross-check table, dims 1/2/3; N = 2,259)**:
+  - Education: postgrad × opera +0.17/+0.16/+0.12, × musicals +0.15/+0.13/
+    +0.12, × folk +0.10/+0.12/+0.09, × rap −0.10/−0.10/−0.01; HS-or-less ×
+    opera −0.10/−0.10/−0.01, × musicals −0.13/−0.12/−0.07, × classical
+    −0.11/−0.14/+0.06; **bachelor's × opera 0.00/0.00/−0.05** (zero!) but ×
+    classical +0.09/+0.10/−0.03; some college ≈ 0 everywhere in the consecrated
+    block. Group n: 555/789/621/294. The education story is a POSTGRAD-vs-HS
+    contrast on opera/musicals with bachelor's at zero — genuinely
+    NON-monotonic; the old educ7 ordinal (0.17/0.16 opera, 0.15 classical D2)
+    was pooling these. Classical D2 is its own non-monotonic pattern (HS −0.14,
+    BA +0.10, postgrad only +0.06).
+  - parentba (unchanged binary): opera +0.12/+0.11/+0.04, classical
+    +0.10/+0.13/0.00, musicals +0.12/+0.11/+0.09, rap −0.11/−0.09/−0.03.
+    NOTE: supersedes the 2026-10-14 audit note "parentba D2 opera 0.15" —
+    current script-09 value is 0.11 (source of the old 0.15 not recoverable;
+    use 0.11).
+  - Class: working × rap +0.10/+0.10/+0.03; middle × rap −0.16/−0.15/−0.02;
+    lower × rap +0.08/+0.07/−0.02 (so the old ordinal −0.13 was the middle
+    pole; the working-class claim NOW has direct support). Middle × musicals
+    +0.13/+0.12/+0.09, × big band +0.09/+0.08/+0.10; working × musicals
+    −0.09/−0.07/−0.08, × big band −0.05/−0.05/−0.08. Upper (n = 55!) × opera
+    +0.15/+0.16/+0.06, × classical +0.08/+0.09/+0.04, × musicals ≈ 0.01 — the
+    "higher class → musicals/big band" ordinal reading was a MIDDLE-class
+    effect, not a gradient; upper class's only signal is opera/classical.
+  - Group n: lower 269, working 832, middle 1103, upper 55 (flag upper's small
+    n in any prose use).
+- **PROSE REWRITES (main.tex)**: education paragraph now leads "entered as
+  four categories rather than an ordinal scale", reports postgrad vs
+  HS-or-less on opera/musicals, the bachelor's-zero-on-opera/musicals +
+  bachelor's-classical +0.10 signal, parents' education "a comparable
+  concentration (0.11 opera, 0.13 classical D2)" (hedged — no "stronger"
+  claims, per the statistical-caution note); class paragraph now opens
+  "Because class identification is categorical, each identity enters the
+  analysis as its own indicator", reports working +0.10 rap (both dims) /
+  middle −0.16/−0.15 reverse, middle's musicals +0.13 (D1) and big band +0.10
+  (D3) with working −0.09/−0.08, upper-class opera 0.16 with n = 55 flagged.
+  Encoding sentence + dim-1 caption: "four category indicators each" / "four
+  categories" + "four category identities". Appendix: "All sixteen demographic
+  variables" with both four-group lists; D1 sentence now "middle-class
+  respondents show more disagreement in musicals (0.13) and big band (0.09)";
+  D2 sentence now education contrasts (postgrad 0.16 opera, bachelor's 0.10
+  classical, parents' 0.11/0.13). The 8 key genres still earn their place
+  (education: opera/musicals/classical; class: rap, musicals, big band, opera).
+- **FIGURES regenerated** (16 rows): fig-omega-demographics-dim1/2/3 now
+  4.6×4.9in; fig-omega-demographics-genres-d1/2/3 now 6.2×5.8in (20 genres ×
+  16 demographics). Rendered and verified readable. R_MIN 0.15 outline
+  automatic; the outlined set now includes middle×rap, postgrad×opera/musicals
+  (D1), upper×opera, plus the previous age/race cells.
+- **Compile state**: 34 pp. (was 33; taller figures), 0 undefined refs, the
+  same 3 pre-existing overfulls (2.78pt prose, 29.24pt + 10.42pt appendix
+  headings).
+- **STILL UNCOMMITTED at session end**: manuscript/main.tex,
+  scripts/09-omega-demographics.R, the six regenerated
+  fig-omega-demographics*.pdf, fig-config-variation.pdf (untracked), plus the
+  prior sessions' uncommitted work (statistical-caution AGENTS.md section, the
+  2026-10-14 audit/clarity work). No Overleaf sync yet.
+
+## Session: October 15, 2026 — Regression regeneration, prose refinement, and section restructuring
+
+**Focus**: Regenerate script 07 with categorical education and class indicators (matching
+script 09 encoding); update section 4.7 with new regression results; improve section 4.8
+structure and flow; clarify section 4.6 (Duality) explanation of partial points.
+
+### Major changes
+
+1. **Script 07 regenerated with categorical indicators** (education 4 groups, class 4
+   identities; matching script 09 encoding):
+   - Extracted education from individual credential variables (nodipdeg, hsged, somcol,
+     aadeg, bach, ma, docprof) and grouped into four categories (HS-or-less, some college,
+     bachelor's, postgraduate).
+   - Extracted class from four binary identity indicators (lower, working, middle, upper).
+   - Built regression predictors as binary factors with reference categories (HS-or-less
+     for education, lower for class).
+   - Computed bivariate eta² for both the categorical variables (reconstructed at block
+     level from indicators) and single-indicator demographics (age, gender, race, etc.).
+   - R² values essentially unchanged: 0.051/0.018/0.020 (vs. prior 0.052/0.020/0.021).
+   - Genre-based (ω) component R² identical: 0.084/0.078/0.033.
+
+2. **Section 4.7 (Who Has Complex Tastes?) completely rewritten with categorical results**:
+   - Removed redundant opening question paragraph that merely restated what the next
+     sentence answered.
+   - Updated R² numbers to match categorical encoding (5.1%, 1.8%, 2.0%).
+   - Replaced asterisks with explicit p-values throughout (p < .001, p = .014, etc.).
+   - Restructured to emphasize that effects concentrate on W1 and W3, with education
+     categories showing no main effects on W1/W2 and only weak effects on W3.
+   - Clarified that upper-class effect is strongest (b=3.80, p<.001 on W1; b=7.72,
+     p<.001 on W3) and that parents' education is significant on W1 (b=1.30, p<.001).
+   - Added age-specific coefficients (age 30–39: b=−1.08, p=.014; age 70+: b=−2.09,
+     p<.001) showing younger respondents have less disagreement on W1.
+   - Updated genre-based component discussion to report exact R² values (8.4%, 7.8%,
+     3.3%) and note that coherence component shows no social structuring (R² ~4.7%,
+     1.9%, 1.9%).
+   - Maintained interpretation that social position shapes WHICH GENRES anchor complex
+     tastes, not WHETHER people have complex tastes overall.
+
+3. **Section 4.8 (Genre-Specific Disagreement) restructured for clarity**:
+   - Moved figure introduction paragraph to immediately after section heading (line 232),
+     before detailed demographic findings.
+   - Figure intro now explains: eight genres shown, which demographics they represent,
+     what cells encode (Pearson r between demographic and ω), and color meaning.
+   - Removed redundant "Figures...map these patterns visually" paragraph that appeared
+     later in the section.
+   - Added bridging paragraph at end of section explaining supplementary (20-genre)
+     matrices: they show demographic shaping is genuinely genre-specific, with few
+     correlations >|r|=0.15 outside highlighted genres.
+
+4. **Section 4.6 (The Duality) explanation of partial points clarified**:
+   - Added full conceptual paragraph (before Figure 9) explaining what partial points are:
+     three per dimension, showing aspect-specific positions for each genre.
+   - Explained what their spread means: aspects place genre differently, revealing
+     segmented audiences by aspect.
+   - Provided concrete example (Dimension 2): rap/reggae/metal negative for likers/
+     listeners but positive for evaluators—different populations.
+   - Updated Figure 9 caption to explain the displacement shows how status attributions
+     segment audiences differently from liking/listening.
+   - Added closing sentence connecting genre-level segmentation back to individual-level
+     complex-taste concept.
+
+5. **Minor prose improvements**:
+   - Changed "respondents not identifying as women" and "respondents identifying as
+     women" to simply "men" and "women" (since survey has binary coding).
+   - Removed "respondents identifying as upper class" phrasing in class paragraph,
+     standardized to "respondents identifying as upper class" with n=55 flag.
+   - Simplified HS-or-less education prose: removed redundant dimension citations (both
+     D1 and D2 at r=−0.10 for opera).
+   - Added table reference (Table~\ref{tab:genre-profile}) in opening paragraph of Duality
+     section right after the percentages for heavy metal/Latin/bluegrass/classical/opera.
+   - Improved class paragraph parallel structure: "Middle-class respondents show the
+     opposite pattern:" with dimension-specific coefficients.
+
+### Compile and numbering verification
+
+- Manuscript compiles cleanly at 34 pp., 0 undefined refs (when run from manuscript/
+  directory after script-03 regeneration).
+- Actual section/figure numbering in compiled PDF verified:
+  - Section 4.6 (The Duality) = Figures 8 (dims 1–2) and 9 (dims 1–3)
+  - Section 4.8 (Genre-Specific Disagreement) = Figures 5–7 (eight-genre matrices,
+    main text) and Figures 12–14 (twenty-genre matrices, appendix)
+  - All figure references now point to correct compiled figures.
+
+### Technical notes for future sessions
+
+- Script 07 now uses the same categorical indicator encoding as script 09 for education
+  and class. Both scripts create education/class factors from underlying binary/ordinal
+  indicators; if changes to encoding are needed, update BOTH scripts.
+- The regression R² values with categorical encoding are nearly identical to ordinal
+  encoding, so the claim "demographics weakly predict W" is robust to encoding choice.
+- Genre-based (ω) component shows stronger social structure than total W (R² 0.084 vs
+  0.051 on W1), validating the decomposition interpretation.
+- All p-values are now explicit in main text (no asterisks), improving accessibility and
+  allowing readers to judge significance themselves.
+
+### Files modified this session
+
+- manuscript/main.tex: Section 4.7 completely rewritten; section 4.8 restructured; section
+  4.6 clarified; minor prose improvements throughout. ~40 line changes total.
+- scripts/07-regression.R: Regenerated with categorical indicators for education and class;
+  outputs regenerated tables 6–7 (tab-regression.tex, tab-w-eta.tex).
+- AGENTS.md: This session note (just now).
+
+### Pending
+
+- No Overleaf sync (awaiting author approval of restructured text).
+- Scripts 01–06 already run recently; script 07 output now current. Scripts 08–09 remain
+  up-to-date from prior sessions.
+- Manuscript ready for final review and Overleaf sync.
+
+## Session: October 15, 2026 (later) — Appendix demarcation + omega-matrix label redesign
+
+- **main.tex**: appendix now visually separated from the main text — `\clearpage` +
+  `\appendix` + an unnumbered `\section*{Appendix}` heading with a one-sentence
+  lead-in ("The following supplementary materials provide additional technical
+  details..."). Appendix sections continue to number A/B/C.
+- **Script 09, label redesign (applied to ALL SIX omega matrices — main figs 5–7
+  AND supplementary figs 12–14)**: x-axis labels moved from the bottom to the
+  TOP, angled at 60 degrees, start-anchored at their own column tick
+  (`hjust = 0, vjust = -0.05`), cell text 2.7 (supplementary) / 2.5 (main),
+  axis text 8/7, sizes trimmed slightly at the author's request.
+  - GOTCHA 1: on a TOP axis, vjust is mirrored — SMALLER vjust moves the labels
+    closer to the panel (vjust = 1 pushed them up into the title; -0.05 is the
+    author-confirmed snug value; -0.2 overlaps the top row of cells).
+  - GOTCHA 2: end-anchoring (`hjust = 1`) puts the label's bulk over the
+    PREVIOUS column — the author read it as off-by-one. Start-anchoring
+    (`hjust = 0`) puts the lower tip of each label exactly at its tick.
+  - Margins: `plot.margin = margin(8, 30, 2, 2)` (supplementary) /
+    `margin(8, 20, 2, 2)` (main) — top clears the title above the tall
+    angled-label strip, right reserves room for the longest label's up-right
+    drift ("Multirace/Other" at 45 degrees was clipped; 60 degrees fits).
+  - Correlation values unchanged (console cross-check identical to prior runs).
+- fig-config-variation.pdf (untracked leftover from the clarity-pass session)
+  now committed; it is referenced from app:config-variation in main.tex.
+- Compiles at 35 pp., 0 undefined refs. Committed and synced to Overleaf;
+  outer-repo gitlink refreshed.
