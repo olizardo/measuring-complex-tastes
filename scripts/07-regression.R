@@ -107,22 +107,26 @@ nice <- function(x) gsub("-", "--", gsub("\\$", "\\\\$", x))
 # Map indicator variable names and coefficient names to readable labels
 var_labels <- c(
   genderFemale = "Woman",
+  genderMissing = "Missing",
   raceBlack = "Black",
   raceHispanic = "Hispanic",
-  raceWhite = "White",
-  raceOther = "Asian/other",
-  age630_39 = "30--39",
-  age640_49 = "40--49",
-  age650_59 = "50--59",
-  age660_69 = "60--69",
-  age670 = "70+",
+  raceAsian = "Asian",
+  `race>1 race` = ">1 race",
+  raceOther = "Other",
+  raceMissing = "Missing",
+  `age630-39` = "30--39",
+  `age640-49` = "40--49",
+  `age650-59` = "50--59",
+  `age660-69` = "60--69",
+  `age670+` = "70+",
+  age6Missing = "Missing",
   educ_somecol1 = "Some college",
   educ_bach1 = "Bachelor's",
   educ_postgrad1 = "Postgraduate",
-  parentbaParents_BA = "Yes",
-  income4_25_49k = "\\$25--49k",
-  income4_50_74k = "\\$50--74k",
-  income4_75k = "\\$75k+",
+  `parentbaParents BA` = "Yes",
+  `income4$25-49k` = "\\$25--49k",
+  `income4$50-74k` = "\\$50--74k",
+  `income4$75k+` = "\\$75k+",
   sclass_working1 = "Working",
   sclass_middle1 = "Middle",
   sclass_upper1 = "Upper",
@@ -134,7 +138,9 @@ var_labels <- c(
 tl <- c("\\begin{tabular}{lccc}", "\\toprule",
         " & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
 for (bk in blocks) {
-  if (is.list(bk[[1]])) {
+  # list blocks carry a vector of indicator terms + a header; plain blocks are
+  # c(term, header) character vectors
+  if (is.list(bk)) {
     # Multi-indicator block (education or class)
     terms_list <- bk[[1]]
     hdr <- bk[[2]]

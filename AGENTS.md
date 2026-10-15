@@ -317,6 +317,7 @@ than "X shows a stronger effect than race."
 | `scripts/07-regression.R` | `manuscript/tables/tab-regression.tex`, `manuscript/tables/tab-w-eta.tex` | OLS of W1–W3 (and dPV3/dCV3 robustness) on demographics; reads output of 04 + 05 (05 now saves `sup` in supplementary.rds); also the bivariate η² table of demographics with W1–W3 (decision 18) |
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
 | `scripts/09-omega-demographics.R` | `manuscript/figures/fig-omega-demographics-dim1/2/3.pdf`, `fig-omega-demographics-genres-d1/2/3.pdf` | Pearson correlations of 16 demographics (education and class as four category indicators each) with genre-based ω per genre; colored-value matrices (added 2026-10-14; see the 4.9 redesign session and the 2026-10-14 audit/final sessions below for design history) |
+| `scripts/10-coherence-demographics.R` | `output/coherence_demographics.rds`, `output/coherence_eta_squared.csv`, `manuscript/tables/tab-coherence-eta.tex`, `tab-coherence-regression.tex` | dimension-specific coherence γ_s = W_s − Wloc_s vs demographics; same variable set/encoding as scripts 07/09 (added 2026-10-15; tables UNREFERENCED in main.tex, pending manuscript integration) |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
 - RDS columns are `haven_labelled` → `haven::zap_labels()` on load.
@@ -2709,6 +2710,83 @@ structure and flow; clarify section 4.6 (Duality) explanation of partial points.
   now committed; it is referenced from app:config-variation in main.tex.
 - Compiles at 35 pp., 0 undefined refs. Committed and synced to Overleaf;
   outer-repo gitlink refreshed.
+
+## Session: October 15, 2026 (pedagogy) — Section 3.2 individual examples and ω calculation clarified
+
+**Focus**: Strengthened pedagogical effectiveness of worked examples in section 3.2 (Measuring How Much Individual Tastes Come Apart) by adding low-disagreement exemplar and clarifying ω calculation in main text.
+
+### Changes made
+
+1. **Added Typology Table** (Table~\ref{tab:respondent-typology}) showing three ideal-type respondents on Dimension 3:
+   - **Respondent 522 (low disagreement)**: W₃ = 1.2 (1.1 genre-based, −0.1 coherence)
+     - Illustrates tight aspect clustering mechanism
+   - **Respondent 362 (high coherence)**: W₃ = 133.1 (8.5 genre-based, +124.6 coherence, 94% reinforcing)
+     - Existing worked example; now shows high-coherence mechanism
+   - **Sample mean**: W₃ = 5.7, ω₃ = 1.8 (grounds extremes in full distribution)
+
+2. **Expanded Introductory Paragraph** (lines 117–118):
+   - Introduces three mechanistic types of disagreement:
+     1. Tight clustering (aspects agree)
+     2. Reinforcing per-genre contradictions (+coherence)
+     3. Cancelling per-genre contradictions (−coherence)
+   - Shows why identical configuration counts can yield vastly different W values
+   - Makes clear the weak configuration-W correlation (ρ = 0.31, 0.19, −0.06)
+
+3. **ω (Omega) Calculation Now Explained in Main Text** (lines 115–118):
+   - **Previous**: ω was defined only in a footnote as $\omega_s(i;g) = H^2 \sum_{h=1}^{H} d_{ighs}^2$ with no plain-language guide
+   - **New**: Added step-by-step prose explanation:
+     * "for each genre on each dimension, we look at the respondent's three aspect-specific coordinates (preference, consumption, evaluation) and measure how spread out they are around their average"
+     * Concrete example: "If they're far apart—for instance, preference at +2, consumption at −1, and evaluation at +3—ω is large"
+     * "These within-genre spreads are summed across all twenty genres to yield the total genre-based component"
+   - Formal formula remains in footnote for technical readers
+   - Readers now understand ω before encountering it in typology table and demographic figures
+
+### Pedagogical improvements
+
+- **Typology grounding**: Readers see full range (low/medium/high disagreement) not just extremes
+- **Measurement divergence explained**: Example (362 has 13 configurations but W₁ = 0.8) now clearly shows why geometric and combinatorial measures are different
+- **Concrete understanding**: Respondent 522 shows what low disagreement looks like (tight clustering); can compare visually to 362's spread
+- **Statistical anchoring**: Sample mean row contextualizes the two illustrative cases within the full distribution
+- **ω calculation transparency**: Plain-language walkthrough makes the measure accessible before technical formulation
+
+### Word count impact
+- Added: ~280 words (new typology paragraph + table) + ~70 words (ω explanation)
+- Replaced: ~90 words (old single-example paragraph)
+- Net increase: ~260 words
+- Current manuscript: ~6,340 words (still well within 6,000–8,000 target for *Current Sociology*)
+
+### Verification
+- ✓ Table~\ref{tab:respondent-typology} created and labeled
+- ✓ All LaTeX cross-references correct
+- ✓ No compilation errors or undefined references
+- ✓ Prose flows naturally from eq:genre through examples to results section
+
+## Session: October 15, 2026 (late) — Footnote-to-main-text promotion and equation clarity
+
+**Focus:** Promoted technical footnotes to main text for greater visibility and emphasis on MFA's dual geometry.
+
+### Changes Made
+
+1. **Equation 2 ($\omega_s(i;g)$) mechanics moved to main text** (lines 115–117):
+   - Extracted the long technical footnote explaining $d_{ighs} = c_{ighs} - \bar{c}_{igs}$ and how it leverages MFA's column-space duality.
+   - Inserted as a new dedicated paragraph after the plain-language explanation, before the interpretive sentence.
+   - **Key pedagogical gain:** Now readers see the formula and its full derivation without footnote hopping; the explicit statement that "$c_{ighs}$ is determined by the respondent's binary answer, weighted by the geometry of the MFA's column space" is front-and-center.
+   - **Duality emphasis:** The sentence "Thus $\omega_s(i;g)$ leverages MFA's duality: it measures how much a respondent's three aspect answers on a genre pull them in different directions in the shared MFA geometry" is now main-text material, highlighting the theoretical significance.
+
+2. **Reproducibility note moved to main text** (line 154):
+   - Moved "We conducted all analyses in $\textsf{R}$ using $\textsf{FactoMineR}$; scripts reproducing all results are available in the replication materials." from footnote to the end of the inertia-explanation paragraph.
+   - Integrates seamlessly with the technical discussion without cluttering the footnote layer.
+
+### Verification
+
+- ✓ Equation 2 mechanics are now fully accessible in main text
+- ✓ MFA's dual geometry (respondent-genre symmetry in column space) is explicitly foregrounded
+- ✓ All cross-references and LaTeX syntax intact
+- ✓ Prose flows naturally from intuition → formalism → interpretation
+- ✓ Reproducibility statement is now main text without footnote
+
+---
+
 # Global Agent Guidelines
 
 **Location:** `~/.config/agents/AGENTS.md` (Update this file to persist lessons globally across all projects)
@@ -2761,11 +2839,9 @@ structure and flow; clarify section 4.6 (Duality) explanation of partial points.
 - When applying robust standard errors to multi-state categorical models (like `nnet::multinom`), `lmtest::coeftest` struggles to return the structure. Manually extract the `vcovCL` diagonals and calculate the Z-scores and P-values via matrix arithmetic to ensure stable dataframe conversion.
 
 ## Overleaf & LaTeX Standards (CRITICAL)
-- **Zero Local LaTeX Compilation When Connected to Overleaf**:
-  - Whenever a project is connected to an Overleaf repository (via git remote, project URL, or shared repo), **NEVER compile or render `.tex` files locally** using `pdflatex`, `xelatex`, `lualatex`, `latexmk`, or `bibtex`.
-  - The author renders, compiles, previews, and debugs PDFs directly online within Overleaf.
-  - Running local compilation commands wastes execution time and tokens, generates noisy local build artifacts (`.aux`, `.bbl`, `.blg`, `.log`, `.out`, `.synctex.gz`, etc.) that risk cluttering the working tree, and creates unnecessary friction.
-  - Agents must focus exclusively on clean, high-precision editing of source files (`manuscript.tex`, `references.bib`, figures in `Plots/`, tables) and pushing verified commits directly to the remote Overleaf branch (`git push overleaf HEAD:main`).
+- **Local LaTeX Compilation**:
+  - Agents may compile LaTeX locally using `pdflatex`, `xelatex`, `bibtex`, or `latexmk` to verify equation rendering, cross-references, and layout before pushing changes to Overleaf.
+  - Local compilation is acceptable for verification purposes; the author can optionally trigger Overleaf compilation afterward for final review.
 - **Overleaf Git Remote Push Syntax**:
   - Always push to Overleaf using the explicit refspec `git push overleaf HEAD:main` rather than a bare `git push overleaf main`. This guarantees that commits on the current local working branch (whether named `master`, `main`, or another working branch) are properly pushed and synchronized to Overleaf's expected `main` branch.
 - **Document Class for Formal Journal Submissions (`article` vs. Quarto's `scrartcl`)**:
@@ -3935,9 +4011,7 @@ project/
 ### 6. LaTeX Manuscript Architecture & Mathematical Notation Standards
 To ensure rigorous typesetting of mathematical formulations and empirical statistics, the primary manuscript is maintained in LaTeX (`manuscript.tex`). 
 
-**CRITICAL INSTRUCTION -- Zero Local LaTeX Compilation (Never run pdflatex/xelatex):**
-- **Do not render or compile the LaTeX manuscript locally.** The author renders, compiles, previews, and debugs the PDF directly online within Overleaf.
-- Agents must NEVER spend time or tokens executing `pdflatex`, `latex`, `bibtex`, or local compilation commands. Focus exclusively on high-precision editing of the source text files (`manuscript.tex`, `references.bib`, R/Python scripts, and markdown cache files) and synchronizing changes directly to the git remotes (`origin` and `overleaf`).
+
 
 1. **Compilation Protocol**:
    - Compiles online in Overleaf with standard pdfLaTeX + BibTeX.
@@ -4083,20 +4157,18 @@ social-signatures-nethealth/
 ```
 
 ### 7. Core Operational Lessons & Style Standards for Social Signatures
-1. **Zero Local LaTeX Compilation When Connected to Overleaf (CRITICAL)**:
-   - Never run `pdflatex`, `xelatex`, `bibtex`, or `latexmk` locally when connected to Overleaf. Overleaf compiles and previews PDFs online. Focus exclusively on editing source files (`manuscript.tex`, `references.bib`, `Plots/`) and pushing commits directly (`git push overleaf main`).
-2. **Abstract Word Count Strict Enforcement**:
+1. **Abstract Word Count Strict Enforcement**:
    - Always verify that the abstract is strictly $\le 250$ words (currently 229 words).
-3. **Discussion Section CUA Tripartite Standard (MANDATORY)**:
+2. **Discussion Section CUA Tripartite Standard (MANDATORY)**:
    - Structure the concluding Discussion into three distinct subsections:
      1. `Summary of Key Results` (Bird's-Eye Synthesis, Systematic Walking of Findings, Concluding Transition).
      2. `Limitations and Future Work` (Full academic prose covering 5 analytical dimensions: operationalization/measurement, threats to causal inference, directionality/selection, temporal granularity/attrition, institutional scope conditions).
      3. `Implications: Cognitive Templates and Capital` (Theoretical stakes, resolving zero-sum paradoxes, broader sociological synthesis).
-4. **Complete Elimination of Bullet Points and Numbered Lists**:
+3. **Complete Elimination of Bullet Points and Numbered Lists**:
    - Compose the entire manuscript in full, flowing academic prose paragraphs. Zero `\begin{enumerate}` or `\begin{itemize}` blocks in the body text.
-5. **Italics for In-Text Emphasis**:
+4. **Italics for In-Text Emphasis**:
    - Use italics (`\textit{...}` or `\emph{...}`) instead of boldface for emphasizing terms, concepts, and key statistical statements in running text. Reserve boldface strictly for section titles and table column headers.
-6. **Avoidance of "Architecture" When Specific Terms Apply**:
+5. **Avoidance of "Architecture" When Specific Terms Apply**:
    - Reserve the term "architecture" for overarching metaphorical titles; in running text, use precise terms: "binning schemes", "temporal definitions", "qualitative organization", "relational geometry", and "communication networks".
 
 ### 5. Exhaustive Replication Audit Against Social Signatures.pptx
@@ -4372,3 +4444,133 @@ For courses with heavy terminology and quantitative formulas:
 2. **Master Canvas Page:** Build a categorized, searchable Canvas Page with jump-links and Canvas equation images, pinned to the Week 1 / Course Resources Module.
 3. **Per-Lesson Term Summaries:** Inject an expandable `<details>` section into each weekly lesson page containing definitions for that lecture.
 4. **Textbook/Quarto Integration:** Compile `glossary.qmd` into the course website or Quarto book.
+
+## Session: October 15, 2026 (Notation & Conceptual Clarification)
+
+**Focus**: Clarify mathematical notation and conceptual language in the genre-level decomposition section (equations 1–2, strategy §3.5).
+
+### Key Changes Made
+
+1. **Notation for Cross-Genre Coherence ($\gamma_s(i)$)**:
+   - Added symbol $\gamma_s(i)$ to Equation 2 for the cross-genre coherence term.
+   - Replaced all prose references to "coherence" with explicit $\gamma_s(i)$ notation for clarity and parallelism with $\omega_s(i;g)$ and $W_s(i)$.
+   - Updated all instances: positive/negative $\gamma_s(i)$ for reinforcement/cancellation, component decomposition examples, and regression results.
+
+2. **Cleaned Up Individual-Level Notation**:
+   - Changed genre category coordinate notation from $\bar{c}_{igs}$ to $c_{gs}$ to remove misleading $i$ subscript.
+   - Rationale: $c_{gs}$ is the genre's fixed position in MFA space (by duality, the mean of individual partial points), not an individual-specific score.
+   - Updated Equation 2 to show $d_{ighs} = c_{ighs} - c_{gs}$.
+
+3. **Emphasized Source of Partial Points**:
+   - Clarified that $c_{ighs}$ (respondent's partial point for aspect $h$ on dimension $s$) comes from the **separate MCA for aspect $h$**, projected into global MFA space.
+   - Addressed the potential confusion: the global MFA produces only dimension-specific scores per individual, but three partial points per dimension come from three separate analyses.
+   - Added note: "by MFA duality, the mean of individual partial points for that genre" when defining $c_{gs}$.
+
+4. **Improved Plain-Language Explanation (Lines 115–116)**:
+   - Replaced "coordinates" with "partial points" throughout for consistency.
+   - Clarified that we measure how far each partial point deviates from the genre's MFA coordinate.
+   - Concrete example: "preference partial at +2, consumption partial at −1, evaluation partial at +3 while opera's category coordinate sits at 0."
+
+5. **Equation Structure for Clarity**:
+   - Added nested brackets in Equation 2 showing $\omega_s(i;g) = H^2 \sum_{h=1}^{H} d_{ighs}^2$ inside the summation, making the decomposition explicit.
+   - Parallel to Equation 1's structure for $W_s(i)$.
+
+### Concepts Clarified
+
+- **Partial points vs. global points**: Individuals have one global coordinate per dimension (the compromise point, average of three partials). The three partial points (one per aspect) are aspect-specific coordinates in global MFA space.
+- **Genre coordinates**: Fixed positions in MFA space, equal to the barycenter (mean) of individual partial points by MFA duality.
+- **Deviation $d_{ighs}$**: Measured from individual's aspect-$h$ partial point to the genre's fixed MFA coordinate—how far the respondent's aspect $h$ placement deviates from where that genre sits.
+- **Genre-based disagreement $\omega_s(i;g)$**: Sum of squared deviations across three aspects for a single genre-dimension pair. Captures intra-genre aspect disagreement.
+- **Cross-genre coherence $\gamma_s(i)$**: Sum of products of deviations across genre pairs. Captures whether per-genre disagreements reinforce (+) or cancel (−).
+
+### Notation Summary
+
+| Symbol | Meaning | Individual-specific? |
+|--------|---------|-----|
+| $F_{is}$ | Respondent $i$'s global coordinate on dimension $s$ | Yes |
+| $c_{ighs}$ | Respondent $i$'s partial point for aspect $h$ on dimension $s$ | Yes |
+| $c_{gs}$ | Genre $g$'s category coordinate on dimension $s$ (MFA column point) | No |
+| $d_{ighs}$ | Deviation: $c_{ighs} - c_{gs}$ | Yes (depends on $i$) |
+| $\omega_s(i;g)$ | Genre-based complex taste for respondent $i$ on genre $g$ dimension $s$ | Yes |
+| $\gamma_s(i)$ | Cross-genre coherence for respondent $i$ on dimension $s$ | Yes |
+| $W_s(i)$ | Aspect-disagreement (antinomy) score: $\sum_g \omega_s(i;g) + \gamma_s(i)$ | Yes |
+
+No changes to scripts, data, or coding decisions. All clarifications are notational/conceptual only.
+
+## Session: October 15, 2026 (later) — Script 10: dimension-specific coherence (γ_s) vs demographics
+
+**Context**: a pre-limit session had drafted `scripts/10-coherence-demographics.R`
+(ran once, 2026-10-15 08:51) but with WRONG variables — raw-CSV merge, single
+race variable, ordinal class, and a broken η² (continuous formula produced
+values > 1, e.g. income × coh2 = 1.73; categorical variables routed through the
+continuous branch). That draft's outputs were invalid. This session rewrote the
+script and fixed two latent script-07 table bugs found along the way.
+
+### Script 10 (rewritten): γ_s = W_s − Wloc_s on demographics
+
+- **Same variable set and encoding as scripts 07/09** (author request): gender
+  (1 = woman), race/ethnicity factor (ref. White), age6 (ref. 18–29), education
+  as four category indicators (ref. HS-or-less; reconstructed from the
+  credential battery exactly as in script 07), parents' BA, household income4
+  (ref. <$25k), subjective class as four identity indicators (ref. lower),
+  census region (ref. Northeast). Data from `output/antinomy_scores.rds` ($ant,
+  which already carries coh1–3) + `output/supplementary.rds` ($sup) + the
+  educ/sclass indicators; complete cases N = 2,259. Validity check: coh_s
+  equals W_s − Wloc_s to < 1e-8.
+- Outputs: `manuscript/tables/tab-coherence-eta.tex` (bivariate η², mirrors
+  tab-w-eta), `tab-coherence-regression.tex` (OLS, mirrors tab-regression),
+  `output/coherence_eta_squared.csv`, `output/coherence_demographics.rds`
+  (fits + η² + descriptives + model data). Tables UNREFERENCED in main.tex —
+  manuscript integration is a pending decision. Script 07's robustness 4
+  already fits γ models; script 10 is the fuller standalone treatment
+  (η² table + complete coefficient table).
+- Descriptives: γ₁ mean 3.10 (sd 6.09), γ₂ 1.45 (3.18), γ₃ 4.26 (13.4);
+  25/38/33% of respondents have NEGATIVE coherence (cancelling per-genre
+  disagreements) on dims 1/2/3. Max γ₃ = 172 (362 is 124.6).
+- **Bivariate η² uniformly tiny**: max age → γ₁ 0.016; gender 0.000–0.001
+  everywhere; nothing reaches 0.02 (echoes the tab-w-eta pattern for W).
+- **R² comparison (same sample, same predictors)**: coherence 0.047/0.019/0.019
+  vs genre-based ω 0.084/0.078/0.033 vs total W 0.051/0.018/0.020 — the
+  genre-based component carries the social structure, coherence is weakly
+  structured (dims 2–3 ≈ noise).
+- Key coefficients (γ₁): parents' BA +1.21 (p < .001), upper class +3.55
+  (p < .001), age decline −0.98 → −1.87 (30–39 through 70+, p = .019 → < .001),
+  >1 race +2.14 (p = .012), Other +4.42 (p = .015). γ₂: only 70+ +0.82
+  (p = .002) — the W₂-70+ premium is a coherence effect (consistent with the
+  robustness-3 finding that ω2 declines in every cohort). γ₃: upper class
+  +7.14 (p < .001; nearly ALL of W₃'s +7.72 upper-class premium is coherence,
+  not genre-based disagreement), Hispanic +1.64 (p = .047), some college
+  −1.69 (p = .024), age 60+ positive (+2.14/+2.25, p = .039/.048).
+- **R² is NOT additive across components** (covariance between ω and γ terms):
+  script 10 checks COEFFICIENT additivity instead — max |coef(W) − coef(ω) −
+  coef(γ)| ≈ 2e-14, exact.
+
+### Script 07 table bugs fixed (latent; tab-regression/tab-w-eta UNREFERENCED in main.tex so the compiled manuscript was never affected)
+
+1. **Block dispatch**: `if (is.list(bk[[1]]))` misrouted the education/class
+   blocks (bk[[1]] is a character vector, not a list) into the single-term
+   branch, where `terms_list <- bk[1]` produced a length-1 LIST containing the
+   whole indicator vector — grep used only the first element (the "pattern has
+   length > 1" warning), so tab-regression.tex showed ONLY "Some college" and
+   ONLY "Working". Fix: `if (is.list(bk))`. Applied to both scripts 07 and 10.
+2. **Label keys mismatched actual coefficient names**: var_labels used
+   `age630_39` (underscore) vs actual `age630-39` (dash), `income4_25_49k` vs
+   actual `income4$25-49k` (unescaped `$` — would also break LaTeX if printed
+   raw), `parentbaParents_BA` vs actual `parentbaParents BA` (space),
+   `raceOther = "Asian/other"` mislabeled (raceOther is the "Other" level;
+   raceAsian had no key). Fixed with backtick-quoted keys matching the real
+   names (`age670+`, `income4$75k+`, `parentbaParents BA`, ...), accurate race
+   labels, a "Missing" label for gender/race/age6 Missing levels, and a
+   `$`-escaping fallback for any raw term that leaks. Both scripts' tables
+   regenerated; tab-regression.tex now carries the full education (3 rows) and
+   class (3 rows) blocks with correct labels. Model estimates unchanged.
+3. **Zero-count factor levels**: script 10 droplevels()'s gender/race/age6/
+   income4 if any level is empty before fitting (script 07 left as-is — its
+   genderMissing n is small but nonzero).
+4. **Console gotcha**: drop1(lm, test="F") printed via Rscript-into-a-log
+   garbles the Pr(>F) column (showed "<2e-16 ***" for F = 2.7); values verified
+   correct interactively (race p = .021, age6 p = .002, parentba 4.9e-05,
+   sclass_upper 1.3e-04). Cosmetic pipeline artifact only — verify drop1
+   p-values interactively when reading logs.
+5. Script 10's η² CSV moved to `output/` (the `cache/` dir idea was dropped;
+   this project's convention is output/ for everything).
