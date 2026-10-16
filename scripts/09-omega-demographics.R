@@ -134,7 +134,7 @@ dim_labels <- c("Dimension 1 (highbrow-popular)", "Dimension 2 (volume)",
 # ============================================================================
 
 corr_list <- list()
-for (d in 1:3) {
+for (d in 1:4) {
   omega_d <- omega[, , d]
   colnames(omega_d) <- genres
 

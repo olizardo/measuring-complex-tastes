@@ -63,9 +63,9 @@ p2 <- ggplot(ind, aes(dim1, dim2, color = age6)) +
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Category maps, one figure per dimension pair ------------------------------
-# Planes under the 4-dimension passive-individuals fit: (D1, D2) = highbrow x
-# volume, and (D1, D4) = highbrow x status valuation -- both share the
-# horizontal highbrow--popular axis; status valuation stays vertical.
+# Planes under the 4-dimension passive-individuals fit (author request,
+# 2026-10-16): (D1, D2) = highbrow x volume, and (D3, D4) = musical family x
+# status valuation -- the two positioning dimensions pair with each other.
 # Axis titles name the dimensions explicitly (with their readings).
 mk_cc <- function(dims, xl, yl) {
   d <- as.data.frame(res$quali.var$coord[, dims])
@@ -98,11 +98,12 @@ ggsave("manuscript/figures/fig-categories-d12.pdf",
        mk_cc(c(1, 2), "Dimension 1 (highbrow vs popular)",
              "Dimension 2 (volume)"),
        width = 4.6, height = 4.4)
-ggsave("manuscript/figures/fig-categories-d14.pdf",
-       mk_cc(c(1, 4), "Dimension 1 (highbrow vs popular)",
+ggsave("manuscript/figures/fig-categories-d34.pdf",
+       mk_cc(c(3, 4), "Dimension 3 (musical family)",
              "Dimension 4 (status valuation)"),
        width = 4.6, height = 4.4)
-# the old dims 2-3 plane figure is stale under the new fit
+# the old dims 1-4 and dims 2-3 plane figures are stale under the new fit
+unlink("manuscript/figures/fig-categories-d14.pdf")
 unlink("manuscript/figures/fig-categories-d23.pdf")
 unlink("manuscript/figures/fig-categories.pdf")
 

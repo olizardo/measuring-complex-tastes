@@ -116,3 +116,46 @@ Compute and record in a session notes file (and AGENTS.md decision entry):
 - Confirm presence/location of §4.9 (coherence section) before updates
 - Request author approval of dimension reordering before finalizing §4.7–4.9
 
+
+---
+
+## Session 2 progress (2026-10-16, continuation) — audit + category maps (author request: planes (D1,D2) and (D3,D4))
+
+### DONE this session
+1. **script 03**: category-map planes changed to (D1,D2) + (D3,D4) per author request (was d12+d14). `fig-categories-d34.pdf` created, `fig-categories-d14.pdf` unlinked. Rerun clean; all tables byte-identical.
+2. **script 09**: correlation loop FIXED `for (d in 1:3)` → `1:4` (reproducibility gap: the committed dim4 figure was EMPTY — pdftotext showed only title+legend, no cells; the previous agent ran an in-session 1:4 loop but committed the script with 1:3). Rerun: all 8 omega figures regenerated; dim1–3 byte-content-identical to committed (md5 of pdftotext matched), dim4 now has full 16x8 values.
+3. Verified correct already: §4.3 prose (line 200) matches tab-groups + tab-partial-axes (4-dim, regenerated); §4.5 line 228 shares 49/55/52/66 ✓ (49.3/55.3/51.9/65.7); §4.9 negative-coherence 33/25/52/30 ✓; compile 39 pp, 0 undefined refs, 4 pre-existing overfulls.
+
+### VERIFIED NEW-FIT NUMBERS (all computed from output/antinomy_scores.rds + output/mfa_results.rds this session)
+- shares mean(W_s/T_s): 49.3 / 55.3 / 51.9 / 65.7 %
+- rho(n_complex, W) Spearman: 0.17 / 0.28 / 0.18 / −0.11; **Pearson: 0.20 / 0.45 / 0.18 / 0.08** — manuscript line 230 quotes the PEARSON numbers with a ρ symbol (stale convention violation). Fix to Spearman values.
+- rho(n_complex, Wloc): 0.61 / 0.58 / 0.63 / 0.24
+- mean W: 3.4 / 5.2 / 2.3 / 6.2; mean Wloc: 1.6 / 1.6 / 1.6 / 1.4; mean coh: 1.7 / 3.6 / 0.6 / 4.8
+- 362: W = 7.0 / 0.1 / 0.3 / **155.7**; Wloc = 2.5 / 3.7 / 2.7 / **11.2**; coh = 4.5 / −3.6 / −2.4 / **+144.4**; F = −0.45 / 3.13 / −0.74 / 4.24
+- 1881: W = 9.6 / 36.3 / 0.8 / 2.8; Wloc = 2.2 / 5.3 / 2.0 / 0.6; coh = 7.4 / 31.0 / −1.2 / 2.2; F = 0.82 / 3.50 / 0.24 / −1.82
+- 522: W = 0.1 / 0.2 / 6.5 / **1.1**; Wloc4 = 0.8, coh4 = +0.3; F = −0.12 / −0.43 / 2.08 / **−0.36**; T4 = 1.4 (W4 share 0.73 — near-origin respondent; DROP the old "7% of projected inertia" clause)
+- guilty (n = 1,971) mean W: 3.4 / 5.1 / 2.4 / **4.5**; sd: 3.5 / 7.3 / 2.7 / **10.4**
+- Category coordinates (res$quali.var$coord, yes categories):
+  - D1 highbrow–popular: cons yes opera +0.72, bband +0.69, classical +0.64; rap −1.26, indalt −1.29. pref yes opera +0.61, folk +0.51, bwayst +0.38; rap −1.21, indalt −0.99. eval yes mean +0.10, range −0.23 (rap) .. +0.39 (danclub).
+  - D2 volume: cons yes ALL positive, rarest furthest: folk +1.35, blueg +1.31, bband +1.19; rap +0.05, hvymtl +0.03. pref yes folk +0.84, bband +0.80, opera +0.78. eval yes: blurb +0.59, latspsal +0.57, hvymtl +0.51 vs classical +0.03, bwayst −0.01 (rarity-ordered too).
+  - D3 musical-family: cons yes reggae +0.95, latspsal +0.76, rap +0.61 vs indalt −0.76, hvymtl −0.91; pref yes rap +0.60, latspsal +0.51, reggae +0.45 vs indalt −0.53, hvymtl −0.62; eval flat (−0.33..+0.17).
+  - D4 status valuation: eval yes ALL positive, mean +1.04, rap/latspsal +1.94 top, country +1.67, classical +0.02, opera +0.00 bottom; pref/cons yes near zero (−0.50..+0.13).
+
+### STALE SPOTS FOUND IN main.tex (pending fixes, in file order)
+1. **§3.2 line 129 + tab:respondent-typology (lines 131–145)**: prose says "F_3 = −0.88 (withholding); W_3 = 1.2 (7% of inertia) = 1.1 genre-based + γ_3 = −0.1" and "362: W_3 = 133.1 = 8.5 + 124.6 (94%)" — OLD fit. Correct (D4): 522 F_4 = −0.36, W_4 = 1.1 = 0.8 ω + 0.3 γ; 362 W_4 = 155.7 = 11.2 + 144.4 (93%). Table rows: 522 "0.4 & 0.2 & +0.2" → "1.1 & 0.8 & +0.3"; 362 "8.9 & +146.8" → "11.2 & +144.4"; sample mean "2.0 & +4.2" → "1.4 & +4.8" (W4 6.2 ✓). STILL TO VERIFY: likes/listens/evals means 8.2/5.2/4.6. Hypothetical "ω_3 = 50" → ω_4.
+2. **§4.1 lines 168–184: ENTIRE dimension-reading block is OLD-FIT** (D1 volume, D2 highbrow, D3 status; "folk +1.43, bluegrass +1.34"; caption line 172 "Dimension 1 (volume)"; line 178 "Dimension 3" status; figure env line 182 includes fig-categories-d14). Contradicts §4.3 line 200 (which IS correct new-fit). Rewrite needed: D1 = highbrow–popular, D2 = volume, D3 = musical-family (NEW paragraph), D4 = status (old status paragraph renumbered, now references d34). Use the category coordinates above. FLAG to author: the old dim-2 "generous evaluators" clarification paragraph (seven-times grant arithmetic) was written for the OLD dim 2 and does not carry over verbatim; new D2's eval-yes pattern (rarity-ordered, blurb +0.59 … musicals −0.01) is different.
+3. **§4.5 line 230**: ρ values are Pearson → replace with Spearman 0.17 / 0.28 / 0.18 / −0.11 (keep "most strongly with volume": 0.28 still max). Guilty example: "mean W_3 of 4.1, SD 8.9 ... status-valuation" → W_4 mean 4.5, SD 10.4.
+4. **fig-signatures caption line 234**: "across three dimensions" → four (script 04 generates 12 columns F1–4/W1–4/ω1–4; fig-signatures.pdf regenerated 19:09 post-refit ✓).
+5. **§4.8 captions**: line 273 "Dimension 1 (volume)" → "(highbrow--popular)"; line 280 "Dimension 2 (highbrow--popular)" → "(volume)". Line 268 refs fig:omega-genres-d1--d3 → d1--d4. PENDING VERIFY: whether the age-gradient numbers (rap −0.42, indie −0.34, dance −0.24, bband +0.19) belong on D1 or D2 in the new fit (prose says D1; caption d2 also cites age gradient rap −0.43 — check script 09 console chk output, which prints age rows for raphiphop/indalt/danclub/bband on all 4 dims; print(chk, n=135) truncated — raise n or filter).
+6. **Appendix app:omega-genres (lines 403–427)**: no fig:omega-genres-d4 env (script 09 DOES produce fig-omega-demographics-genres-d4.pdf, committed); refs d1–d3 → d1–d4 in both line 268 and 405; caption line 426 "Dimension 3 (status valuation)" → "musical family"; new d4 caption "(status valuation)"; prose line 407 maps dimensions per OLD fit ("volume dimension = omega-genres-d1") — rewrite using regenerated script 09 console values per dimension.
+7. **§4.9 pending verifies**: γ4 ↔ |global F4| r = 0.80 claim; upper-class W2 split b 4.54 = 3.55 (coh) + 0.99 (ω) — check output/coherence_demographics.rds + script 07 omega models.
+
+### Worked-example figure note
+fig-worked-example.pdf regenerated 19:09 post-refit; caption line 152 already describes D4 status planes ("left: volume axis with status valuation; right: highbrow--popular axis with status valuation") — plausible for planes (D2,D4)+(D1,D4); VERIFY the actual panel planes in script 04's figure block match the caption before editing.
+
+### Session-2 remaining checklist
+- [ ] main.tex edits 1–6 above
+- [ ] verify pending numbers (sample means; §4.8 age assignment; γ4 r; coherence split)
+- [ ] recompile (pdflatex→bibtex→pdflatex×2), 0 undefined refs
+- [ ] commit + refresh outer gitlink; AGENTS.md decision note (category-plane change + dim4 omega fix)
+- [ ] flag to author: §4.1 rewrite + new D3 reading approval; old dim-2 clarification paragraph disposition

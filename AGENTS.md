@@ -4730,3 +4730,22 @@ passive-individuals MFA results from the regenerated pipeline (scripts 02–11,
   D3=musical-family, D4=status-valuation
 - All regression coefficients from notes-passive-refit.md have been integrated
 - The §4.8 rewrite is the most substantial change; verify prose reads smoothly
+
+## Session: October 16, 2026 (session 2, in progress) — Phase 3 audit + category-map planes
+
+**Author request (2026-10-16): category cloud maps on planes (D1,D2) and (D3,D4)** (was d12+d14).
+DONE: script 03 changed (d34 created, d14 unlinked, rerun clean, tables byte-identical); script 09 corr
+loop FIXED 1:3 → 1:4 — the committed fig-omega-demographics-dim4.pdf was EMPTY (title+legend only, no
+cells; previous agent ran an in-session loop but committed 1:3); all 8 omega figures regenerated
+(dim1–3 content byte-identical to committed, dim4 now full). Audit found MORE stale prose than the
+prior session recorded; full verified-numbers table + fix checklist saved in the plan file
+(.posit/assistant/plans/2026-10-16-1858-rebuild-...md, "Session 2 progress" block). Headline stale
+spots pending main.tex fixes: §3.2 typology prose+table (old-fit W3 numbers; correct D4: 522 W4 1.1 =
+0.8+0.3, 362 W4 155.7 = 11.2+144.4, mean ω4 1.4/coh +4.8); §4.1 lines 168–184 ENTIRELY old-fit
+dimension readings (D1 volume/D2 highbrow/D3 status — contradicts correct §4.3); §4.5 line 230 quotes
+PEARSON config-count correlations (0.20/0.45/0.18/0.08) with a ρ symbol (Spearman = 0.17/0.28/0.18/
+−0.11) + guilty example W3 4.1/8.9 → W4 4.5/10.4; fig-signatures caption "three dimensions" → four;
+§4.8 captions d1/d2 dimension labels swapped vs new fit + line 268 and appendix app:omega-genres
+still reference only d1–d3 and use old-fit dimension mapping (no d4 env yet). Verified correct:
+§4.3, shares 49/55/52/66, §4.9 negative-coherence shares. Compile 39 pp, 0 undefined refs. WORK IN
+PROGRESS — see plan file for the complete checklist and all verified numbers before editing.
