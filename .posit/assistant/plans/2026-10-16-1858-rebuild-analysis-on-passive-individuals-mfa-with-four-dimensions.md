@@ -67,3 +67,52 @@ Compute and record in a session notes file (and AGENTS.md decision entry):
 - The new D3 interpretation is genuinely new analysis — its reading may surprise.
 - 1881's geometry is now a projection; if that reads awkwardly in §4.5 we can swap in an active respondent with a similar profile.
 - Old numbers remain recoverable via git history; `output/mfa_results.rds` is overwritten (regenerable by reverting script 02).
+
+---
+
+## Phase 3 Progress — Status Update (2026-10-16, 17:45 UTC)
+
+**COMPLETED:**
+✅ Straightliner footnote inverted (passive-individuals methodology explained)
+✅ Eigenvalue percentages: 8.23/7.25/5.39/5.11% for dims 1–4
+✅ RV structure confirmed: P-C 0.353, P-E 0.014, C-E 0.015
+✅ Dimension readings reordered and described (D1 highbrow–popular, D2 volume, D3 musical-family, D4 status)
+✅ Aspect contributions revised per dimension
+✅ Typology table values updated (respondent 362: W4=155.7 with 93% coherence)
+✅ Transposed MFA numbers: λ1-4 = 2.246/1.931/1.247/1.115 (14.8/12.8/8.2/7.4%)
+✅ Transposed RV: P-C 0.915, P-E 0.532, C-E 0.476
+✅ Figure references updated (d12/d14 instead of d12/d13 and d23)
+✅ Manuscript compiles cleanly: 38 pp, 0 undefined refs
+
+**REMAINING PHASE 3 WORK:**
+
+1. **§4.7 Social Sources of Complex Tastes**: Update regression coefficients and R² for W1–W4
+   - Locate regression numbers from script 07 output
+   - Update R² values: currently reports only W1–W3; extend to W_1 to W_4
+   - Update coefficient estimates (b values and p-values)
+   - Update tab-w-eta: η² of demographics with W1–W4
+
+2. **§4.8 Genre-Specific Disagreement**: Update omega figures and genre selections
+   - Currently references omega figures; count should be 8 (4 dimensions × 2 figure types)
+   - Verify eight-genre selection rule based on new correlations
+   - Update prose describing which demographics anchor which genres
+   - Note: script 09 was rerun with D1–D4; console output has updated correlations
+
+3. **§4.9 Coherence Demographics** (if present): Update γ1–γ4 references
+   - Verify if sec:coherence or similar section exists in current manuscript
+   - If present, update all γs references (γ1–γ4, not just γ1–γ3)
+   - Update table/prose references from tab-coherence-eta and tab-coherence-regression
+
+4. **Author Approval Pending**:
+   - Dimension reordering may need authorial sign-off (D1–D4 re-rankings vs previous D1–D3)
+   - New D3 (musical-family contrast) interpretation is novel; verify it's sensible
+   - D4 (status valuation) readability at the genre level with revised RVs
+
+**COMPILATION STATE**: 38 pages, clean. Two pre-existing overfull boxes remain (header + appendix titles).
+
+**NEXT AGENT NOTES:**
+- Check script 07 console output for W1–W4 regression numbers
+- Verify script 09 console for updated omega correlations per dimension
+- Confirm presence/location of §4.9 (coherence section) before updates
+- Request author approval of dimension reordering before finalizing §4.7–4.9
+
