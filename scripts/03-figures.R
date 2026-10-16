@@ -67,7 +67,7 @@ ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 # 2026-10-16): (D1, D2) = highbrow x volume, and (D3, D4) = musical family x
 # status valuation -- the two positioning dimensions pair with each other.
 # Axis titles name the dimensions explicitly (with their readings).
-mk_cc <- function(dims, xl, yl) {
+mk_cc <- function(dims, xl, yl, nudge = NULL) {
   d <- as.data.frame(res$quali.var$coord[, dims])
   names(d) <- c("x", "y")
   d$name <- rownames(d)
@@ -76,17 +76,29 @@ mk_cc <- function(dims, xl, yl) {
   d$yes <- grepl("_1$", d$name)
   d$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", d$name)),
                           gshort)]
-  # "no" categories shown in light grey for reference
+  # optional per-label nudges (data units) for near-coincident category pairs
+  # that the repel algorithm cannot separate once the markers are gone
+  d$nx <- 0; d$ny <- 0
+  if (!is.null(nudge)) {
+    d$nx <- ifelse(is.na(nudge$nx[match(d$name, nudge$name)]), 0,
+                   nudge$nx[match(d$name, nudge$name)])
+    d$ny <- ifelse(is.na(nudge$ny[match(d$name, nudge$name)]), 0,
+                   nudge$ny[match(d$name, nudge$name)])
+  }
+  # "no" categories shown as small grey dots for reference; labeled "yes"
+  # categories are drawn as text only (no markers), labels repelled apart
   ggplot(d, aes(x, y)) +
     geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
     geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
     geom_point(data = subset(d, !yes), color = "grey65", size = 1) +
-    geom_point(data = subset(d, yes), aes(color = aspect), size = 1.8,
-               alpha = 0.9) +
-    ggrepel::geom_text_repel(data = subset(d, yes),
-                             aes(label = genre, color = aspect), size = 2.6,
-                             segment.color = NA, max.overlaps = 25,
-                             show.legend = FALSE, seed = 17) +
+    geom_text_repel(data = subset(d, yes),
+                    aes(label = genre, color = aspect), size = 2.5,
+                    fontface = "bold", segment.color = NA,
+                    min.segment.length = Inf, max.overlaps = Inf,
+                    force = 6, force_pull = 0.7, box.padding = 0.4,
+                    max.iter = 50000,
+                    nudge_x = d$nx, nudge_y = d$ny,
+                    show.legend = FALSE, seed = 5) +
     scale_color_manual(values = c(Preference = "#08519C",
                                   Consumption = "#A63603",
                                   Evaluation = "#006D2C")) +
@@ -97,11 +109,14 @@ mk_cc <- function(dims, xl, yl) {
 ggsave("manuscript/figures/fig-categories-d12.pdf",
        mk_cc(c(1, 2), "Dimension 1 (highbrow vs popular)",
              "Dimension 2 (volume)"),
-       width = 4.6, height = 4.4)
+       width = 6.5, height = 6.0)
 ggsave("manuscript/figures/fig-categories-d34.pdf",
        mk_cc(c(3, 4), "Dimension 3 (musical family)",
-             "Dimension 4 (status valuation)"),
-       width = 4.6, height = 4.4)
+             "Dimension 4 (status valuation)",
+             nudge = data.frame(
+               name = c("cons_bwayst_1", "cons_bband_1"),
+               nx = c(0.14, -0.14), ny = c(-0.10, 0.02))),
+       width = 6.5, height = 6.0)
 # the old dims 1-4 and dims 2-3 plane figures are stale under the new fit
 unlink("manuscript/figures/fig-categories-d14.pdf")
 unlink("manuscript/figures/fig-categories-d23.pdf")

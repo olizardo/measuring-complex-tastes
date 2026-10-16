@@ -23,5 +23,14 @@
     "edit": {
       "*.md": "allow"
     }
+  },
+  "sandbox": {
+    "enabled": false
   }
+
+{
+  "features": {
+    "autoCompactTokenBuffer": 40000
+  }
+}
 }
