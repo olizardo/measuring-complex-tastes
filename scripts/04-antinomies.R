@@ -291,7 +291,7 @@ pseg <- ggplot(segdf) +
              show.legend = FALSE) +
   scale_x_continuous(breaks = 1:4,
                      labels = c("Highbrow\u2013popular", "Volume",
-                                "Musical family", "Status valuation")) +
+                                "Engagement divide", "Status valuation")) +
   scale_y_continuous(limits = c(-lim, lim)) +
   scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
                                 Evaluation = "#009E73"), name = NULL) +
@@ -424,8 +424,9 @@ ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 # figure: worked examples — partial points of two contrasting respondents,
 # used as running examples throughout Section "Measuring Complex Tastes
 # Geometrically". Rows = respondents, columns share the status-valuation
-# axis (dim 4): left pairs it with the volume axis (dim 2), right with the
-# highbrow-popular axis (dim 1, the plane of the paper's other maps).
+# axis (dim 4): left pairs it with the highbrow-popular axis (dim 1, the
+# horizontal axis of the paper's first category map), right with the
+# volume axis (dim 2).
 # Scales are free in both directions (respondent 362's dim-4 spread dwarfs
 # 1881's; fixed axes would flatten the second row). NOTE: 1881 is a
 # supplementary (projected) individual in the main fit — their partial
@@ -441,9 +442,9 @@ rlab <- c("Grants 18 of 20 recognitions", "Grants none")
 ex <- match(exr, rownames(ant))
 stopifnot(!any(is.na(ex)))
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
-pane_dims <- c(2, 1)  # x-dimension of each panel (y is always dim 4)
-panes <- c("Dimension 2 (volume)",
-           "Dimension 1 (highbrow\u2013popular)")
+pane_dims <- c(1, 2)  # x-dimension of each panel (y is always dim 4)
+panes <- c("Dimension 1 (highbrow\u2013popular)",
+           "Dimension 2 (volume)")
 exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
   do.call(rbind, lapply(seq_along(panes), function(s) {
     data.frame(
@@ -502,7 +503,7 @@ cfg_labs <- c(simple_pos = "Simple taste", guilty = "Guilty pleasure",
               distanced = "Distanced consumption", justified = "Justified abstention",
               distant = "Distant praise", simple_neg = "Simple non-taste")
 dim_labs <- c(W1 = "Highbrow vs popular", W2 = "Volume",
-              W3 = "Musical family", W4 = "Status valuation")
+              W3 = "Engagement divide", W4 = "Status valuation")
 cv <- do.call(rbind, lapply(cfg_cols, function(cl) {
   hold <- type_counts[[cl]] > 0
   cbind(config = cfg_labs[cl],

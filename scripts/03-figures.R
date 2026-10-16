@@ -64,7 +64,7 @@ ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
 # --- Category maps, one figure per dimension pair ------------------------------
 # Planes under the 4-dimension passive-individuals fit (author request,
-# 2026-10-16): (D1, D2) = highbrow x volume, and (D3, D4) = musical family x
+# 2026-10-16): (D1, D2) = highbrow x volume, and (D3, D4) = engagement divide x
 # status valuation -- the two positioning dimensions pair with each other.
 # Axis titles name the dimensions explicitly (with their readings).
 mk_cc <- function(dims, xl, yl, nudge = NULL) {
@@ -111,7 +111,7 @@ ggsave("manuscript/figures/fig-categories-d12.pdf",
              "Dimension 2 (volume)"),
        width = 6.5, height = 6.0)
 ggsave("manuscript/figures/fig-categories-d34.pdf",
-       mk_cc(c(3, 4), "Dimension 3 (musical family)",
+       mk_cc(c(3, 4), "Dimension 3 (engagement divide)",
              "Dimension 4 (status valuation)",
              nudge = data.frame(
                name = c("cons_bwayst_1", "cons_bband_1"),
