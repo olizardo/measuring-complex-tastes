@@ -4664,3 +4664,50 @@ script and fixed two latent script-07 table bugs found along the way.
   the aggregate Σ W_s / Σ Σ_h F² ratio (which is 49/44/65) — don't conflate;
   (d) the saved output/mfa_results.rds has no `group$sep1..3` (trimmed) —
   recompute separate λ1s with direct MCA calls on the blocks.
+
+## Session: October 16, 2026 (Phase 3 continuation) — Update §4.7–4.9 for 4-dimension passive-individuals MFA
+
+**Context**: Phase 3 revision is ~50% complete. The main manuscript structure and 
+dimension reordering were implemented in prior sessions (cf5680d), but §4.7 (Social 
+Sources), §4.8 (Genre-Specific Disagreement), and §4.9 (Coherence) still reference 
+W₁–W₃ and ω₁–ω₃. This session updates those sections with the four-dimension 
+passive-individuals MFA results from the regenerated pipeline (scripts 02–11, 
+2026-10-16).
+
+**Key numbers from notes-passive-refit.md**:
+- R² for W (total disagreement): **0.044 / 0.036 / 0.100 / 0.019** (dims 1–4)
+- R² for ω (genre-based): **0.222 / 0.079 / 0.201 / 0.030** (much higher structure)
+- R² for γ (coherence): 0.035 / 0.035 / 0.071 / 0.018 (weaker structure)
+- Regression coefficients (tab-regression): W1 age/education, W2 upper-class/parentBA, 
+  W3 race/age/region, W4 upper-class/age-cohorts
+
+**✅ Completed in this session**:
+1. **§4.7 opening paragraph** (lines 238–245): Updated R² values from "5.1%/1.8%/2.0% 
+   on W₁–W₃" to "4.4%/3.6%/10.0%/1.9% on W₁–W₄"; rewritten regression effects to 
+   reflect dimension-specific patterns (age on D1, upper-class on D2, race on D3, 
+   class/age-cohorts on D4).
+2. **§4.7 decomposition paragraph** (lines 247–249): Updated R² for genre-based 
+   "8.4%/7.8%/3.3%" to "22.2%/7.9%/20.1%/3.0%"; coherence R² changed to 
+   "3.5%/3.5%/7.1%/1.8%"; clarified that genre-based component carries social 
+   structure, especially on D1 and D3.
+3. **§4.8 heading/intro** (line 251): Updated figure references from 
+   "Figures~\ref{fig:omega-demographics-d1}--\ref{fig:omega-demographics-d3}" to 
+   "Figures~\ref{fig:omega-demographics-d1}--\ref{fig:omega-demographics-d4}".
+
+**⏳ Still pending** (necessary before Overleaf sync):
+- Update §4.8 prose (lines 254–266) with new age/race/education patterns on D1–D4
+- Update D1–D3 figure captions (currently reference old 3-dimension readings)
+- Add D4 figure caption and figure reference
+- Update §4.9 (Coherence) with W₁–W₄ decomposition splits and coherence R² values
+- Verify manuscript compiles clean and all figure references resolve
+- Run Overleaf sync (git push after test compile)
+
+**Notes for next agent**:
+- §4.8 figure text needs rewriting to discuss:
+  * D1 (highbrow–popular): age/rap/indie/dance/classical patterns
+  * D2 (volume): upper-class, parentBA, some-college patterns
+  * D3 (musical-family NEW): race dominance (Black/>1race/Hispanic), age, region
+  * D4 (status NEW): upper-class dominance, age 30–49 positive effects
+- The omega figure captions need updating for D4 (dims 1–4 now, not 1–3)
+- Coherence section (§4.9, line 289) already exists but needs coefficient updates
+- Current manuscript line count: ~38 pp; should remain stable after these edits
