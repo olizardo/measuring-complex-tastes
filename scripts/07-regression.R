@@ -58,17 +58,18 @@ sclass_indicators <- sclass_indicators |>
 # Rename for convenience and set reference categories as factors
 sup$race <- relevel(sup$race, ref = "White")
 
-dat <- cbind(ant[, c("W1", "W2", "W3", "dPV3", "dCV3", "dPC3",
-                     "Wloc1", "Wloc2", "Wloc3")], sup,
+dat <- cbind(ant[, c("W1", "W2", "W3", "W4",
+                     "dPV3", "dCV3", "dPC3", "dPV4", "dCV4", "dPC4",
+                     "Wloc1", "Wloc2", "Wloc3", "Wloc4")], sup,
              educ_indicators, sclass_indicators)
 
 # Regression predictors: use education and class indicators instead of ordinal versions
-preds <- c("gender", "race", "age6", 
+preds <- c("gender", "race", "age6",
            "educ_somecol", "educ_bach", "educ_postgrad",
            "parentba", "income4",
            "sclass_working", "sclass_middle", "sclass_upper",
            "region")
-ys <- c("W1", "W2", "W3")
+ys <- c("W1", "W2", "W3", "W4")
 fits <- lapply(ys, function(y) lm(reformulate(preds, y), data = dat))
 
 cat("\n== R2 ==\n")
@@ -135,8 +136,8 @@ var_labels <- c(
   regionWest = "West"
 )
 
-tl <- c("\\begin{tabular}{lccc}", "\\toprule",
-        " & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
+tl <- c("\\begin{tabular}{lcccc}", "\\toprule",
+        " & $W_1$ & $W_2$ & $W_3$ & $W_4$ \\\\", "\\midrule")
 for (bk in blocks) {
   # list blocks carry a vector of indicator terms + a header; plain blocks are
   # c(term, header) character vectors
@@ -176,7 +177,7 @@ r2row <- sprintf("%.3f", sapply(fits, function(m) summary(m)$r.squared))
 nrow_lab <- format(nrow(dat), big.mark = ",")
 tl <- c(tl,
         paste0("R$^2$ & ", paste(r2row, collapse = " & "), " \\\\"),
-        paste0("$N$ & ", paste(rep(nrow_lab, 3), collapse = " & "), " \\\\"),
+        paste0("$N$ & ", paste(rep(nrow_lab, length(ys)), collapse = " & "), " \\\\"),
         "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-regression.tex")
 
@@ -249,8 +250,8 @@ elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
           educ = "Education", parentba = "Parents' BA",
           income4 = "Household income", sclass = "Subjective class",
           region = "Census region")
-te <- c("\\begin{tabular}{lccc}", "\\toprule",
-        " & $W_1$ & $W_2$ & $W_3$ \\\\", "\\midrule")
+te <- c("\\begin{tabular}{lcccc}", "\\toprule",
+        " & $W_1$ & $W_2$ & $W_3$ & $W_4$ \\\\", "\\midrule")
 for (v in names(eta2_list)) {
   te <- c(te, paste0(elab[v], " & ",
                      paste(sprintf("%.3f", eta2[, v]), collapse = " & "),
@@ -273,9 +274,10 @@ for (i in seq_along(fitlog)) {
       round(mean(sign(b1[common]) == sign(b2[common]), na.rm = TRUE), 2), "\n")
 }
 
-# --- robustness 2: pairwise disagreement components on dimension 3 --------------
-cat("\n== Pairwise disagreement outcomes (dimension 3) ==\n")
-for (y in c("dPV3", "dCV3", "dPC3")) {
+# --- robustness 2: pairwise disagreement components on dimension 4 --------------
+# dimension 4 is the status-valuation axis under the 4-dimension fit
+cat("\n== Pairwise disagreement outcomes (dimension 4) ==\n")
+for (y in c("dPV4", "dCV4", "dPC4")) {
   m <- lm(reformulate(preds, y), data = dat)
   cat("\n--", y, "-- R2:", round(summary(m)$r.squared, 3), "\n")
   print(round(drop1(m, test = "F")[, "F value", drop = FALSE], 1))
@@ -287,8 +289,8 @@ for (y in c("dPV3", "dCV3", "dPC3")) {
 # --- robustness 3: genre-based components (Equation eq:genre) as outcomes ---------
 # Wloc_s = omega, the genre-based complex-taste part of W_s -- isolates the
 # configural component from the cross-genre coherence component.
-cat("\n== Robustness: genre-based components Wloc1-Wloc3 ==\n")
-ys_loc <- c("Wloc1", "Wloc2", "Wloc3")
+cat("\n== Robustness: genre-based components Wloc1-Wloc4 ==\n")
+ys_loc <- c("Wloc1", "Wloc2", "Wloc3", "Wloc4")
 fits_loc <- lapply(ys_loc, function(y) lm(reformulate(preds, y), data = dat))
 print(round(sapply(fits_loc, function(m) summary(m)$r.squared), 3))
 for (i in seq_along(fits_loc)) {
@@ -304,11 +306,11 @@ for (i in seq_along(fits_loc)) {
 # same predictors/sample the three model sets decompose additively:
 # coef(W) = coef(Wloc) + coef(coherence). The coherence models therefore add
 # no new estimates, only the explicit attribution of each W coefficient.
-cat("\n== Robustness: coherence components coh1-coh3 ==\n")
-for (s in 1:3) {
+cat("\n== Robustness: coherence components coh1-coh4 ==\n")
+for (s in 1:4) {
   dat[[paste0("coh", s)]] <- dat[[paste0("W", s)]] - dat[[paste0("Wloc", s)]]
 }
-ys_coh <- c("coh1", "coh2", "coh3")
+ys_coh <- c("coh1", "coh2", "coh3", "coh4")
 fits_coh <- lapply(ys_coh, function(y) lm(reformulate(preds, y), data = dat))
 print(round(sapply(fits_coh, function(m) summary(m)$r.squared), 3))
 for (i in seq_along(fits_coh)) {
@@ -319,7 +321,7 @@ for (i in seq_along(fits_coh)) {
   print(round(s[sel, c(1, 2, 4)], 3))
 }
 cat("\nadditivity check (max |coef(W) - coef(Wloc) - coef(coherence)|):\n")
-for (i in 1:3) {
+for (i in seq_along(ys)) {
   cw <- coef(fits[[i]]); cl <- coef(fits_loc[[i]]); cc <- coef(fits_coh[[i]])
   ok <- !is.na(cw) & !is.na(cl) & !is.na(cc)
   cat("dim", i, ":", max(abs(cw[ok] - cl[ok] - cc[ok])), "\n")

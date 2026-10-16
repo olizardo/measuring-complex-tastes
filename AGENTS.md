@@ -284,6 +284,28 @@ with the global Zotero export.
     attributions" survives in two explanatory sentences (§4.2 RV
     discussion, §4.6 duality) — kept as plain English, not the label.
     "Conjunctive" stays in the Measures/data-section coding description.
+19. **Passive-individuals MFA is now the MAIN analysis (author-approved plan,
+    2026-10-16; Phase 1–2 complete, prose pending).** The 412 respondents
+    constant within ≥1 aspect block are SUPPLEMENTARY individuals in script 02
+    (`ind.sup = passive`; ids in `output/passive_ids.rds`); the old all-active
+    fit survives only as the INVERTED script-11 sensitivity (the 2026-10-15
+    straightliner footnote is inverted, not deleted). Dimensions presented in
+    the new fit's rank order: **D1 highbrow–popular, D2 volume, D3
+    musical-family contrast (= old dim 4 promoted, race η² 0.245), D4 status
+    valuation (= old dim 3)**. This REVERSES decision 17 — dim 4 returns as a
+    full main-text dimension. Eigen 1.605/1.413/1.051/0.997 (25.97% cum);
+    separate λ1 (active) 0.155/0.127/0.194 → weights 6.450/7.904/5.150;
+    RV 0.353/0.014/0.015. Transposed MFA rebuilt on the 1,847 active rows
+    (constant-dropping now a no-op). Worked examples 362/1881 recomputed
+    (362 W4 155.7 = 93% coherence; 1881 W2 36.3, now a supplementary
+    individual — projections). Structural novelty to handle in prose:
+    consumption's separate axis ORDER swapped (cons ax1 = popular-weighted
+    volume, loads −0.83 on D1; cons ax2 highbrow-weighted carries D2), so the
+    old "ladder shared by preference and consumption" partial-axes narrative no
+    longer holds; and ω R² jumped to 0.222/0.079/0.201/0.030 (D1/D3 strongly
+    socially structured). Full numbers: `notes-passive-refit.md` (workspace
+    root). Old↔new correspondences: newD1↔oldD2 |0.89|, newD2↔oldD1 0.87,
+    newD3↔oldD4 0.97, newD4↔oldD3 0.95; W: W2↔oldW1 0.94, W4↔oldW3 0.99.
 
 ## Statistical caution: ω-demographics correlations (2026-10-14)
 
@@ -318,6 +340,7 @@ than "X shows a stronger effect than race."
 | `scripts/08-robustness-pca.R` | `output/robustness_pca.rds` | MCA-vs-PCA robustness: same MFA with `type="c"` (scaled PCA within groups); compares eigenvalues, separate λ1 (group weights), RV, sign-matched individual coords, W-scores, antinomy shares |
 | `scripts/09-omega-demographics.R` | `manuscript/figures/fig-omega-demographics-dim1/2/3.pdf`, `fig-omega-demographics-genres-d1/2/3.pdf` | Pearson correlations of 16 demographics (education and class as four category indicators each) with genre-based ω per genre; colored-value matrices (added 2026-10-14; see the 4.9 redesign session and the 2026-10-14 audit/final sessions below for design history) |
 | `scripts/10-coherence-demographics.R` | `output/coherence_demographics.rds`, `output/coherence_eta_squared.csv`, `manuscript/tables/tab-coherence-eta.tex`, `tab-coherence-regression.tex` | dimension-specific coherence γ_s = W_s − Wloc_s vs demographics; same variable set/encoding as scripts 07/09 (added 2026-10-15; tables UNREFERENCED in main.tex, pending manuscript integration) |
+| `scripts/11-straightliner-sensitivity.R` | `output/straightliner_sensitivity.rds` | straightliner robustness behind the §3.1 footnote: refits the MFA with the 412 constant-within-a-block respondents as supplementary (passive) individuals; reports eigenvalues, RVs, separate λ1s, 3×5 old↔new cross-correlations (coordinates and W), disagreement shares (added 2026-10-15; see the straightliner-sensitivity session note) |
 
 R implementation gotchas (all fixed in scripts; keep them fixed):
 - RDS columns are `haven_labelled` → `haven::zap_labels()` on load.
@@ -4574,3 +4597,70 @@ script and fixed two latent script-07 table bugs found along the way.
    p-values interactively when reading logs.
 5. Script 10's η² CSV moved to `output/` (the `cache/` dir idea was dropped;
    this project's convention is output/ for everything).
+
+## Session: October 15, 2026 (straightliner sensitivity + prose edits)
+
+- **Intro question revised (author choice "option 1")**: the intro's third
+  question "And where, geometrically, do complex tastes live?" replaced with
+  "And what does the geometric signature of independent taste aspects look
+  like when mapped to the same shared space?" (also fixed the "complexm"
+  typo in the same sentence).
+- **SSI URL footnote** added at the survey's first citation in the Data
+  section (`\url{https://olizardo.github.io/SSI-2012/}`; hyperref provides
+  \url). The lizardo2012ssi bib entry already carried the same URL.
+- **Data and Measures section rewritten** in the paper's conversational style
+  (author request: it read like a different, checklist style). Subsection
+  retitled "Data Source" / "Operationalizing the Three Aspects of Taste";
+  each aspect now gets a narrative paragraph with the coding rationale
+  inline; evaluation paragraph explains the contradictory check-all responses
+  and the unambiguous-status standard as a judgment call. All numbers
+  unchanged (41.7/22.9/20.7%).
+- **Straightliner sensitivity analysis (author question: "is the analysis
+  hurt by unresponsive respondents who coded everything 1 or 0?", then the
+  author's own proposal: make them passive/supplementary rather than active).**
+  - Counts: 412 of 2,259 constant within ≥1 block — pref 83 (38 all-0, 45
+    all-20), cons 84 (74 all-0, 10 all-20), eval 326 (321 all-0 + 5 all-20);
+    15 constant in all three; 66 constant in ≥2.
+  - Passive-individuals refit (script `11-straightliner-sensitivity.R`, saves
+    `output/straightliner_sensitivity.rds`): RV structure unchanged
+    (0.353/0.014/0.015 vs 0.321/0.013/0.014). First two dimensions RECOVERED
+    but SWAP rank order (new d1 = old d2 highbrow–popular, r = −0.89; new d2 =
+    old d1 volume, r = +0.87; W corr 0.87/0.68). **The status-valuation axis
+    SURVIVES INTACT but slips from third to fourth place** (new d4: coordinate
+    r = 0.948 with old d3, eval contribution 91.1%, eval partial sd 2.86 vs
+    2.75 baseline, oldW3↔newW4 r = 0.987), displaced by a NEW pref/cons
+    dimension (new d3, λ 1.051, pref 40.5/cons 56.3/eval 3.1%, cor with
+    n-likes −0.05). An earlier "dim 3 dissolves" reading was an artifact of
+    comparing only the top three dimensions — do not repeat it. Mean
+    individual shares: 56/52/63 → 48.5/56.5/51.7 for the first three of each
+    fit (not dimension-matched).
+  - The 321 zero-grant respondents: normal engagement profiles (mean likes
+    8.24 vs 8.36 rest; 7.2% like zero genres) but 4× enriched for
+    straightlining elsewhere (18% vs 4.5% also constant on pref/cons).
+    Genuineness unresolved; worked example 1881 is one of them.
+  - AUTHOR DECISION (AskUser): keep the full-sample active fit as the main
+    analysis; report the passive-individuals variant in a robustness footnote.
+    Footnote added in §3.1 anchored at the balancing-weights sentence (states
+    the substantive-position reading, the RV/dimension-rank results, and that
+    "the substance of the three interpreted dimensions thus survives this
+    choice, though the rank order of the third does not").
+- **STALE 0.484 FIXED (pre-existing error found by this session)**: main.tex
+  quoted eval's separate-MCA λ1 as 0.484 with weight "4.28 (1/0.484)" —
+  arithmetically inconsistent; 0.484 was the OLD inclusive-OR coding's value.
+  Current value 0.234 (weight 4.277 = 1/0.234, per decision 12). Fixed in TWO
+  places: §3.1 weights sentence (both occurrences) and the duality section's
+  "versus the original $0.200/0.155/0.234$" clause. **Do not reintroduce
+  0.484; the tab-groups table was already correct (λ1 0.234, weight 4.277).**
+- Compiles at 37 pp, no errors. Still UNCOMMITTED: main.tex (intro question,
+  SSI footnote, Data-section rewrite, straightliner footnote, 0.484 fixes),
+  scripts/11, output/straightliner_sensitivity.rds, plus prior sessions'
+  pending items. No Overleaf sync yet.
+- Session gotchas: (a) `df[] <- lapply(df, f)` preserves rownames;
+  `as.data.frame(lapply(df, f))` DROPS them (cost a debug cycle — mfa_input
+  rownames are the alignment keys); (b) `rownames()` on an extracted matrix
+  column (a vector) returns NULL, making `%in%` checks vacuously TRUE — index
+  the matrix, not the vector; (c) the manuscript's 56/52/63% disagreement
+  shares are the MEAN of individual W_s/T_s ratios (script 04 `share_s`), NOT
+  the aggregate Σ W_s / Σ Σ_h F² ratio (which is 49/44/65) — don't conflate;
+  (d) the saved output/mfa_results.rds has no `group$sep1..3` (trimmed) —
+  recompute separate λ1s with direct MCA calls on the blocks.

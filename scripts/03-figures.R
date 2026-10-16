@@ -36,38 +36,37 @@ p1 <- ggplot(eig, aes(factor(dim), lambda, group = 1)) +
   theme(panel.grid.minor = element_blank())
 ggsave("manuscript/figures/fig-scree.pdf", p1, width = 5, height = 3.4)
 
-# --- Figure 2: individual factor map (dims 2-3), colored by age ----------------
-ind <- as.data.frame(res$ind$coord[, 2:3])
-names(ind) <- c("dim2", "dim3")
+# --- Individual factor map (dims 1-2), colored by age (UNREFERENCED) ----------
+ind <- as.data.frame(res$ind$coord[, 1:2])
+names(ind) <- c("dim1", "dim2")
 mfa_dat <- readRDS("data/mfa_input.rds")
 df0 <- readRDS("data/ssi2012_cleaned.rds")
 df0[] <- lapply(df0, function(x) if (haven::is.labelled(x)) haven::zap_labels(x) else x)
-d0 <- df0[as.integer(rownames(mfa_dat)), ]
+d0 <- df0[as.integer(rownames(res$ind$coord)), ]  # active individuals only
 age6 <- cut(d0$age, breaks = c(-Inf, 4, 6, 8, 10, 12, Inf),
             labels = c("18-29", "30-39", "40-49", "50-59", "60-69", "70+"))
 ind$age6 <- factor(age6, levels = c("18-29", "30-39", "40-49", "50-59",
                                     "60-69", "70+"))
 ind <- ind[!is.na(ind$age6), ]  # drop single missing-age respondent
-p2 <- ggplot(ind, aes(dim2, dim3, color = age6)) +
+p2 <- ggplot(ind, aes(dim1, dim2, color = age6)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_point(alpha = 0.4, size = 0.75) +
-  # sequential dark-blue ramp: age is ordinal, ramp makes the dim-2 gradient visible
+  # sequential dark-blue ramp: age is ordinal, ramp makes the dim-1 gradient visible
   scale_color_manual(values = setNames(
     colorRampPalette(c("#6BAED6", "#08306B"))(6), levels(ind$age6))) +
-  labs(x = "Dimension 2", y = "Dimension 3", color = "Age group",
-       title = "Individual factor map (dimensions 2-3)",
+  labs(x = "Dimension 1", y = "Dimension 2", color = "Age group",
+       title = "Individual factor map (dimensions 1-2)",
        subtitle = "Points: respondents, colored by age group") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "right")
 ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
 
-# --- Figures 2-3: category maps, one figure per dimension pair (2026-10-14) ---
-# The combined two-panel figure was split at the author's request for
-# readability (and to fix the duplicated-figure problem: both main.tex
-# environments pointed at the same two-panel PDF). Dimensions 1-2 first,
-# then 2-3; axis titles name the dimensions explicitly (with their readings),
-# since the horizontal/vertical assignment differs between the two.
+# --- Category maps, one figure per dimension pair ------------------------------
+# Planes under the 4-dimension passive-individuals fit: (D1, D2) = highbrow x
+# volume, and (D1, D4) = highbrow x status valuation -- both share the
+# horizontal highbrow--popular axis; status valuation stays vertical.
+# Axis titles name the dimensions explicitly (with their readings).
 mk_cc <- function(dims, xl, yl) {
   d <- as.data.frame(res$quali.var$coord[, dims])
   names(d) <- c("x", "y")
@@ -96,14 +95,15 @@ mk_cc <- function(dims, xl, yl) {
     theme(panel.grid.minor = element_blank(), legend.position = "bottom")
 }
 ggsave("manuscript/figures/fig-categories-d12.pdf",
-       mk_cc(c(1, 2), "Dimension 1 (volume)",
-             "Dimension 2 (highbrow vs popular)"),
+       mk_cc(c(1, 2), "Dimension 1 (highbrow vs popular)",
+             "Dimension 2 (volume)"),
        width = 4.6, height = 4.4)
-ggsave("manuscript/figures/fig-categories-d23.pdf",
-       mk_cc(c(2, 3), "Dimension 2 (highbrow vs popular)",
-             "Dimension 3 (status valuation)"),
+ggsave("manuscript/figures/fig-categories-d14.pdf",
+       mk_cc(c(1, 4), "Dimension 1 (highbrow vs popular)",
+             "Dimension 4 (status valuation)"),
        width = 4.6, height = 4.4)
-# the combined two-panel version is replaced by the two per-dimension figures
+# the old dims 2-3 plane figure is stale under the new fit
+unlink("manuscript/figures/fig-categories-d23.pdf")
 unlink("manuscript/figures/fig-categories.pdf")
 
 # --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
@@ -160,14 +160,14 @@ writeLines(rlines, "manuscript/tables/tab-rv.tex")
 # group structure: separate first eigenvalue, balancing weight, contributions, Lg with MFA
 lam1g <- sapply(res$separate.analyses, function(a) a$eig[1, 1])
 w <- 1 / lam1g
-gcont <- res$group$contrib[1:3, 1:3]
+gcont <- res$group$contrib[1:3, 1:4]
 gLg <- res$group$Lg[1:3, "MFA"]
 gnames <- c("Preference", "Consumption", "Evaluation")
 glines <- c(
-  "\\begin{tabular}{lcccccc}", "\\toprule",
-  " & & & \\multicolumn{3}{c}{Contributions (\\%)} & \\\\",
-  "\\cmidrule(lr){4-6}",
-  "Aspect & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & $Lg$ with MFA \\\\",
+  "\\begin{tabular}{lccccccc}", "\\toprule",
+  " & & & \\multicolumn{4}{c}{Contributions (\\%)} & \\\\",
+  "\\cmidrule(lr){4-7}",
+  "Aspect & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & Dim 4 & $Lg$ with MFA \\\\",
   "\\midrule")
 for (i in 1:3) {
   glines <- c(glines, paste0(gnames[i], " & ",
@@ -180,14 +180,14 @@ writeLines(glines, "manuscript/tables/tab-groups.tex")
 
 # partial axes: correlations between each group's separate-analysis axes
 # and the global dimensions (cor of individual coordinates on the two axes)
-global <- res$ind$coord[, 1:3, drop = FALSE]
+global <- res$ind$coord[, 1:4, drop = FALSE]
 plines <- c(
-  "\\begin{tabular}{lccc}", "\\toprule",
-  "Partial axis & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+  "\\begin{tabular}{lcccc}", "\\toprule",
+  "Partial axis & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
 for (h in 1:3) {
-  sep <- res$separate.analyses[[h]]$ind$coord[, 1:3, drop = FALSE]
+  sep <- res$separate.analyses[[h]]$ind$coord[, 1:4, drop = FALSE]
   pcax <- cor(sep, global)
-  for (s in 1:3) {
+  for (s in 1:4) {
     plines <- c(plines, paste0(gnames[h], " axis ", s, " & ",
       paste(sprintf("%.2f", pcax[s, ]), collapse = " & "), " \\\\"))
   }

@@ -124,8 +124,10 @@ demo_labels <- c(
   otherrace = "Multirace/Other"
 )
 
-dim_labels <- c("Dimension 1 (volume)", "Dimension 2 (highbrow-popular)",
-                "Dimension 3 (status valuation)")
+# 4-dimension passive-individuals fit (2026-10-16). D3's prose gloss is
+# provisional pending the Phase-2 characterization (musical-family contrast).
+dim_labels <- c("Dimension 1 (highbrow-popular)", "Dimension 2 (volume)",
+                "Dimension 3 (musical family)", "Dimension 4 (status valuation)")
 
 # ============================================================================
 # STEP 2: COMPUTE PEARSON CORRELATIONS (ALL ON ONE SHARED SCALE)
@@ -233,8 +235,8 @@ mk_genre_rows <- function(data, y_labels = TRUE, x_labels = TRUE, text_size = 1.
     )
 }
 
-dim_titles <- c("Dimension 1\n(volume)", "Dimension 2\n(highbrow-popular)",
-                "Dimension 3\n(status valuation)")
+dim_titles <- c("Dimension 1\n(highbrow-popular)", "Dimension 2\n(volume)",
+                "Dimension 3\n(musical family)", "Dimension 4\n(status valuation)")
 
 # ============================================================================
 # STEP 3: MAIN FIGURES -- 8 key genres, one figure per dimension (2026-10-14)

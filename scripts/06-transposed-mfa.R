@@ -87,6 +87,9 @@ mfa_manual <- function(Xlist, ncp = 5) {
 
 # --- data ----------------------------------------------------------------------
 md <- readRDS("data/mfa_input.rds")
+passive_ids <- readRDS("output/passive_ids.rds")
+act <- setdiff(rownames(md), passive_ids)
+cat("active respondents for the transposed fit:", length(act), "of", nrow(md), "\n")
 
 # per-genre configuration rates (Ma's eight types), all 2,259 respondents
 types <- c("simple_pos", "guilty", "preacquired", "pose",
@@ -101,26 +104,31 @@ cfg <- sapply(genres, function(g) {
 })
 rownames(cfg) <- types; colnames(cfg) <- genres
 
-# drop constant respondent-variables per aspect
+# Within the active subsample no respondent is constant within an aspect
+# block (all straightliners were demoted to supplementary individuals by
+# script 02), so the constant-dropping guard below is a no-op — kept as a
+# safety check.
+mda <- md[act, ]
 keep <- function(pre) {
-  M <- as.matrix(md[, grep(paste0("^", pre, "_"), names(md))])
+  M <- as.matrix(mda[, grep(paste0("^", pre, "_"), names(mda))])
   rs <- rowSums(M); rs > 0 & rs < 20
 }
 kp <- keep("pref"); kc <- keep("cons"); kv <- keep("eval")
+stopifnot(all(kp), all(kc), all(kv))
 cat("respondent-variables kept: pref", sum(kp), "cons", sum(kc),
-    "eval", sum(kv), "of", nrow(md), "\n")
+    "eval", sum(kv), "of", nrow(mda), "\n")
 
 Xt_list <- list(
-  Preference  = t(md[kp, paste0("pref_", genres)]),
-  Consumption = t(md[kc, paste0("cons_", genres)]),
-  Evaluation  = t(md[kv, paste0("eval_", genres)]))
+  Preference  = t(mda[kp, paste0("pref_", genres)]),
+  Consumption = t(mda[kc, paste0("cons_", genres)]),
+  Evaluation  = t(mda[kv, paste0("eval_", genres)]))
 
-# --- VALIDATION against FactoMineR (respondent-level analysis) ------------------
+# --- VALIDATION against FactoMineR (respondent-level analysis, active rows) ----
 res_ref <- readRDS("output/mfa_results.rds")
 Xo_list <- list(
-  Preference  = as.matrix(md[, paste0("pref_", genres)]),
-  Consumption = as.matrix(md[, paste0("cons_", genres)]),
-  Evaluation  = as.matrix(md[, paste0("eval_", genres)]))
+  Preference  = as.matrix(mda[, paste0("pref_", genres)]),
+  Consumption = as.matrix(mda[, paste0("cons_", genres)]),
+  Evaluation  = as.matrix(mda[, paste0("eval_", genres)]))
 mo <- mfa_manual(Xo_list)
 d_eig  <- max(abs(mo$eig - res_ref$eig[1:5, 1]))
 d_glob <- max(abs(sweep(mo$Fglob, 2, sign(colSums(mo$Fglob * res_ref$ind$coord[, 1:5])), "*")
@@ -141,6 +149,27 @@ stopifnot(d_eig < 1e-3, d_glob < 1e-2, d_part < 1e-2, d_rv < 1e-3, d_ctb < 1e-3)
 mt <- mfa_manual(Xt_list)
 rownames(mt$Fglob) <- genres
 for (h in seq_along(gname3)) rownames(mt$Fpart[[h]]) <- genres
+
+# sign anchoring: the transposed dimensions' directions are SVD-arbitrary.
+# Orient each transposed dimension to agree with the individual-level fit:
+# reference = each genre's mean "yes"-category coordinate across the three
+# aspects in the main (flipped) MFA space; flip the transposed dimension
+# when the correlation with that reference is negative.
+res_main <- readRDS("output/mfa_results.rds")
+qc <- res_main$quali.var$coord[, 1:4]
+genref <- sapply(genres, function(g) {
+  rows <- paste0(rep(c("pref", "cons", "eval"), each = 1), "_", g, "_1")
+  colMeans(qc[rows, ])
+})  # 4 x 20: genre barycenters of the yes-category coordinates
+for (s in 1:4) {
+  r <- cor(mt$Fglob[, s], genref[s, ])
+  cat(sprintf("transposed dim %d vs individual-space genre barycenters: r = %.2f\n",
+              s, r))
+  if (!is.na(r) && r < 0) {
+    mt$Fglob[, s] <- -mt$Fglob[, s]
+    for (h in seq_along(gname3)) mt$Fpart[[h]][, s] <- -mt$Fpart[[h]][, s]
+  }
+}
 saveRDS(mt, "output/mfa_results_transposed.rds")
 
 cat("\n== Transposed eigenvalues (first 5) ==\n")
@@ -149,23 +178,18 @@ cat("\n== Separate MCA lambda1 per aspect (transposed) ==\n")
 print(round(mt$lambda1, 4))
 cat("\n== RV coefficients between aspects, genre level ==\n")
 print(round(mt$RV, 3))
-cat("\n== Group contributions (dims 1-3, %) ==\n")
-print(round(mt$contrib[, 1:3], 1))
+cat("\n== Group contributions (dims 1-4, %) ==\n")  # contrib is dims x groups
+print(round(mt$contrib[1:4, ], 1))
 
-# anchor signs: dim poles read from genre coordinates
-Fg <- mt$Fglob[, 1:3]
-cat("\n== Genre global coordinates (dims 1-3) ==\n")
+Fg <- mt$Fglob[, 1:4]
+cat("\n== Genre global coordinates (dims 1-4) ==\n")
 print(round(Fg, 2))
 
-cat("\n== Genre partial coordinates (dim 1) ==\n")
-print(round(cbind(pref = mt$Fpart[[1]][, 1], cons = mt$Fpart[[2]][, 1],
-                  eval = mt$Fpart[[3]][, 1]), 2))
-cat("\n== Genre partial coordinates (dim 2) ==\n")
-print(round(cbind(pref = mt$Fpart[[1]][, 2], cons = mt$Fpart[[2]][, 2],
-                  eval = mt$Fpart[[3]][, 2]), 2))
-cat("\n== Genre partial coordinates (dim 3) ==\n")
-print(round(cbind(pref = mt$Fpart[[1]][, 3], cons = mt$Fpart[[2]][, 3],
-                  eval = mt$Fpart[[3]][, 3]), 2))
+for (s in 1:4) {
+  cat(sprintf("\n== Genre partial coordinates (dim %d) ==\n", s))
+  print(round(cbind(pref = mt$Fpart[[1]][, s], cons = mt$Fpart[[2]][, s],
+                    eval = mt$Fpart[[3]][, s]), 2))
+}
 
 cat("\n== Pearson correlations: configuration rates vs transposed dims ==\n")
 cfgT <- as.data.frame(t(cfg))
@@ -183,11 +207,12 @@ gnames <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
             "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
             "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
             "Dance/Club", "Heavy Metal")
-glob <- data.frame(genre = gnames, d1 = Fg[, 1], d2 = Fg[, 2], d3 = Fg[, 3])
+glob <- data.frame(genre = gnames, d1 = Fg[, 1], d2 = Fg[, 2],
+                   d3 = Fg[, 3], d4 = Fg[, 4])
 part <- do.call("rbind", lapply(seq_along(gname3), function(h)
   data.frame(genre = gnames, modality = gname3[h],
              d1 = mt$Fpart[[h]][, 1], d2 = mt$Fpart[[h]][, 2],
-             d3 = mt$Fpart[[h]][, 3])))
+             d3 = mt$Fpart[[h]][, 3], d4 = mt$Fpart[[h]][, 4])))
 mk <- function(panel, xg, yg, xp, yp) data.frame(
   panel = panel, genre = glob$genre, xg = glob[[xg]], yg = glob[[yg]],
   modality = part$modality, xp = part[[xp]], yp = part[[yp]])
@@ -220,13 +245,14 @@ mk_gm <- function(xg, yg, xp, yp, ttl, xl, yl) {
 }
 ggsave("manuscript/figures/fig-genre-map-d12.pdf",
        mk_gm("d1", "d2", "d1", "d2", "Dimensions 1-2",
-             "Dimension 1 (volume)", "Dimension 2 (highbrow vs popular)"),
+             "Dimension 1 (highbrow vs popular)", "Dimension 2 (volume)"),
        width = 5.2, height = 4.6)
-ggsave("manuscript/figures/fig-genre-map-d13.pdf",
-       mk_gm("d1", "d3", "d1", "d3", "Dimensions 1-3",
-             "Dimension 1 (volume)", "Dimension 3 (status valuation)"),
+ggsave("manuscript/figures/fig-genre-map-d14.pdf",
+       mk_gm("d1", "d4", "d1", "d4", "Dimensions 1-4",
+             "Dimension 1 (highbrow vs popular)", "Dimension 4 (status valuation)"),
        width = 5.2, height = 4.6)
-# the combined two-panel version is replaced by the two per-dimension figures
+# the old dims 1-3 plane figure is stale under the 4-dimension fit
+unlink("manuscript/figures/fig-genre-map-d13.pdf")
 unlink("manuscript/figures/fig-genre-map.pdf")
 
 # --- table: per-genre configuration profiles --------------------------------------

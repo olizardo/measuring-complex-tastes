@@ -59,7 +59,8 @@ sclass_indicators <- sclass_indicators |>
 sup$race <- relevel(sup$race, ref = "White")
 
 dat <- cbind(
-  ant[, c("coh1", "coh2", "coh3", "W1", "W2", "W3", "Wloc1", "Wloc2", "Wloc3")],
+  ant[, c("coh1", "coh2", "coh3", "coh4",
+          "W1", "W2", "W3", "W4", "Wloc1", "Wloc2", "Wloc3", "Wloc4")],
   sup, educ_indicators, sclass_indicators
 )
 
@@ -71,20 +72,22 @@ for (v in c("gender", "race", "age6", "income4")) {
 # Sanity: coherence is the exact residual of the eq:genre identity
 stopifnot(max(abs(dat$coh1 - (dat$W1 - dat$Wloc1))) < 1e-8,
           max(abs(dat$coh2 - (dat$W2 - dat$Wloc2))) < 1e-8,
-          max(abs(dat$coh3 - (dat$W3 - dat$Wloc3))) < 1e-8)
+          max(abs(dat$coh3 - (dat$W3 - dat$Wloc3))) < 1e-8,
+          max(abs(dat$coh4 - (dat$W4 - dat$Wloc4))) < 1e-8)
 
 # =============================================================================
 # 1. Descriptive statistics
 # =============================================================================
 cat("\n===== COHERENCE DESCRIPTIVES =====\n\n")
 desc <- tibble(
-  dim = c("gamma_1", "gamma_2", "gamma_3"),
-  mean = c(mean(dat$coh1), mean(dat$coh2), mean(dat$coh3)),
-  sd = c(sd(dat$coh1), sd(dat$coh2), sd(dat$coh3)),
-  median = c(median(dat$coh1), median(dat$coh2), median(dat$coh3)),
-  min = c(min(dat$coh1), min(dat$coh2), min(dat$coh3)),
-  max = c(max(dat$coh1), max(dat$coh2), max(dat$coh3)),
-  pct_negative = c(mean(dat$coh1 < 0), mean(dat$coh2 < 0), mean(dat$coh3 < 0))
+  dim = c("gamma_1", "gamma_2", "gamma_3", "gamma_4"),
+  mean = c(mean(dat$coh1), mean(dat$coh2), mean(dat$coh3), mean(dat$coh4)),
+  sd = c(sd(dat$coh1), sd(dat$coh2), sd(dat$coh3), sd(dat$coh4)),
+  median = c(median(dat$coh1), median(dat$coh2), median(dat$coh3), median(dat$coh4)),
+  min = c(min(dat$coh1), min(dat$coh2), min(dat$coh3), min(dat$coh4)),
+  max = c(max(dat$coh1), max(dat$coh2), max(dat$coh3), max(dat$coh4)),
+  pct_negative = c(mean(dat$coh1 < 0), mean(dat$coh2 < 0),
+                   mean(dat$coh3 < 0), mean(dat$coh4 < 0))
 )
 print(desc, digits = 3)
 cat("\nN =", nrow(dat), "\n")
@@ -113,7 +116,7 @@ eta2_list <- list()
 for (v in preds) {
   if (v %in% c("educ_somecol", "educ_bach", "educ_postgrad")) next
   if (v %in% c("sclass_working", "sclass_middle", "sclass_upper")) next
-  eta2_list[[v]] <- sapply(c("coh1", "coh2", "coh3"),
+  eta2_list[[v]] <- sapply(c("coh1", "coh2", "coh3", "coh4"),
                            function(t) eta2_one(dat[[t]], dat[[v]]))
 }
 
@@ -124,7 +127,7 @@ educ_fac <- factor(
   ifelse(dat$educ_bach == 1, "Bachelor's",
   ifelse(dat$educ_postgrad == 1, "Postgraduate", NA)))),
   levels = c("HS or less", "Some college", "Bachelor's", "Postgraduate"))
-eta2_list$educ <- sapply(c("coh1", "coh2", "coh3"),
+eta2_list$educ <- sapply(c("coh1", "coh2", "coh3", "coh4"),
                          function(t) eta2_one(dat[[t]], educ_fac))
 
 sclass_fac <- factor(
@@ -133,11 +136,11 @@ sclass_fac <- factor(
   ifelse(dat$sclass_middle == 1, "Middle",
   ifelse(dat$sclass_upper == 1, "Upper", NA)))),
   levels = c("Lower", "Working", "Middle", "Upper"))
-eta2_list$sclass <- sapply(c("coh1", "coh2", "coh3"),
+eta2_list$sclass <- sapply(c("coh1", "coh2", "coh3", "coh4"),
                            function(t) eta2_one(dat[[t]], sclass_fac))
 
 eta2 <- t(do.call(cbind, eta2_list))
-colnames(eta2) <- c("coh1", "coh2", "coh3")
+colnames(eta2) <- c("coh1", "coh2", "coh3", "coh4")
 cat("\n== Correlation ratios (eta^2) with coherence scores ==\n")
 print(round(eta2, 3))
 
@@ -146,7 +149,7 @@ print(round(eta2, 3))
 # =============================================================================
 cat("\n===== OLS: COHERENCE ON DEMOGRAPHICS =====\n")
 
-ys_coh <- c("coh1", "coh2", "coh3")
+ys_coh <- c("coh1", "coh2", "coh3", "coh4")
 
 # Complete cases across the full predictor set (same criterion as script 07)
 keep <- complete.cases(dat[, unique(c(ys_coh, preds))])
@@ -166,9 +169,9 @@ for (i in seq_along(fits_coh)) {
 }
 
 # Context: R2 of W and Wloc on the same sample and predictors
-fits_w <- lapply(c("W1", "W2", "W3"),
+fits_w <- lapply(c("W1", "W2", "W3", "W4"),
                  function(y) lm(reformulate(preds, y), data = dat_cc))
-fits_loc <- lapply(c("Wloc1", "Wloc2", "Wloc3"),
+fits_loc <- lapply(c("Wloc1", "Wloc2", "Wloc3", "Wloc4"),
                    function(y) lm(reformulate(preds, y), data = dat_cc))
 cat("\n== R2 comparison (same sample, same predictors) ==\n")
 comp <- rbind(
@@ -176,11 +179,11 @@ comp <- rbind(
   Wloc = sapply(fits_loc, function(m) summary(m)$r.squared),
   coherence = sapply(fits_coh, function(m) summary(m)$r.squared)
 )
-colnames(comp) <- c("dim1", "dim2", "dim3")
+colnames(comp) <- c("dim1", "dim2", "dim3", "dim4")
 print(round(comp, 3))
 cat("\nNOTE: R2 is not additive across components (covariance between Wloc and",
     "\ncoherence terms); coefficient additivity is checked instead:\n")
-for (i in 1:3) {
+for (i in seq_along(ys_coh)) {
   cw <- coef(fits_w[[i]]); cl <- coef(fits_loc[[i]]); cc <- coef(fits_coh[[i]])
   ok <- !is.na(cw) & !is.na(cl) & !is.na(cc)
   cat("dim", i, "max |coef(W) - coef(Wloc) - coef(coherence)|:",
@@ -196,8 +199,8 @@ elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
           educ = "Education", parentba = "Parents' BA",
           income4 = "Household income", sclass = "Subjective class",
           region = "Census region")
-te <- c("\\begin{tabular}{lccc}", "\\toprule",
-        " & $\\gamma_1$ & $\\gamma_2$ & $\\gamma_3$ \\\\", "\\midrule")
+te <- c("\\begin{tabular}{lcccc}", "\\toprule",
+        " & $\\gamma_1$ & $\\gamma_2$ & $\\gamma_3$ & $\\gamma_4$ \\\\", "\\midrule")
 for (v in names(eta2_list)) {
   te <- c(te, paste0(elab[v], " & ",
                      paste(sprintf("%.3f", eta2[v, ]), collapse = " & "),
@@ -258,8 +261,8 @@ var_labels <- c(
   regionWest = "West"
 )
 
-tl <- c("\\begin{tabular}{lccc}", "\\toprule",
-        " & $\\gamma_1$ & $\\gamma_2$ & $\\gamma_3$ \\\\", "\\midrule")
+tl <- c("\\begin{tabular}{lcccc}", "\\toprule",
+        " & $\\gamma_1$ & $\\gamma_2$ & $\\gamma_3$ & $\\gamma_4$ \\\\", "\\midrule")
 for (bk in blocks) {
   # list blocks carry a vector of indicator terms + a header; plain blocks are
   # c(term, header) character vectors

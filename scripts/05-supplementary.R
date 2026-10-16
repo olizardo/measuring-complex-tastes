@@ -64,20 +64,58 @@ sup <- data.frame(gender, race, age6, educ, parentba, income4, sclass, region)
 stopifnot(nrow(sup) == nrow(mfa_dat))
 
 # --- rerun MFA with supplementary columns ---------------------------------------
+# Same fit as script 02 (straightliners as supplementary individuals) plus the
+# demographic block as supplementary group 4.
 mfa2 <- cbind(mfa_dat, sup)
 mfa2[1:ncol(mfa_dat)] <- lapply(mfa_dat, function(x) factor(x, levels = c(0, 1)))
 nsup <- ncol(sup)
+passive_ids <- readRDS("output/passive_ids.rds")
 res <- MFA(mfa2,
            group = c(20, 20, 20, nsup),
            type = c("n", "n", "n", "n"),
            name.group = c("Preference", "Consumption", "Evaluation",
                           "Demographics"),
            num.group.sup = 4,
+           ind.sup = match(passive_ids, rownames(mfa2)),
            graph = FALSE)
+
+# -- sign anchoring: same flip as script 02 (D1 + = highbrow; D2 + = volume;
+#    D3 + = rap/reggae/Latin side; D4 + = generous status granting). The
+#    supplementary demographic group changes nothing about the taste-space
+#    construction, so this fit's axes are script 02's up to sign.
+flip <- c(-1, 1, 1, 1)
+flip_cols <- function(M, f) {
+  k <- seq_along(f)
+  M[, k] <- sweep(M[, k, drop = FALSE], 2, f, "*")
+  M
+}
+for (path in list(
+  c("ind", "coord"), c("ind", "coord.partiel"),
+  c("ind.sup", "coord"), c("ind.sup", "coord.partiel"),
+  c("quali.var", "coord"), c("quali.var", "coord.partiel"), c("quali.var", "v.test"),
+  c("quali.var.sup", "coord"), c("quali.var.sup", "v.test"),
+  c("group", "coord"), c("group", "correlation"),
+  c("partial.axes", "coord"), c("partial.axes", "cor"),
+  c("global.pca", "var", "coord"), c("global.pca", "var", "cor"),
+  c("global.pca", "ind", "coord"), c("global.pca", "ind.sup", "coord"),
+  c("global.pca", "quali.sup", "coord")
+)) {
+  el2 <- res[[path]]
+  if (is.null(el2)) next
+  res[[path]] <- flip_cols(el2, flip)
+}
+cc_chk <- res$quali.var$coord
+stopifnot(
+  cc_chk["cons_opera_1", 1] > 0.5,
+  mean(cc_chk[grep("^cons_.*_1$", rownames(cc_chk)), 2]) > 0,
+  cc_chk["cons_raphiphop_1", 3] > 0.5,
+  cc_chk["eval_raphiphop_1", 4] > 1.5
+)
 saveRDS(res, "output/mfa_results_sup.rds")
 
 # --- category coordinates (barycenters of members' individual coordinates) ------
-coord <- res$ind$coord[, 1:4]
+# full sample: active coordinates plus the projected supplementary individuals
+coord <- rbind(res$ind$coord, res$ind.sup$coord)[rownames(mfa_dat), 1:4]
 cc <- do.call(rbind, lapply(names(sup), function(v) {
   g <- sup[[v]]
   data.frame(variable = v, category = levels(g),
@@ -109,29 +147,30 @@ cat("\n== Supplementary category coordinates (dims 1-4) ==\n")
 print(cbind(cc[, c("variable", "category", "n")],
              round(cc[, c("d1", "d2", "d3", "d4")], 2)), row.names = FALSE)
 
-# --- figure: supplementary category barycenters, dims 2-3 ----------------------
+# --- figure: supplementary category barycenters, dims 1-2 (UNREFERENCED) -------
 el <- c("gender" = "Gender", "race" = "Race/ethnicity", "age6" = "Age",
         "educ" = "Education", "parentba" = "Parents' BA", "income4" = "Income",
         "sclass" = "Subjective class", "region" = "Census region")
 pal <- setNames(RColorBrewer::brewer.pal(8, "Dark2"), names(sup))
-p8 <- ggplot(cc, aes(d2, d3, color = variable)) +
+p8 <- ggplot(cc, aes(d1, d2, color = variable)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
   geom_point(size = 2.2) +
   geom_text_repel(aes(label = category), size = 2.5,
                   segment.color = NA, max.overlaps = 20, show.legend = FALSE) +
   scale_color_manual(values = pal, labels = el[names(pal)]) +
-  labs(x = "Dimension 2", y = "Dimension 3",
+  labs(x = "Dimension 1", y = "Dimension 2",
        title = "Supplementary demographic categories in the MFA space",
        subtitle = "Category barycenters; axes cover the category coordinates only") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "bottom")
 ggsave("manuscript/figures/fig-supplementary.pdf", p8, width = 6, height = 4.4)
 
-# --- figure: category map on dimensions 2 and 4 ---------------------------------
-# Dimension 4 is a racialized engagement contrast (reggae/Latin/rap/Blues-R&B
-# vs. the rock-country cluster). Show its 'yes' categories by aspect, with 'no'
-# categories in grey, mirroring the fig-categories design.
+# --- figure: category map on dimensions 2 and 3 (UNREFERENCED) -------------------
+# Dimension 3 is the musical-family engagement contrast (rap/reggae/Latin/salsa
+# vs. the guitar-rock cluster). Show its 'yes' categories by aspect, with 'no'
+# categories in grey, mirroring the fig-categories design. (This was fig-dim4
+# under the old all-active fit, where the contrast sat on dimension 4.)
 gshort <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
             "country", "blueg", "folk", "hymgos", "latspsal", "raphiphop",
             "blurb", "reggae", "toppop", "controck", "indalt", "danclub", "hvymtl")
@@ -140,59 +179,59 @@ genres <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
             "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
             "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
             "Dance/Club", "Heavy Metal")
-cd4 <- as.data.frame(res$quali.var$coord[, c(2, 4)])
-names(cd4) <- c("dim2", "dim4")
-cd4$name <- rownames(cd4)
-cd4$aspect <- ifelse(grepl("^pref_", cd4$name), "Preference",
-                 ifelse(grepl("^cons_", cd4$name), "Consumption", "Evaluation"))
-cd4$yes <- grepl("_1$", cd4$name)
-cd4$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cd4$name)),
+cd3 <- as.data.frame(res$quali.var$coord[, c(2, 3)])
+names(cd3) <- c("dim2", "dim3")
+cd3$name <- rownames(cd3)
+cd3$aspect <- ifelse(grepl("^pref_", cd3$name), "Preference",
+                 ifelse(grepl("^cons_", cd3$name), "Consumption", "Evaluation"))
+cd3$yes <- grepl("_1$", cd3$name)
+cd3$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", cd3$name)),
                           gshort)]
-p9 <- ggplot(cd4, aes(dim2, dim4)) +
+p9 <- ggplot(cd3, aes(dim2, dim3)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
-  geom_point(data = subset(cd4, !yes), color = "grey65", size = 1) +
-  geom_point(data = subset(cd4, yes), aes(color = aspect), size = 1.8,
+  geom_point(data = subset(cd3, !yes), color = "grey65", size = 1) +
+  geom_point(data = subset(cd3, yes), aes(color = aspect), size = 1.8,
              alpha = 0.9) +
-  ggrepel::geom_text_repel(data = subset(cd4, yes),
+  ggrepel::geom_text_repel(data = subset(cd3, yes),
                            aes(label = genre, color = aspect), size = 2.6,
                            segment.color = NA, max.overlaps = 25,
                            show.legend = FALSE) +
   scale_color_manual(values = c(Preference = "#08519C",
                                 Consumption = "#A63603",
                                 Evaluation = "#006D2C")) +
-  labs(x = "Dimension 2", y = "Dimension 4",
+  labs(x = "Dimension 2", y = "Dimension 3",
        color = "Aspect",
-       title = "Category map: 'yes' categories on Dimensions 2 and 4",
+       title = "Category map: 'yes' categories on Dimensions 2 and 3",
        subtitle = "Grey points: 'no' categories") +
   theme_minimal(base_size = 10) +
   theme(panel.grid.minor = element_blank(), legend.position = "right")
-ggsave("manuscript/figures/fig-dim4.pdf", p9, width = 6, height = 5)
+ggsave("manuscript/figures/fig-dim3.pdf", p9, width = 6, height = 5)
+unlink("manuscript/figures/fig-dim4.pdf")
 
 # --- LaTeX tables ---------------------------------------------------------------
-# tables report dims 1-3 only; the manuscript no longer discusses dim 4
-# (eta/cc still compute d4 and fig-dim4 is still generated, but unreferenced)
+# tables report dims 1-4 (the manuscript again discusses four dimensions)
 tl <- c(
-  "\\begin{tabular}{lccc}", "\\toprule",
-  "Variable & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+  "\\begin{tabular}{lcccc}", "\\toprule",
+  "Variable & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
 for (v in names(el)) {
   tl <- c(tl, paste0(el[v], " & ",
-                     paste(sprintf("%.3f", eta[v, 1:3]), collapse = " & "),
+                     paste(sprintf("%.3f", eta[v, 1:4]), collapse = " & "),
                      " \\\\"))
 }
 tl <- c(tl, "\\bottomrule", "\\end{tabular}")
 writeLines(tl, "manuscript/tables/tab-eta.tex")
 
 sl <- c(
-  "\\begin{tabular}{llcccc}", "\\toprule",
-  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 \\\\", "\\midrule")
+  "\\begin{tabular}{llccccc}", "\\toprule",
+  "Variable & Category & $n$ & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
 prev <- NULL
 for (i in seq_len(nrow(cc))) {
   if (!is.null(prev) && cc$variable[i] != prev) sl <- c(sl, "\\addlinespace")
   cat_esc <- gsub("\\$", "\\\\$", cc$category[i])
   sl <- c(sl, paste0(el[cc$variable[i]], " & ", cat_esc, " & ",
                      cc$n[i], " & ",
-                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3")]),
+                     paste(sprintf("%.2f", cc[i, c("d1", "d2", "d3", "d4")]),
                            collapse = " & "), " \\\\"))
   prev <- cc$variable[i]
 }
