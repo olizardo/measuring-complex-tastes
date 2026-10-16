@@ -158,4 +158,41 @@ fig-worked-example.pdf regenerated 19:09 post-refit; caption line 152 already de
 - [ ] verify pending numbers (sample means; §4.8 age assignment; γ4 r; coherence split)
 - [ ] recompile (pdflatex→bibtex→pdflatex×2), 0 undefined refs
 - [ ] commit + refresh outer gitlink; AGENTS.md decision note (category-plane change + dim4 omega fix)
-- [ ] flag to author: §4.1 rewrite + new D3 reading approval; old dim-2 clarification paragraph disposition
+- [x] flag to author: §4.1 rewrite + new D3 reading approval; old dim-2 clarification paragraph disposition
+
+### Session 2 COMPLETE (2026-10-16, evening)
+
+All checklist items done. Additional stale spots found and fixed beyond the
+original list: §3.2 worked-example walk (line 110 — full old-fit partial-point
+arithmetic, rewritten with new-fit D4/D2/D1 numbers: W4 = 155.7 = 74% of T4,
+W2 = 0.1 tight cluster, W1 = 7.0 with pref −2.61 vs cons +0.61); §3.2 line 147
+(W1 = 0.8 → W2 0.1/W3 0.3 vs W4 155.7); 522's profile was WRONG in prose AND
+table (said 8 likes/6 listens/5 evals; actual 5/4/11 — verified from
+mfa_input); §4.9 line 303 coefficients stale vs tab-coherence-regression (γ1
+70+ is +0.45 ns not −1.87; γ3 has Midwest/West effects; γ2 carries
+parentba/upper-class — rewritten); §4.9 line 301 η² claim (race γ3 = 0.049,
+not "nothing reaches 0.02"; W max η² = 0.064 race W3); discussion line 358
+dimension swap (D1 is highbrow, D2 volume, eval dominates FOURTH not third);
+discussion RV 0.32 → 0.35. Verified numerically this session: age η² D1
+0.313, race η² D3 0.245 (sup$sup is POSITION-indexed 1..2259, not
+original-index — merge gotcha); γ4↔|F4| = 0.78; upper-class W2 split 4.54 =
+4.09 coh + 0.45 ω; mean ω4 1.4 / coh4 +4.8; sample means 8.3/4.6/4.1; 362
+n_complex = 13 (fit-independent). fig-config-variation had NO generating
+script — new block appended to script 04 (2×2, four dimensions, grey bars,
+mean±SD), figure regenerated; script 04 rerun left all tables and
+antinomy_scores.rds byte-identical. Caption trims: d1 omega caption example
+sentences dropped (now in prose; clears the "Float too large" warning);
+worked-example caption "In the left panels" dropped (D4 vertical in both
+panels). sec:contrib line 221 colon split + appositive rewording clears its
+overfull. FINAL STATE: compiles at 40 pp, 0 undefined refs, exactly the 3
+pre-existing overfulls (tab-genre-profile 2.78pt; two appendix headings
+29.24pt/10.42pt). FLAGGED to author: (a) §4.1 rewrite + the new D3
+musical-family paragraph need approval; (b) the old dim-2
+generous-evaluators clarification paragraph was dropped in the rewrite — its
+rarity-weighted grant arithmetic (7x, −0.66 partial correlation) described the
+OLD D2 and does not carry over to the new volume axis; decide whether a
+D4-analog is wanted; (c) discussion's "dispersion ... is orthogonal to social
+positions" is now in tension with the paper's own §4.7–4.9 findings (ω R²
+22.2%/20.1% on D1/D3) — the sentence is defensible for TOTAL W (max R² 10%)
+but may need hedging; (d) two appendix heading overfulls remain (trivially
+fixable by rewording). No Overleaf sync yet.
