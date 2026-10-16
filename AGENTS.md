@@ -4694,20 +4694,39 @@ passive-individuals MFA results from the regenerated pipeline (scripts 02–11,
    "Figures~\ref{fig:omega-demographics-d1}--\ref{fig:omega-demographics-d3}" to 
    "Figures~\ref{fig:omega-demographics-d1}--\ref{fig:omega-demographics-d4}".
 
-**⏳ Still pending** (necessary before Overleaf sync):
-- Update §4.8 prose (lines 254–266) with new age/race/education patterns on D1–D4
-- Update D1–D3 figure captions (currently reference old 3-dimension readings)
-- Add D4 figure caption and figure reference
-- Update §4.9 (Coherence) with W₁–W₄ decomposition splits and coherence R² values
-- Verify manuscript compiles clean and all figure references resolve
-- Run Overleaf sync (git push after test compile)
+**✅ COMPLETED — Phase 3 now ~75% done**:
 
-**Notes for next agent**:
-- §4.8 figure text needs rewriting to discuss:
-  * D1 (highbrow–popular): age/rap/indie/dance/classical patterns
-  * D2 (volume): upper-class, parentBA, some-college patterns
-  * D3 (musical-family NEW): race dominance (Black/>1race/Hispanic), age, region
-  * D4 (status NEW): upper-class dominance, age 30–49 positive effects
-- The omega figure captions need updating for D4 (dims 1–4 now, not 1–3)
-- Coherence section (§4.9, line 289) already exists but needs coefficient updates
-- Current manuscript line count: ~38 pp; should remain stable after these edits
+4. **§4.8 genre-specificity prose completely rewritten** (lines 254–290): Reorganized 
+   by dimension to show:
+   * D1 (highbrow–popular): age dominates (younger −0.42 rap, −0.34 indie, −0.24 dance; 
+     older +0.19 big band); region effects (South/West lower)
+   * D2 (volume): education/class dominate (postgrad opera/musicals; upper-class broadly 
+     elevated; parents' BA +0.11)
+   * D3 (musical-family): race/ethnicity dominate (Black +0.20, multiracial +0.14, 
+     Hispanic +0.10); older respondents lower
+   * D4 (status): upper-class (+0.25), ages 30–49 positive
+5. **D1–D4 figure captions updated**: D3 caption now reflects musical-family contrast 
+   (not status); D4 caption added with status-valuation axis and upper-class dominance
+6. **§4.9 (Coherence) completely rewritten** (lines 293–307):
+   * Updated R² values: γ₁–γ₄ at 3.5%/3.5%/7.1%/1.8% (vs genre-based 22.2%/7.9%/20.1%/3.0%)
+   * Reframed coherence effects: age on D1, race on D3, weaker structure overall
+   * Expanded section to reference all four dimensions and their distinct patterns
+   * Clarified D4 caveat: evaluation-only axis means coherence reflects uniform displacement
+
+**⏳ Remaining before Overleaf sync**:
+- Script 09 must generate `fig-omega-demographics-dim4.pdf` (currently undefined figure ref)
+- Verify all figure references resolve (currently one warning for fig:omega-demographics-d4)
+- Run full compile + bibtex cycle before pushing to Overleaf
+- Push to Overleaf: `git push overleaf HEAD:main`
+
+**Files status**:
+- Commit 1d750c9: Phase 3 partial with §4.7–4.9 updates
+- Manuscript compiles at 39 pp (was 38)
+- No undefined LaTeX refs except fig:omega-demographics-d4 (expected pending script 09)
+
+**Notes for final agent**:
+- After script 09 generates the D4 figure PDF, recompile to resolve all refs
+- Dimension labels now correct throughout: D1=highbrow–popular, D2=volume, 
+  D3=musical-family, D4=status-valuation
+- All regression coefficients from notes-passive-refit.md have been integrated
+- The §4.8 rewrite is the most substantial change; verify prose reads smoothly
