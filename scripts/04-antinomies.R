@@ -492,4 +492,38 @@ saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
              cell_cfg = cell_cfg, Dcoef = Dcoef),
         "output/antinomy_scores.rds")
 cat("\nsaved output/antinomy_scores.rds\n")
+
+## fig-config-variation: within-configuration variation in the W scores
+## (appendix app:config-variation)
+cfg_cols <- c("simple_pos", "guilty", "preacquired", "pose", "distanced",
+              "justified", "distant", "simple_neg")
+cfg_labs <- c(simple_pos = "Simple taste", guilty = "Guilty pleasure",
+              preacquired = "Pre-acquired taste", pose = "Taste pose",
+              distanced = "Distanced consumption", justified = "Justified abstention",
+              distant = "Distant praise", simple_neg = "Simple non-taste")
+dim_labs <- c(W1 = "Highbrow vs popular", W2 = "Volume",
+              W3 = "Musical family", W4 = "Status valuation")
+cv <- do.call(rbind, lapply(cfg_cols, function(cl) {
+  hold <- type_counts[[cl]] > 0
+  cbind(config = cfg_labs[cl],
+        do.call(rbind, lapply(paste0("W", 1:4), function(w)
+          data.frame(dim = dim_labs[w],
+                     mean = mean(ant[[w]][hold]),
+                     sd = sd(ant[[w]][hold])))))
+}))
+cv$config <- factor(cv$config, levels = unname(cfg_labs))
+cv$dim <- factor(cv$dim, levels = unname(dim_labs))
+pcv <- ggplot(cv, aes(config, mean)) +
+  geom_col(fill = "grey60", color = "grey30", linewidth = 0.3) +
+  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd),
+                width = 0.35, linewidth = 0.5) +
+  facet_wrap(~ dim, ncol = 2, scales = "free_x") +
+  labs(x = NULL, y = "Mean aspect-disagreement score") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+        strip.text = element_text(face = "bold", size = 10))
+ggsave("manuscript/figures/fig-config-variation.pdf", pcv, width = 9, height = 7)
+cat("wrote fig-config-variation\n")
+
 cat("wrote manuscript tables and figures\n")

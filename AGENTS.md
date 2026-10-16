@@ -4749,3 +4749,74 @@ PEARSON config-count correlations (0.20/0.45/0.18/0.08) with a ρ symbol (Spearm
 still reference only d1–d3 and use old-fit dimension mapping (no d4 env yet). Verified correct:
 §4.3, shares 49/55/52/66, §4.9 negative-coherence shares. Compile 39 pp, 0 undefined refs. WORK IN
 PROGRESS — see plan file for the complete checklist and all verified numbers before editing.
+
+## Session: October 16, 2026 (session 2, completed) — full stale-reference sweep for the passive-individuals refit
+
+Completed the plan file's checklist plus additional stale blocks found during
+verification. All changes are in main.tex unless noted.
+
+- **§3.2 worked-example walk (line 110) REWRITTEN with new-fit arithmetic**:
+  362 D4 partials pref −0.76 / cons −0.96 / eval +14.42, global +4.24,
+  W4 = 155.7 (74% of T4); D2 volume cluster 2.90–3.41 around 3.13, W2 = 0.1;
+  D1 pref −2.61 vs cons/eval +0.61/+0.66, global −0.45, W1 = 7.0 (41%). The
+  old "liking runs ahead of listening toward the popular pole" reading holds.
+  Also fixed the stale "musicals" in 362's likes list (does NOT like bwayst —
+  recurring error). §3.2 line 147 (combinatorial contrast) updated: 362's
+  near-zero scores are now W2/W3 (0.1/0.3), not W1 (7.0, above the 3.4 mean).
+- **522 (typology respondent) PROFILE WAS WRONG in prose AND table**: said
+  likes 8/listens 6/evals 5; actual likes 5/listens 4/evals 11 (verified from
+  mfa_input). Table row now 1.1 = 0.8 ω + 0.3 γ; sample-mean row 8.3/4.6/4.1,
+  ω4 1.4, coh +4.8. "(withholding)" gloss dropped (11 grants is not
+  withholding; F4 −0.36 is barely below average).
+- **§4.1 dimension readings fully rewritten** (was entirely old-fit): D1
+  highbrow–popular (cons yes opera +0.72 / rap −1.26; eval nearly silent,
+  −0.23..+0.39), anchored in generation (age η² 0.313 — verified; sup$sup is
+  POSITION-indexed 1..2259, not original-index — a merge-by-rownames gotcha
+  produced garbage η² first); D2 volume (rarity ordering: cons folk +1.35 …
+  rap +0.05; eval yes rarity-ordered but near origin); NEW D3 musical-family
+  paragraph (cons reggae +0.95 / metal −0.91; eval flat; race η² 0.245
+  verified); D4 status paragraph renumbered with category values (rap/latspsal
+  +1.94 vs classical +0.02 / opera +0.00). fig envs: d12 + NEW d34 (d14
+  unlinked by script 03 per author request). Captions rewritten.
+- **§4.5 line 230**: Spearman ρ 0.17/0.28/0.18/−0.11 (were Pearson
+  0.20/0.45/0.18/0.08 with a ρ symbol); guilty example W4 4.5 (SD 10.4).
+  fig-signatures caption "four dimensions".
+- **§4.7–4.9**: all regression coefficient claims verified against
+  tab-regression (W2 parentba +1.52, W3 >1-race +1.41 ✓). §4.9 line 303
+  REWRITTEN — stale γ coefficients (γ1 70+ is +0.45 ns, not −1.87; the
+  gradient peaks at 50–59 −1.12; γ3 carries Midwest −0.40/West −0.55; γ2
+  carries parentba +1.33/upper 4.09). Line 301 η² claim fixed (race γ3 0.049;
+  W max race W3 0.064 — not "nothing reaches 0.02"). Upper-class W2 split
+  4.54 = 4.09 coherence + 0.45 genre-based (was 3.55/0.99). γ4↔|F4| 0.78
+  (was 0.80).
+- **§4.8 rewritten by dimension** with script-09 verified values (D1 age rap
+  −0.44/indie −0.36/metal −0.27/dance −0.25, older folk 0.22/big band 0.18;
+  Hispanic Latin 0.44, White mirror −0.34/−0.27/−0.22, Black blues 0.23/rap
+  0.20/gospel 0.25; D2 education postgrad opera 0.17/musicals 0.15, parents'
+  0.12; D3 repeats D1's pattern at nearly full strength — said explicitly; D4
+  weak: postgrad opera 0.18, big band 0.16). The old region sentence on D1
+  DELETED (contradicted line 254's verified null-region finding). Captions
+  d1–d4 rewritten with correct labels and examples; line 268 and appendix
+  refs extended to d4; appendix prose rewritten per dimension; NEW
+  fig:omega-genres-d4 env. d1 caption's example sentences dropped (duplicated
+  the rewritten prose; also clears the "Float too large by 33pt" warning).
+- **Discussion**: dimension swap fixed ("first = volume" → first = highbrow,
+  second = volume, eval dominates the FOURTH dimension); RV 0.32 → 0.35.
+  Mean n_complex 10.2 / 12 zero-config respondents verified (fit-independent).
+- **fig-config-variation had NO generating script** (Oct-14 ad-hoc artifact,
+  still 3 dims). New block appended to script 04 (2×2 panels, four dimension
+  labels, grey bars mean±SD over configuration holders); regenerated. Script
+  04 rerun left ALL tables and antinomy_scores.rds byte-identical.
+- sec:contrib line 221: colon split + "Dimension 1, the highbrow--popular
+  axis," appositive (clears its 2.6pt overfull; decision 15).
+- FINAL STATE: compiles at 40 pp, 0 undefined refs, exactly the 3
+  pre-existing overfulls (tab-genre-profile 2.78pt; appendix headings
+  29.24pt/10.42pt). FLAGGED TO AUTHOR: (a) §4.1 rewrite + new D3 reading need
+  approval; (b) the old dim-2 generous-evaluators clarification paragraph was
+  dropped in the rewrite — its rarity-weighted grant arithmetic described the
+  OLD D2 and does not carry over to the volume axis; decide whether a D4
+  analog is wanted; (c) the discussion's "dispersion ... is orthogonal to
+  social positions" is in tension with §4.7–4.9 (ω R² 22.2%/20.1%) —
+  defensible for TOTAL W (max R² 10%) but may need hedging; (d) the two
+  appendix heading overfulls remain (trivially fixable by rewording). No
+  Overleaf sync yet.

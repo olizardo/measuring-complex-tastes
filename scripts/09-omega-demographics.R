@@ -310,6 +310,34 @@ chk <- corr_data |>
   select(dimension, genre_short, demographic, r) |>
   mutate(r = sprintf("%.2f", r)) |>
   arrange(dimension, demographic, genre_short)
-print(chk, n = 135)
+print(chk, n = 200)
+
+# cells quoted in the manuscript prose (sec:genre-specificity + appendix)
+cat("\n=== Quoted cells by dimension ===\n")
+quoted <- corr_data |>
+  filter(
+    (demographic == "Age" & genre %in% c("raphiphop", "indalt", "danclub",
+                                         "bband", "moodez", "hvymtl", "folk")) |
+    (demographic == "Postgrad." & genre %in% c("opera", "bwayst", "classical")) |
+    (demographic == "Parents' educ." & genre %in% c("opera", "classical", "bwayst")) |
+    (demographic %in% c("Working class", "Middle class", "Upper class") &
+       genre %in% c("raphiphop", "opera", "bwayst", "bband", "classical")) |
+    (demographic %in% c("Black", "Hispanic", "White", "Multirace/Other") &
+       genre %in% c("raphiphop", "latspsal", "blurb", "danclub", "reggae"))
+  ) |>
+  select(dimension, demographic, genre_short, r) |>
+  mutate(r = sprintf("%.2f", r)) |>
+  arrange(dimension, demographic, genre_short)
+print(quoted, n = 200)
+
+# largest |r| per dimension (any genre x demographic)
+cat("\n=== Top |r| per dimension ===\n")
+corr_data |>
+  group_by(dimension) |>
+  slice_max(abs(r), n = 8) |>
+  ungroup() |>
+  mutate(r = sprintf("%.2f", r)) |>
+  select(dimension, demographic, genre_short, r) |>
+  print(n = 40)
 
 cat("\nScript 09 complete.\n")
