@@ -4820,3 +4820,16 @@ verification. All changes are in main.tex unless noted.
   defensible for TOTAL W (max R² 10%) but may need hedging; (d) the two
   appendix heading overfulls remain (trivially fixable by rewording). No
   Overleaf sync yet.
+- Last sync (2026-10-16, later): Phase-3 passive-individuals manuscript,
+  scripts, and AGENTS.md synced to Overleaf (clone 7ba2abb → fb39692, plus
+  bd14148 fix). No web edits at pull time — the two "Update on Overleaf"
+  commits (5a77f18/1ffa009) predate the restructure, and all six distinctive
+  wording markers from them were verified present in the workspace before the
+  wholesale copy. TWO SYNC GOTCHAS (new): (1) `cp -r` preserves
+  manuscript/references.bib as a SYMLINK (git mode 120000) — on Overleaf the
+  absolute-path link (`/home/omarlizardo/projects/references.bib`) dangles and
+  bibtex breaks; the clone's references.bib must be a regular file (fixed in
+  bd14148; use `cp -rL` or copy the global file explicitly). (2) In this
+  clone the remote is named `origin`, so the push is `git push origin
+  HEAD:main` — a remote named `overleaf` does not exist here. Outer-repo
+  commit records the refreshed gitlink.
