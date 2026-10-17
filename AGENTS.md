@@ -2,7 +2,7 @@
 
 Project: measuring "complex tastes" (Ma Xiangyu 2026, *Cultural Sociology*) geometrically, using Multiple Factor Analysis (MFA) on 20 musical genres from the SSI-2012 survey. The manuscript draft is synced to Overleaf.
 
-Status (2026-10-17, evening): `manuscript/main.tex` compiles (40 pp., no undefined references or citation warnings); `manuscript/main.pdf` has been rebuilt. Overleaf is synced through commit 681d1c1 (workspace changes copied; the only deltas were a clarified MCA column-weighting paragraph in main.tex and this file).
+Status (2026-10-17, late evening): `manuscript/main.tex` compiles (42 pp., no undefined references or citation warnings). Overleaf is synced through commit dadf250. That commit carries the review fixes to Sections 3.1 to 3.3, applied on top of the Overleaf web edits from d8890b4, which were pulled into the workspace first. The workspace `manuscript/main.pdf` has not been rebuilt since these edits. The earlier 40 pp. figure no longer matches.
 
 ## Conceptual frame
 
@@ -155,7 +155,7 @@ Structure and content still open:
 - Limitations lacks the evaluation-coding robustness sentence (decision 12). Rerun the earlier codings from git history to get the numbers.
 - The split-sample check for the transposed tD4 result is suggested in the text but has not been run.
 - `ma2026deep` (Socius) disambiguates the `ma2026tastes` citations as "Ma 2026b." Flagged to author. The `ma2026deep-fb3` bib entry is uncited and kept.
-- ~~Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.~~ Done 2026-10-17 evening (Overleaf commit 681d1c1; main.pdf rebuilt, 40 pp.).
+- ~~Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.~~ Done 2026-10-17 evening (Overleaf commit 681d1c1; main.pdf rebuilt, 40 pp.). Superseded 2026-10-17 late evening by Overleaf commit dadf250 (42 pp.; see the status line at the top).
 
 Working files: `manuscript/to-do.md` lists only open items as of 2026-10-17. `manuscript-audit.md` (2026-10-13) predates the restructure; do not use it as a to-do list.
 
