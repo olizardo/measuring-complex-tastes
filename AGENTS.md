@@ -2,7 +2,7 @@
 
 Project: measuring "complex tastes" (Ma Xiangyu 2026, *Cultural Sociology*) geometrically, using Multiple Factor Analysis (MFA) on 20 musical genres from the SSI-2012 survey. The manuscript draft is synced to Overleaf.
 
-Status (2026-10-17): `manuscript/main.tex` compiles (42 pp. in a scratch build, no undefined references or citation warnings). `manuscript/main.pdf` has not been rebuilt, and nothing has been synced to Overleaf since the 2026-10-17 edits.
+Status (2026-10-17, evening): `manuscript/main.tex` compiles (40 pp., no undefined references or citation warnings); `manuscript/main.pdf` has been rebuilt. Overleaf is synced through commit 681d1c1 (workspace changes copied; the only deltas were a clarified MCA column-weighting paragraph in main.tex and this file).
 
 ## Conceptual frame
 
@@ -30,7 +30,7 @@ Numbers 3, 6, 7, 16–18, and 20 were retired. The remaining numbers are kept so
 2. **Consumption**: as collected (0/1).
 4. **Sample**: complete cases on all 60 variables give n = 2,259 of 2,276. Demographic models use complete cases on their covariates (N = 2,258; decision 21).
 5. **Terminology**: the manuscript says "complex tastes," not "antinomies." `main.tex` is stored with one paragraph per line. Use "preference, engagement, and evaluation," not "feeling, doing, praising." Keep Ma's configuration names.
-8. **Figures**: category maps on planes (D1,D2) and (D3,D4). `fig-individuals`, `fig-dim4`, `fig-scree`, `fig-rv`, `fig-antinomy-map`, and `fig-genre-segments` are generated but unreferenced. `fig-worked-example` overlays respondents 362 and 1881 in two panels, (D1,D4) and (D2,D4), with segments from partials to global and a shared D4 y-scale. Partial-point numbers in prose are on the true FactoMineR partial scale (global = mean of partials).
+8. **Figures**: category maps on planes (D1,D2) and (D3,D4). `fig-individuals`, `fig-dim4`, `fig-scree`, `fig-rv`, `fig-antinomy-map`, and `fig-genre-segments` are generated but unreferenced. `fig-worked-example` overlays respondents 362 and 1881 in the same space, two panels — (D1,D4) and (D2,D4) — with color = respondent, shape = aspect, segments from partials to global, and a shared D4 y-scale (free x). This layout is the 2026-10-16 committed design (outer 43482bc, Overleaf 8ee78a1); on 2026-10-17 the working tree had regressed to an older 2×2 row-per-respondent layout and was restored to it. Partial-point numbers in prose are on the true FactoMineR partial scale (global = mean of partials).
 9. **Age**: six groups (18–29 to 70+), collapsed from the 13 codebook bands (`age6`).
 10. **Terminology**: "modality" is reserved for the GDA sense (a category of a categorical variable). The three blocks are "aspects of taste." Internal R names (`modality`) are unchanged.
 11. **Terminology**: the evaluation measure is called "genre evaluation(s)" in prose.
@@ -155,7 +155,7 @@ Structure and content still open:
 - Limitations lacks the evaluation-coding robustness sentence (decision 12). Rerun the earlier codings from git history to get the numbers.
 - The split-sample check for the transposed tD4 result is suggested in the text but has not been run.
 - `ma2026deep` (Socius) disambiguates the `ma2026tastes` citations as "Ma 2026b." Flagged to author. The `ma2026deep-fb3` bib entry is uncited and kept.
-- Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.
+- ~~Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.~~ Done 2026-10-17 evening (Overleaf commit 681d1c1; main.pdf rebuilt, 40 pp.).
 
 Working files: `manuscript/to-do.md` lists only open items as of 2026-10-17. `manuscript-audit.md` (2026-10-13) predates the restructure; do not use it as a to-do list.
 
