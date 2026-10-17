@@ -66,6 +66,11 @@ cf <- lapply(fits, function(m) {
 })
 names(cf) <- ys
 
+# Holm correction across every non-intercept coefficient shown in the table
+nonint <- cf[[1]]$term != "(Intercept)"
+pm <- sapply(cf, function(dd) dd$p[nonint])
+holm_m <- matrix(p.adjust(as.vector(pm), "holm"), nrow = nrow(pm))
+
 # LaTeX-escape $ and use en-dashes in range labels
 nice <- function(x) gsub("-", "--", gsub("\\$", "\\\\$", x))
 
@@ -76,7 +81,7 @@ var_labels <- c(
   raceBlack = "Black",
   raceHispanic = "Hispanic",
   raceAsian = "Asian",
-  `race>1 race` = ">1 race",
+  `race>1 race` = "$>$1 race",
   raceOther = "Other",
   raceMissing = "Missing",
   `age630-39` = "30--39",
@@ -126,10 +131,15 @@ for (bk in blocks) {
       label <- var_labels[term]
       if (is.na(label)) label <- term
       
-      row <- sapply(cf, function(dd) {
+      row <- sapply(seq_along(cf), function(j) {
+        dd <- cf[[j]]
         k <- match(term, dd$term)
         if (is.na(k) || is.na(dd$b[k])) return("--")
-        paste0(sprintf("$%.2f$ (%.2f)", dd$b[k], dd$se[k]), stars(dd$p[k]))
+        ci <- sprintf("$[%.2f, %.2f]$", dd$b[k] - 1.96 * dd$se[k],
+                      dd$b[k] + 1.96 * dd$se[k])
+        dag <- if (holm_m[match(term, cf[[1]]$term[nonint]), j] < 0.05) "$^{\\dagger}$" else ""
+        paste0("\\shortstack{", sprintf("$%.2f$ (%.2f)", dd$b[k], dd$se[k]),
+               stars(dd$p[k]), dag, "\\\\", ci, "}")
       })
       tl <- c(tl, paste0("\\quad ", label, " & ",
                          paste(row, collapse = " & "), " \\\\"))

@@ -63,7 +63,7 @@ res <- MFA(mfa_dat,
 # the POSITIVE pole is, on every dimension:
 #   D1 highbrow--popular: highbrow (classical/opera/big-band engagement)
 #   D2 volume: more engagement (yes categories)
-#   D3 musical-family contrast: Black/Latin popular musics + opera
+#   D3 engagement divide: Black/Latin popular musics + opera
 #      (rap, reggae, Latin/salsa; vs the guitar-rock cluster: metal, indie,
 #      contemporary rock) -- engagement-owned, evaluation near-inert
 #   D4 status valuation: generous (granting unambiguous high status)

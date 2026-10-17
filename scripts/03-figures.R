@@ -187,7 +187,7 @@ glines <- c(
   "\\midrule")
 for (i in 1:3) {
   glines <- c(glines, paste0(gnames[i], " & ",
-    sprintf("%.3f", lam1g[i]), " & ", sprintf("%.3f", w[i]), " & ",
+    sprintf("%.4f", lam1g[i]), " & ", sprintf("%.3f", w[i]), " & ",
     paste(sprintf("%.1f", gcont[i, ]), collapse = " & "), " & ",
     sprintf("%.2f", gLg[i]), " \\\\"))
 }

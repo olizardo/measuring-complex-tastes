@@ -154,10 +154,15 @@ cat("Correlations computed:", nrow(corr_data), "cells; max |r| =",
 R_LIM <- max(0.45, max(abs(corr_data$r)) + 0.02)
 low_col <- "#A63603"; high_col <- "#08519C"
 
-# Heatmap-matrix builder. Two explicit orientations (no aes indirection):
-#   mk_demo_rows():  rows = demographics, cols = genres (main figure)
-#   mk_genre_rows(): rows = genres, cols = demographics (supplementary)
+# Heatmap-matrix builder, one orientation for both figure sets:
+#   mk_demo_rows():  rows = demographics, cols = genres (main and supplementary)
 fmt_r <- function(r) ifelse(abs(r) < 0.005, "0.00", sprintf("%.2f", r))
+# compact variant for narrow cells (supplementary matrices): drops the
+# leading zero so "-0.22" (5 chars) becomes "-.22" (4 chars)
+fmt_r_compact <- function(r) {
+  s <- ifelse(abs(r) < 0.005, "0.00", sprintf("%.2f", r))
+  sub("(-?)0\\.", "\\1.", s)
+}
 
 # cells with |r| at or above this threshold get a dark outline, so the key
 # patterns stand out against the printed values (author request, 2026-10-14)
@@ -171,14 +176,14 @@ matrix_theme <- function() theme_minimal(base_size = 8) + theme(
   plot.margin = margin(2, 2, 2, 2)
 )
 
-mk_demo_rows <- function(data, y_labels = TRUE, text_size = 2.1) {
+mk_demo_rows <- function(data, y_labels = TRUE, text_size = 2.1, fmt = fmt_r) {
   ggplot(data, aes(x = genre_short,
                    y = factor(demographic, levels = rev(demo_labels)),
                    fill = r)) +
     geom_tile(color = "white", linewidth = 0.4) +
     geom_tile(data = ~ subset(.x, abs(r) >= R_MIN), fill = NA,
               color = "grey20", linewidth = 0.9) +
-    geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
+    geom_text(aes(label = fmt(r), color = abs(r) > 0.30),
               size = text_size, show.legend = FALSE) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +
     scale_fill_gradient2(low = low_col, mid = "grey92", high = high_col,
@@ -196,35 +201,6 @@ mk_demo_rows <- function(data, y_labels = TRUE, text_size = 2.1) {
       legend.position = "bottom",
       legend.title = element_text(size = 8),
       legend.text = element_text(size = 7)
-    )
-}
-
-mk_genre_rows <- function(data, y_labels = TRUE, x_labels = TRUE, text_size = 1.8) {
-  ggplot(data, aes(x = factor(demographic, levels = demo_labels_supp),
-                   y = genre_short, fill = r)) +
-    geom_tile(color = "white", linewidth = 0.4) +
-    geom_tile(data = ~ subset(.x, abs(r) >= R_MIN), fill = NA,
-              color = "grey20", linewidth = 0.9) +
-    geom_text(aes(label = fmt_r(r), color = abs(r) > 0.30),
-              size = text_size, show.legend = FALSE) +
-    scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "grey15")) +
-    scale_fill_gradient2(low = low_col, mid = "grey92", high = high_col,
-                         midpoint = 0, limits = c(-R_LIM, R_LIM),
-                         name = "Pearson r",
-                         guide = guide_colourbar(barwidth = 7, barheight = 0.8)) +
-    # x labels (demographics) at the top, closer to the figure title
-    scale_x_discrete(expand = c(0, 0), position = "top") +
-    scale_y_discrete(expand = c(0, 0)) +
-    matrix_theme() +
-    theme(
-      axis.text.x.top = if (x_labels)
-        element_text(angle = 60, hjust = 0, vjust = -0.05, size = 8) else
-        element_blank(),
-      axis.text.x = element_blank(),
-      axis.text.y = if (y_labels) element_text(size = 7.5) else element_blank(),
-      legend.position = "bottom",
-      legend.title = element_text(size = 9),
-      legend.text = element_text(size = 8)
     )
 }
 
@@ -261,35 +237,33 @@ for (i in seq_along(dim_labels)) {
 unlink("manuscript/figures/fig-omega-demographics.pdf")
 
 # ============================================================================
-# STEP 4: SUPPLEMENTARY FIGURES -- one full matrix per dimension (2026-10-14)
-# The combined three-panel heatmap was unreadable (cell text ~1pt after the
-# .95\linewidth downscale) and showed only 7 of 9 demographics. Splitting one
-# figure per dimension lets every cell print large enough to read, and ALL
-# sixteen demographic variables are shown as columns (no omissions).
+# STEP 4: SUPPLEMENTARY FIGURES -- one full matrix per dimension (2026-10-14;
+# transposed 2026-10-16 for legibility)
+# The original 20-genre-rows x 30-demographic-columns layout put five-character
+# labels in ~0.17in cells, where they overlapped into unreadable smudges.
+# Transposed to match the main figures (rows = demographics, columns = genres),
+# which roughly doubles the cell width. All thirty demographic indicators are
+# shown as rows (no omissions); cell labels use the compact format.
 # ============================================================================
-
-demo_labels_supp <- demo_labels  # all ten demographics, no omissions
 
 for (i in seq_along(dim_labels)) {
   d <- corr_data |> filter(dimension == dim_labels[i])
-  # text sizes trimmed slightly at the author's request (2026-10-15)
-  p_i <- mk_genre_rows(d, y_labels = TRUE, x_labels = TRUE, text_size = 2.7) +
+  p_i <- mk_demo_rows(d, y_labels = TRUE, text_size = 2.4,
+                      fmt = fmt_r_compact) +
     ggtitle(dim_titles[i]) +
     theme(
-      axis.text.x.top = element_text(angle = 60, hjust = 0, vjust = -0.05, size = 8),
-      axis.text.x = element_blank(),
-      axis.text.y = element_text(size = 8),
+      axis.text.x.top = element_text(angle = 60, hjust = 0, vjust = -0.05, size = 7.5),
       plot.title = element_text(size = 11.5, face = "bold", hjust = 0.5),
       # top margin clears the title above the tall angled-label strip; right
       # margin reserves room for the longest label's up-right drift
       plot.margin = margin(8, 30, 2, 2)
     )
-  # Height 5.8in: the manuscript's \linewidth is 6.53in, so width=\linewidth
-  # scales the figure up by 1.36x and a taller figure (plus caption) overflows
-  # the ~9in \textheight. 5.8 x 1.36 = ~7.9in leaves room for the caption.
+  # Height 7.0in: the manuscript's \linewidth is 6.53in, so width=\linewidth
+  # scales the figure up by 1.05x; 7.0 x 1.05 = ~7.4in plus the caption still
+  # fits the ~9in \textheight while giving the 30 rows ~0.17in each.
   fname <- sprintf("manuscript/figures/fig-omega-demographics-genres-d%d.pdf", i)
-  ggsave(fname, p_i, width = 6.2, height = 5.8, dpi = 300)
-  cat("Saved", basename(fname), "(20 genres x 16 demographics)\n")
+  ggsave(fname, p_i, width = 6.2, height = 7.0, dpi = 300)
+  cat("Saved", basename(fname), "(30 demographics x 20 genres)\n")
 }
 
 # ============================================================================
