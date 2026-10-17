@@ -308,7 +308,7 @@ ggsave("manuscript/figures/fig-genre-segments.pdf", pseg, width = 10, height = 8
 # which aspect stands against the other two (evaluation-odd, consumption-
 # odd, liking-odd), with the simple tastes and the total detached.
 cm <- cor(type_counts, ant[, c(paste0("F", 1:NDIM), paste0("W", 1:NDIM),
-                               paste0("Wloc", 1:NDIM))],
+                               paste0("Wloc", 1:NDIM), paste0("coh", 1:NDIM))],
           method = "spearman")
 sigrows <- data.frame(
   key = c("guilty", "distant", "pose", "distanced", "preacquired",
@@ -320,13 +320,16 @@ sigrows <- data.frame(
           "Pre-acquired taste (-++)", "Justified abstention (+--)",
           " ", "Simple taste (+++)", "Simple non-taste (---)",
           "  ", "Total complex tastes"))
-scols <- as.vector(t(outer(1:NDIM, c("F", "W", "Wloc"),
+scols <- as.vector(t(outer(1:NDIM, c("F", "W", "Wloc", "coh"),
                            function(s, p) paste0(p, s))))
-skeys <- paste0(rep(1:NDIM, each = 3), ".", rep(c("F", "W", "O"), NDIM))
-slabs <- as.expression(c(lapply(1:NDIM, function(s) bquote(F[.(s)])),
-                         lapply(1:NDIM, function(s) bquote(W[.(s)])),
-                         lapply(1:NDIM, function(s) bquote(omega[.(s)]))))
-ncol_sig <- 3 * NDIM
+skeys <- paste0(rep(1:NDIM, each = 4), ".", rep(c("F", "W", "O", "G"), NDIM))
+# labels are looked up by key, so they cannot drift out of step with the columns
+score_label <- function(x) as.expression(lapply(x, function(k) {
+  s <- as.integer(sub("\\..*", "", k))
+  switch(sub(".*\\.", "", k), F = bquote(F[.(s)]), W = bquote(W[.(s)]),
+         O = bquote(omega[.(s)]), G = bquote(gamma[.(s)]))
+}))
+ncol_sig <- 4 * NDIM
 sig <- do.call(rbind, lapply(seq_len(nrow(sigrows)), function(r) {
   v <- if (sigrows$key[r] == "") rep(NA_real_, ncol_sig) else
     as.numeric(cm[sigrows$key[r], scols])
@@ -334,8 +337,9 @@ sig <- do.call(rbind, lapply(seq_len(nrow(sigrows)), function(r) {
 }))
 sig$cfg <- factor(sig$cfg, levels = rev(sigrows$lab))
 sig$dim <- factor(rep(paste0("Dimension ", 1:NDIM),
-                     each = 3, times = nrow(sigrows)),
+                     each = 4, times = nrow(sigrows)),
                   levels = paste0("Dimension ", 1:NDIM))
+sig$score <- factor(sig$score, levels = skeys)
 psig <- ggplot(sig, aes(score, cfg, fill = value)) +
   geom_tile(color = "white", linewidth = 0.5) +
   geom_text(aes(label = ifelse(is.na(value), "", sprintf("%.2f", value)),
@@ -350,8 +354,8 @@ psig <- ggplot(sig, aes(score, cfg, fill = value)) +
                        breaks = seq(-1, 1, 0.5), na.value = "white",
                        name = expression(rho),
                        guide = guide_colourbar(barwidth = 7, barheight = 0.8)) +
-  scale_x_discrete(labels = setNames(slabs, skeys)) +
-  # free_x is required: each facet holds only its dimension's 3 scores,
+  scale_x_discrete(labels = score_label) +
+  # free_x is required: each facet holds only its dimension's 4 scores,
   # otherwise all 9 x-levels appear in every panel and squeeze the tiles
   facet_wrap(~ dim, nrow = 1, scales = "free_x") +
   labs(x = NULL, y = NULL) +
@@ -360,14 +364,20 @@ psig <- ggplot(sig, aes(score, cfg, fill = value)) +
         strip.text = element_text(face = "bold"),
         legend.title = element_text(size = 9),
         legend.text = element_text(size = 8))
-ggsave("manuscript/figures/fig-signatures.pdf", psig, width = 9.5, height = 3.8)
+ggsave("manuscript/figures/fig-signatures.pdf", psig, width = 10.5, height = 3.8)
 
-# table: mean squared pairwise distances between partial points, dims 1-4
+# table: mean squared pairwise distances between partial points, dims 1-4;
+# shares = each respondent's pair distance over their own dimension total
+# (sum of the three pairs), averaged across respondents
 pcols <- as.vector(t(outer(1:NDIM, c("dPC", "dPV", "dCV"),
                            function(s, p) paste0(p, s))))
 pmm <- matrix(colMeans(ant[, pcols]), nrow = 3,
               dimnames = list(c("pc", "pe", "ce"), paste0("dim", 1:NDIM)))
-psh <- sweep(pmm, 2, colSums(pmm), "/")
+psh <- sapply(1:NDIM, function(s) {
+  d <- as.matrix(ant[, paste0(c("dPC", "dPV", "dCV"), s)])
+  colMeans(sweep(d, 1, rowSums(d), "/"))
+})
+dimnames(psh) <- dimnames(pmm)
 print(round(pmm, 2))
 print(round(psh, 3))
 plabs <- c("Preference--consumption", "Preference--evaluation",
@@ -423,14 +433,16 @@ ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 
 # figure: worked examples — partial points of two contrasting respondents,
 # used as running examples throughout Section "Measuring Complex Tastes
-# Geometrically". Rows = respondents, columns share the status-valuation
-# axis (dim 4): left pairs it with the highbrow-popular axis (dim 1, the
-# horizontal axis of the paper's first category map), right with the
-# volume axis (dim 2).
-# Scales are free in both directions (respondent 362's dim-4 spread dwarfs
-# 1881's; fixed axes would flatten the second row). NOTE: 1881 is a
-# supplementary (projected) individual in the main fit — their partial
-# points come from ind.sup$coord.partiel.
+# Geometrically". Both respondents are plotted in the SAME space, one
+# panel per plane: left pairs the status-valuation axis (dim 4, vertical
+# in both panels) with the highbrow-popular axis (dim 1, the horizontal
+# axis of the paper's first category map), right with the volume axis
+# (dim 2). Color distinguishes respondents and shape marks the aspect,
+# so the distance between the two respondents — and the orientation of
+# each one's aspect triangle — is directly visible. The y scale is
+# shared across panels (both planes use dim 4); only x is free.
+# NOTE: 1881 is a supplementary (projected) individual in the main fit —
+# their partial points come from ind.sup$coord.partiel.
 #   362: high engagement + generous valuation (likes 15, listens 9,
 #        grants 18); high-W4 respondent holding guilty-pleasure,
 #        taste-pose, and distant-praise configurations.
@@ -438,7 +450,7 @@ ggsave("manuscript/figures/fig-antinomy-map.pdf", p7, width = 5.5, height = 4)
 #        grants none); nearly the same rung as 362 on dim 1, reached by
 #        opposite materials.
 exr <- c("362", "1881")
-rlab <- c("Grants 18 of 20 recognitions", "Grants none")
+rlab <- c("362: grants 18 of 20", "1881: grants none")
 ex <- match(exr, rownames(ant))
 stopifnot(!any(is.na(ex)))
 mods <- c("Preference", "Consumption", "Evaluation", "Global")
@@ -449,10 +461,10 @@ exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
   do.call(rbind, lapply(seq_along(panes), function(s) {
     data.frame(
       respondent = factor(rlab[r], levels = rlab),
-      modality = factor(mods, levels = mods),
+      aspect = factor(mods, levels = mods),
       d = c(P[ex[r], pane_dims[s]], C[ex[r], pane_dims[s]],
             V[ex[r], pane_dims[s]], F[ex[r], pane_dims[s]]),
-      d3 = c(P[ex[r], 4], C[ex[r], 4], V[ex[r], 4], F[ex[r], 4]),
+      d4 = c(P[ex[r], 4], C[ex[r], 4], V[ex[r], 4], F[ex[r], 4]),
       panel = factor(panes[s], levels = panes))
   }))
 }))
@@ -460,34 +472,47 @@ exd <- do.call(rbind, lapply(seq_along(ex), function(r) {
 segex <- do.call(rbind, lapply(split(exd, interaction(exd$respondent,
                                                      exd$panel, drop = TRUE)),
                                function(b) {
-  data.frame(x = b$d[1:3], y = b$d3[1:3],
-             xend = b$d[4], yend = b$d3[4],
-             modality = b$modality[1:3],
+  data.frame(x = b$d[1:3], y = b$d4[1:3],
+             xend = b$d[4], yend = b$d4[4],
              respondent = b$respondent[1], panel = b$panel[1])
 }))
-pex <- ggplot(exd, aes(d, d3, color = modality, shape = modality)) +
+# overplotting fix: the two respondents nearly coincide near the origin of
+# the right panel (their preference/consumption partials and globals all sit
+# at x ~ 3-3.5, y ~ -1-0). Orange (1881) is drawn HOLLOW (fill = NA, colored
+# outline) so coincident blue points remain visible; blue (362) is solid.
+# Requires fill-capable shapes (21/22/23/24), which also keeps the
+# aspect-shape encoding unchanged.
+pex <- ggplot(exd, aes(d, d4, color = respondent, fill = respondent, shape = aspect)) +
   geom_hline(yintercept = 0, linetype = 2, color = "grey60", linewidth = 0.3) +
   geom_vline(xintercept = 0, linetype = 2, color = "grey60", linewidth = 0.3) +
-  # solid connectors colored by aspect, as in fig-genre-map
-  geom_segment(data = segex, aes(x, y, xend = xend, yend = yend, color = modality),
+  # solid connectors colored by respondent, linking partials to the global
+  geom_segment(data = segex,
+               aes(x, y, xend = xend, yend = yend, color = respondent),
                linewidth = 0.6, alpha = 0.8,
                inherit.aes = FALSE, show.legend = FALSE) +
-  geom_point(size = 4, stroke = 0.5, show.legend = FALSE) +
-  geom_text_repel(aes(label = modality), size = 3.2, segment.color = NA,
-                  show.legend = FALSE, box.padding = 0.8,
-                  point.padding = 0.5, seed = 3, fontface = "bold") +
-  facet_grid(respondent ~ panel, scales = "free") +
-  scale_color_manual(values = c(Preference = "#0072B2", Consumption = "#D55E00",
-                                Evaluation = "#009E73", Global = "black")) +
-  scale_shape_manual(values = c(Preference = 16, Consumption = 17,
-                                Evaluation = 15, Global = 18)) +
+  geom_point(size = 3.6, stroke = 0.7) +
+  geom_text_repel(aes(label = aspect), size = 3, segment.color = NA,
+                  show.legend = FALSE, box.padding = 0.6,
+                  point.padding = 0.4, seed = 3, fontface = "bold") +
+  facet_wrap(~panel, scales = "free_x", nrow = 1) +
+  scale_color_manual(values = c("#0072B2", "#D55E00"), name = "Respondent") +
+  scale_fill_manual(values = c("#0072B2", NA), guide = "none") +
+  scale_shape_manual(values = c(Preference = 21, Consumption = 24,
+                                Evaluation = 22, Global = 23),
+                     name = "Aspect") +
+  # fill-capable shapes render hollow legend keys (fill guide is suppressed);
+  # override back to the solid black keys of the previous version
+  guides(shape = guide_legend(override.aes = list(fill = "black", color = "black"))) +
   labs(x = NULL, y = "Dimension 4 (status valuation)") +
   theme_minimal(base_size = 11) +
   theme(panel.grid = element_blank(),
         strip.text = element_text(face = "bold", size = 10),
         axis.text = element_text(size = 9),
+        legend.position = "top",
+        legend.title = element_text(size = 9, face = "bold"),
+        legend.text = element_text(size = 9),
         axis.title.y = element_text(size = 10, face = "bold"))
-ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 7, height = 6.5)
+ggsave("manuscript/figures/fig-worked-example.pdf", pex, width = 9, height = 4.5)
 
 saveRDS(list(ant = ant, type_counts = type_counts, omega = omega,
              cell_cfg = cell_cfg, Dcoef = Dcoef),

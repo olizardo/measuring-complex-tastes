@@ -1,6 +1,6 @@
 # 07-regression.R
 # Who has complex tastes? OLS regressions of the geometric aspect-disagreement
-# scores W_s(i) (script 04) on respondent demographics (script 05), with
+# scores W_s(i) (script 04) on respondent demographics (scripts/demographics-coding.R), with
 # categorical indicators for education and class (matching script 09 encoding),
 # and robustness checks (log outcomes; pairwise disagreement components on
 # dimension 3; genre-based components; cross-genre coherence components).
@@ -10,58 +10,22 @@
 library(tidyverse)
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
-sup <- readRDS("output/supplementary.rds")$sup
-stopifnot(nrow(ant) == nrow(sup))
 
-# Get the original SSI data to extract education and class as indicators
 ssi <- readRDS("data/ssi2012_cleaned.rds") |> haven::zap_labels()
 omega_indices <- as.numeric(rownames(ant))
 
-# Create categorical indicators for education (matching script 09 encoding)
-# Map the individual credential variables to groups
-cred <- c("nodipdeg", "hsged", "somcol", "aadeg", "bach", "ma", "docprof")
-educ_raw <- rep(NA_character_, length(omega_indices))
-for (j in seq_along(cred)) {
-  is_cred <- ssi[[cred[j]]][omega_indices] == 1
-  educ_raw[is_cred] <- cred[j]
-}
-
-educ_indicators <- tibble(
-  educ_hsless   = as.numeric(educ_raw %in% c("nodipdeg", "hsged")),
-  educ_somecol  = as.numeric(educ_raw %in% c("somcol", "aadeg")),
-  educ_bach     = as.numeric(educ_raw == "bach"),
-  educ_postgrad = as.numeric(educ_raw %in% c("ma", "docprof"))
-)
-
-# Create categorical indicators for class
-sclass_indicators <- tibble(
-  sclass_lower   = as.numeric(ssi$lower[omega_indices] == 1),
-  sclass_working = as.numeric(ssi$working[omega_indices] == 1),
-  sclass_middle  = as.numeric(ssi$middle[omega_indices] == 1),
-  sclass_upper   = as.numeric(ssi$high[omega_indices] == 1)
-)
-
-# Verify each respondent is in exactly one education and one class category
-stopifnot(all(rowSums(educ_indicators) == 1))
-stopifnot(all(rowSums(sclass_indicators) == 1))
-
-# Convert indicators to binary factors (0 = reference, 1 = indicator)
-educ_indicators <- educ_indicators |>
-  mutate(educ_somecol = factor(educ_somecol, levels = c(0, 1)),
-         educ_bach = factor(educ_bach, levels = c(0, 1)),
-         educ_postgrad = factor(educ_postgrad, levels = c(0, 1)))
-sclass_indicators <- sclass_indicators |>
-  mutate(sclass_working = factor(sclass_working, levels = c(0, 1)),
-         sclass_middle = factor(sclass_middle, levels = c(0, 1)),
-         sclass_upper = factor(sclass_upper, levels = c(0, 1)))
-
-# Rename for convenience and set reference categories as factors
-sup$race <- relevel(sup$race, ref = "White")
+# Covariates use the shared coding in scripts/demographics-coding.R; respondents
+# missing any covariate are dropped so every model shares one sample.
+source("scripts/demographics-coding.R")
+ssi_rows <- ssi[omega_indices, ]
+keep <- demographic_keep(ssi_rows)
+cat("Complete cases on demographics: N =", sum(keep), "of", nrow(ant), "\n")
 
 dat <- cbind(ant[, c("W1", "W2", "W3", "W4",
+                     "dPV1", "dCV1", "dPC1", "dPV2", "dCV2", "dPC2",
                      "dPV3", "dCV3", "dPC3", "dPV4", "dCV4", "dPC4",
-                     "Wloc1", "Wloc2", "Wloc3", "Wloc4")], sup,
-             educ_indicators, sclass_indicators)
+                     "Wloc1", "Wloc2", "Wloc3", "Wloc4")],
+             demographic_design(ssi_rows))[keep, ]
 
 # Regression predictors: use education and class indicators instead of ordinal versions
 preds <- c("gender", "race", "age6",
@@ -274,17 +238,40 @@ for (i in seq_along(fitlog)) {
       round(mean(sign(b1[common]) == sign(b2[common]), na.rm = TRUE), 2), "\n")
 }
 
-# --- robustness 2: pairwise disagreement components on dimension 4 --------------
-# dimension 4 is the status-valuation axis under the 4-dimension fit
-cat("\n== Pairwise disagreement outcomes (dimension 4) ==\n")
-for (y in c("dPV4", "dCV4", "dPC4")) {
-  m <- lm(reformulate(preds, y), data = dat)
-  cat("\n--", y, "-- R2:", round(summary(m)$r.squared, 3), "\n")
-  print(round(drop1(m, test = "F")[, "F value", drop = FALSE], 1))
-  s <- summary(m)$coefficients
-  cat("most significant coefficients:\n")
-  print(round(s[order(s[, 4])[1:6], c(1, 2, 4)], 2))
+# --- pairwise disagreement outcomes: squared distance between each pair of
+# aspects on each dimension (sums to 3 * W_s; Section "Pairwise Disagreements").
+# Writes manuscript/tables/tab-pairs-social.tex (R^2 of demographic models).
+pair_names <- c("dPC", "dPV", "dCV")
+pair_labs <- c("Preference--consumption", "Preference--evaluation",
+               "Consumption--evaluation")
+pair_fits <- lapply(pair_names, function(p)
+  lapply(1:4, function(s) lm(reformulate(preds, paste0(p, s)), data = dat)))
+pair_r2 <- t(sapply(pair_fits, function(fl) sapply(fl, function(m) summary(m)$r.squared)))
+w_r2 <- sapply(fits, function(m) summary(m)$r.squared)
+cat("\n== Pairwise disagreement outcomes: R2 (rows pairs, columns dimensions) ==\n")
+print(round(pair_r2, 3))
+cat("W_s R2 for comparison:", round(w_r2, 3), "\n")
+for (k in seq_along(pair_names)) {
+  for (s in 1:4) {
+    m <- pair_fits[[k]][[s]]
+    sm <- summary(m)$coefficients
+    sig <- sm[sm[, 4] < .05 & rownames(sm) != "(Intercept)", c(1, 4), drop = FALSE]
+    cat("\n--", paste0(pair_names[k], s), "-- sig. predictors (p < .05):\n")
+    print(round(sig, 3))
+  }
 }
+pe <- c("\\begin{tabular}{lcccc}", "\\toprule",
+        " & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule",
+        paste0("$W_s$ (aspect disagreement) & ",
+               paste(sprintf("%.3f", w_r2), collapse = " & "), " \\\\"),
+        "\\midrule")
+for (k in seq_along(pair_names)) {
+  pe <- c(pe, paste0(pair_labs[k], " & ",
+                     paste(sprintf("%.3f", pair_r2[k, ]), collapse = " & "),
+                     " \\\\"))
+}
+pe <- c(pe, "\\bottomrule", "\\end{tabular}")
+writeLines(pe, "manuscript/tables/tab-pairs-social.tex")
 
 # --- robustness 3: genre-based components (Equation eq:genre) as outcomes ---------
 # Wloc_s = omega, the genre-based complex-taste part of W_s -- isolates the

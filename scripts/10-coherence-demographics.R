@@ -18,50 +18,18 @@ library(tidyverse)
 library(haven)
 
 ant <- readRDS("output/antinomy_scores.rds")$ant
-sup <- readRDS("output/supplementary.rds")$sup
-stopifnot(nrow(ant) == nrow(sup))
+source("scripts/demographics-coding.R")
 
 # Get the original SSI data to extract education and class as indicators
 # (identical construction to script 07)
 ssi <- readRDS("data/ssi2012_cleaned.rds") |> haven::zap_labels()
 omega_indices <- as.numeric(rownames(ant))
-
-cred <- c("nodipdeg", "hsged", "somcol", "aadeg", "bach", "ma", "docprof")
-educ_raw <- rep(NA_character_, length(omega_indices))
-for (j in seq_along(cred)) {
-  is_cred <- ssi[[cred[j]]][omega_indices] == 1
-  educ_raw[is_cred] <- cred[j]
-}
-
-educ_indicators <- tibble(
-  educ_hsless   = as.numeric(educ_raw %in% c("nodipdeg", "hsged")),
-  educ_somecol  = as.numeric(educ_raw %in% c("somcol", "aadeg")),
-  educ_bach     = as.numeric(educ_raw == "bach"),
-  educ_postgrad = as.numeric(educ_raw %in% c("ma", "docprof"))
-)
-
-sclass_indicators <- tibble(
-  sclass_lower   = as.numeric(ssi$lower[omega_indices] == 1),
-  sclass_working = as.numeric(ssi$working[omega_indices] == 1),
-  sclass_middle  = as.numeric(ssi$middle[omega_indices] == 1),
-  sclass_upper   = as.numeric(ssi$high[omega_indices] == 1)
-)
-
-stopifnot(all(rowSums(educ_indicators) == 1))
-stopifnot(all(rowSums(sclass_indicators) == 1))
-
-# Binary factors (0 = reference, 1 = indicator), as in script 07
-educ_indicators <- educ_indicators |>
-  mutate(across(everything(), ~ factor(.x, levels = c(0, 1))))
-sclass_indicators <- sclass_indicators |>
-  mutate(across(everything(), ~ factor(.x, levels = c(0, 1))))
-
-sup$race <- relevel(sup$race, ref = "White")
+ssi_rows <- ssi[omega_indices, ]
 
 dat <- cbind(
   ant[, c("coh1", "coh2", "coh3", "coh4",
           "W1", "W2", "W3", "W4", "Wloc1", "Wloc2", "Wloc3", "Wloc4")],
-  sup, educ_indicators, sclass_indicators
+  demographic_design(ssi_rows)
 )
 
 # Drop factor levels with zero members (e.g. an empty Missing category)

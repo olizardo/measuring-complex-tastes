@@ -33,44 +33,18 @@ omega_indices <- as.numeric(rownames(ant))
 # STEP 1: EXTRACT DEMOGRAPHICS FOR COMPLETE CASES
 # ============================================================================
 
-demo_vars <- tibble(
-  row_index = omega_indices,
-  # Respondent's own education, ordinal 1-7 (no diploma ... prof/doctorate),
-  # from the same credential battery script 05 uses for its educ factor
-  educ7 = {
-    cred <- c("nodipdeg", "hsged", "somcol", "aadeg", "bach", "ma", "docprof")
-    e <- rep(NA_real_, length(omega_indices))
-    for (j in seq_along(cred)) e[ssi[[cred[j]]][omega_indices] == 1] <- j
-    e
-  },
-  # Own education as four binary groups (author request, 2026-10-14; replaces
-  # the ordinal coding in the figures): HS or less, some college/2-year,
-  # bachelor's, postgraduate
-  educ_hsless   = as.numeric(educ7 %in% 1:2),
-  educ_somecol  = as.numeric(educ7 %in% 3:4),
-  educ_bach     = as.numeric(educ7 == 5),
-  educ_postgrad = as.numeric(educ7 %in% 6:7),
-  parentba = as.numeric(
-    (ssi$bach[omega_indices] == 1) |
-    (ssi$ma[omega_indices] == 1) |
-    (ssi$docprof[omega_indices] == 1)
-  ),
-  age = as.numeric(ssi$age[omega_indices]),
-  gender = as.numeric(ssi$female[omega_indices]),  # 1 = woman, 0 = man
-  # Subjective class as category indicators (exactly one is 1 per respondent,
-  # verified below); replaces the ordinal 1-4 coding, 2026-10-14
-  sclass_lower   = as.numeric(ssi$lower[omega_indices] == 1),
-  sclass_working = as.numeric(ssi$working[omega_indices] == 1),
-  sclass_middle  = as.numeric(ssi$middle[omega_indices] == 1),
-  sclass_upper   = as.numeric(ssi$high[omega_indices] == 1),
-  white = as.numeric(ssi$white[omega_indices] == 1),
-  black = as.numeric(ssi$black[omega_indices] == 1),
-  hisp = as.numeric(ssi$hisp[omega_indices] == 1),
-  asian = as.numeric(ssi$asian[omega_indices] == 1),
-  otherrace = as.numeric(
-    (ssi$multirace[omega_indices] == 1) | (ssi$otherrace[omega_indices] == 1)
-  )
-)
+# Shared coding (scripts/demographics-coding.R): every category as a 0/1
+# indicator, on the complete-case sample used by scripts 07 and 10.
+source("scripts/demographics-coding.R")
+demo_full <- ssi[omega_indices, ]
+keep <- demographic_keep(demo_full)
+cat("Complete cases on demographics: N =", sum(keep), "of", length(keep), "\n")
+ant <- ant[keep, ]
+omega <- omega[keep, , , drop = FALSE]
+omega_indices <- omega_indices[keep]
+demo_vars <- cbind(row_index = omega_indices,
+                   demographic_indicators(demo_full[keep, ]))
+cat("Demographic extraction validated: N =", nrow(demo_vars), "\n")
 
 # Validation
 stopifnot(nrow(demo_vars) == nrow(ant), nrow(demo_vars) == dim(omega)[1])
@@ -99,29 +73,49 @@ genre_display <- c(
   danclub = "Dance", hvymtl = "Metal"
 )
 
-# Demographic rows, in manuscript prose order (education, class, age, gender, race)
+# Demographic rows, in manuscript prose order (education, parents, class, age,
+# gender, race, income, region)
 demo_rows <- c("educ_hsless", "educ_somecol", "educ_bach", "educ_postgrad",
                "parentba",
                "sclass_lower", "sclass_working", "sclass_middle", "sclass_upper",
-               "age", "gender",
-               "white", "black", "hisp", "asian", "otherrace")
+               "age_18_29", "age_30_39", "age_40_49", "age_50_59", "age_60_69",
+               "age_70",
+               "woman",
+               "race_white", "race_black", "race_hisp", "race_asian",
+               "race_multi", "race_other",
+               "income_lt25", "income_25_49", "income_50_74", "income_75",
+               "region_ne", "region_mw", "region_s", "region_w")
 demo_labels <- c(
   educ_hsless = "HS or less",
   educ_somecol = "Some college",
   educ_bach = "Bachelor's",
   educ_postgrad = "Postgrad.",
-  parentba = "Parents' educ.",
+  parentba = "Parents' BA",
   sclass_lower = "Lower class",
   sclass_working = "Working class",
   sclass_middle = "Middle class",
   sclass_upper = "Upper class",
-  age = "Age",
-  gender = "Woman",
-  white = "White",
-  black = "Black",
-  hisp = "Hispanic",
-  asian = "Asian",
-  otherrace = "Multirace/Other"
+  age_18_29 = "Age 18-29",
+  age_30_39 = "Age 30-39",
+  age_40_49 = "Age 40-49",
+  age_50_59 = "Age 50-59",
+  age_60_69 = "Age 60-69",
+  age_70 = "Age 70+",
+  woman = "Woman",
+  race_white = "White",
+  race_black = "Black",
+  race_hisp = "Hispanic",
+  race_asian = "Asian",
+  race_multi = "Multirace",
+  race_other = "Other race",
+  income_lt25 = "Income <$25k",
+  income_25_49 = "Income $25-49k",
+  income_50_74 = "Income $50-74k",
+  income_75 = "Income $75k+",
+  region_ne = "Northeast",
+  region_mw = "Midwest",
+  region_s = "South",
+  region_w = "West"
 )
 
 # 4-dimension passive-individuals fit (2026-10-16)
