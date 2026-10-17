@@ -2,7 +2,7 @@
 
 Project: measuring "complex tastes" (Ma Xiangyu 2026, *Cultural Sociology*) geometrically, using Multiple Factor Analysis (MFA) on 20 musical genres from the SSI-2012 survey. The manuscript draft is synced to Overleaf.
 
-Status (2026-10-17, late evening): `manuscript/main.tex` compiles (42 pp., no undefined references or citation warnings). Overleaf is synced through commit dadf250. That commit carries the review fixes to Sections 3.1 to 3.3, applied on top of the Overleaf web edits from d8890b4, which were pulled into the workspace first. The workspace `manuscript/main.pdf` has not been rebuilt since these edits. The earlier 40 pp. figure no longer matches.
+Status (2026-10-17, late evening): `manuscript/main.tex` compiles (43 pp., no undefined references or citation warnings). Overleaf is synced through commit 460d224, and GitHub through outer commit f28cd68. Those commits carry the review fixes to Sections 3.1 to 3.3, the rewritten genre-based decomposition paragraph in Section 3.3, and this file, applied on top of the Overleaf web edits from d8890b4 (pulled into the workspace first). The workspace `manuscript/main.pdf` has not been rebuilt since these edits, so it still shows the pre-edit build.
 
 ## Conceptual frame
 
@@ -32,7 +32,7 @@ Numbers 3, 6, 7, 16–18, and 20 were retired. The remaining numbers are kept so
 5. **Terminology**: the manuscript says "complex tastes," not "antinomies." `main.tex` is stored with one paragraph per line. Use "preference, engagement, and evaluation," not "feeling, doing, praising." Keep Ma's configuration names.
 8. **Figures**: category maps on planes (D1,D2) and (D3,D4). `fig-individuals`, `fig-dim4`, `fig-scree`, `fig-rv`, `fig-antinomy-map`, and `fig-genre-segments` are generated but unreferenced. `fig-worked-example` overlays respondents 362 and 1881 in the same space, two panels — (D1,D4) and (D2,D4) — with color = respondent, shape = aspect, segments from partials to global, and a shared D4 y-scale (free x). This layout is the 2026-10-16 committed design (outer 43482bc, Overleaf 8ee78a1); on 2026-10-17 the working tree had regressed to an older 2×2 row-per-respondent layout and was restored to it. Partial-point numbers in prose are on the true FactoMineR partial scale (global = mean of partials).
 9. **Age**: six groups (18–29 to 70+), collapsed from the 13 codebook bands (`age6`).
-10. **Terminology**: "modality" is reserved for the GDA sense (a category of a categorical variable). The three blocks are "aspects of taste." Internal R names (`modality`) are unchanged.
+10. **Terminology**: "modality" is reserved for the GDA sense (a category of a categorical variable). The three blocks are "aspects of taste." Internal R names (`modality`) are unchanged. In prose, response options are "categories" or "response categories." "Modalities" and "groups" appear only in the Section 3.1 footnote that explains GDA usage.
 11. **Terminology**: the evaluation measure is called "genre evaluation(s)" in prose.
 12. **Evaluation coding (v3)**: eval = 1 iff (grad AND NOT nocol) OR ((mc OR uc) AND NOT (lc OR wc)). Yes-rate 20.7%. Earlier codings are in git history.
 13. **Aspect-disagreement score** $W_s(i)$ measures aspect dispersion. It is interpreted as complex taste because a profile whose aspects place the person in different locations cannot be summarized by any single taste position. It is not configural complexity. Do not call it a "complex-taste score."
@@ -85,10 +85,11 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 - Quote `do.call` function names in shared sessions (a stray `c` vector once masked `base::c`).
 - In R, `gcont / 100 * l3` recycles across rows. Use `sweep(gcont, 2, l3, "*")`.
 - Eigenvalues: report separate λ1 to four decimals. Consumption is 0.1265, which gives weight 7.904; the three-decimal 0.127 gives 7.87.
-- MFA weights: global column weight $(1-p_j)/(J\lambda_{1g})$; group balancing $1/\lambda_{1g}$. The λ1s are not the weights.
+- MFA weights: global column weight $(1-p_j)/(J\lambda_{1g})$; group balancing $1/\lambda_{1g}$. The λ1s are not the weights. Verified 2026-10-17 against `res$global.pca$call$col.w`: yes columns equal $(1-p)/(J\lambda_{1,h})$ and no columns equal $p/(J\lambda_{1,h})$, with ratios within 0.0002 of 1, using the separate λ1s 0.1550, 0.1265, and 0.1942.
+- Genre-aspect contributions (script 04, section 3b; manuscript Section 3.3): $a_{ighs} = (z_{igh} - p_{gh})\,\Delta_{ghs}$, with $\Delta_{ghs} = [(1-p_{gh})V_{\text{yes},s} - p_{gh}V_{\text{no},s}]/(J\lambda_{1,h}\sqrt{p_{gh}(1-p_{gh})})$. The partial point is $c_{ihs} = H\sum_g a_{ighs}$, the deviation is $d = a - \bar a$ over the three aspects, and $\omega_s(i;g) = H^2\sum_h d^2$. The genre-level identity is exact (checked in R on random data, and script 04 checks it by brute force). Do not sum over the 120 columns. The yes and no columns of one genre-aspect form a single term.
 - Contributions (FactoMineR): a group's contribution is the sum of its 40 yes and no category contributions. Yes-only sums are about 60% of that. Category contribution is $100\, p_j f_{js}^2 / (J \lambda_{1h} \lambda_s^2)$.
 - $\mathrm{Lg}(h,k) = \mathrm{tr}(S_h S_k)/N^2$, where $S_h$ includes the $1/\lambda_{1h}$ weight. $\mathrm{Lg}(h,\mathrm{MFA}) = \sum_k \mathrm{Lg}(h,k)/\lambda_1^{\mathrm{MFA}}$. Read Lg as presence and rank order, not degree (floor ≈ 0.66). Verified 2026-10-17: the MFA column of `res$group$Lg` equals the row sum of the three block Lg values divided by λ₁ (preference: 4.3782 / 1.605 = 2.7279).
-- $S_h = X_h D_h X_h^\mathsf{T}$ is N × N (respondent similarity). RV compares similarity matrices and is not a rank statistic.
+- $S_h = X_h D_h X_h^\mathsf{T}$ is N × N (respondent similarity). RV compares similarity matrices and is not a rank statistic. $S_{ij}$ is a centered, rarity-weighted inner product, not a match count. Agreement on a genre adds to $S_{ij}$, disagreement subtracts, and rare answers carry the most weight. Do not describe it as counting matching answers or as disjointness.
 - Disagreement shares in the manuscript are means of individual ratios (49/55/52/66). Aggregate ratios are 42/49/43/66. Do not mix them.
 - Heatmaps: look up axis labels by key. A character score column must be a factor with levels set explicitly, because ggplot sorts alphabetically. Check with `ggplot_build(p)$layout$panel_params` and `pdftotext`. Gap rows need distinct labels matching factor levels from the start. `facet_wrap` needs `scales = "free_x"` when x varies by panel. Signed Spearman maps use #08519C–white–#A63603 with fixed limits [−1, 1].
 - LaTeX fragments from R: escape `$` and `&`; use `"\\\\"` for row terminators; `droplevels` before η² or `tapply`.
@@ -108,6 +109,9 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 - Gender: individual-level gender coefficients are not significant in any W or γ model; η² < 0.01.
 - Worked examples: **362** (likes 15; listens 9; grants 18/20; W4 155.7 = 11.2 ω + 144.4 γ, 93% coherence; W1 7.0; W2 0.1). **1881** (likes 14; listens 13; grants 0/20; supplementary individual; W2 36.29 = 5.3 ω + 31.0 γ, above the 99th percentile, so complex on D2 alone).
 - Old all-active fit, for the script-11 footnote only: yes-rates 41.7 / 22.9 / 20.7%; eigenvalues 1.509 / 1.178 / 0.982; RV 0.321 / 0.013 / 0.014.
+- Eigenvalue shares (verified 2026-10-17, `tab-eigen` and prose): 8.23 / 7.24 / 5.39 / 5.11%, first five 30.35%. Dimension 2 is 7.2448%, so the prose says 7.24%, not 7.25%.
+- Constant respondents: 2,259 − 1,847 = 412 are constant in at least one block. All 321 respondents with no evaluations are inside the 412.
+- Yes is the rarer answer for 51 of 60 genre-aspect pairs. For nine pairs the yes rate exceeds 0.5, so the no category contributes more: preference classical 0.551, jazz 0.509, moodez 0.578, crold 0.731, blurb 0.530, toppop 0.568, controck 0.510; evaluation classical 0.668, opera 0.744. Do not claim that yes categories always contribute more.
 
 ## Manuscript and Overleaf sync
 
@@ -140,6 +144,17 @@ Corrected 2026-10-17:
 - The γ4 vs global position correlation is r = 0.79 (rounded from 0.785).
 - The Discussion revision note ("should be dropped") was removed. The claim that both first dimensions are visible across all three aspects is gone.
 
+Applied 2026-10-17 late evening (the author may revert any of these):
+- RV description: $S_{ij}$ is a centered, rarity-weighted inner product, not a match count.
+- Yes-category labeling claim restated, with the nine cells where the no category contributes more.
+- "Comparable overall participation" changed to "Uneven overall participation also masks asymmetries across dimensions." The author had been asked about this wording, so revert it if unwanted.
+- Dimension 3 caption names the diaspora genres, not "traditionally racialized genres."
+- Dimension 4 sentence restored to "across genres' fans."
+- Dimension 2 share is 7.24%.
+- FactoMineR footnote: the MFA used FactoMineR, and the transposed analysis is a manual implementation.
+- "120 indicator columns" wording, "how MFA is computed," and the colon after "shows" removed.
+- Genre-based decomposition (Section 3.3) rewritten around genre-aspect contributions $a_{ighs}$, the three-aspect deviation, and the worked example ($78/9 \approx 8.67$).
+
 Awaiting author approval (assistant-drafted):
 - The Abstract and the Limitations subsection (decision 29). The abstract excludes the transposed genre-level findings.
 - The transposed Dimension 4 reading (audience racial composition), the mood/easy-listening exception on tD4, and the Dimension 4 caption reading of `fig-genre-map-d14`.
@@ -151,11 +166,15 @@ Awaiting author approval (assistant-drafted):
 - Whether to add a Dimension 4 analogue of the dropped dim-2 "generous evaluators" clarification.
 
 Structure and content still open:
+- Figure 3–4 now sits before the Dimension 2–4 text. Move it after the Dimension 4 paragraph, or keep it as the author's choice.
+- The Dimension 3 paragraph no longer links to the race and ethnicity results (`sec:social`). Decide whether to restore the link.
+- The workspace `manuscript/main.pdf` needs a rebuild (43 pp.).
+- The `AGENTS.md` edits of 2026-10-17 late evening are in the workspace only until they are committed and copied to Overleaf.
 - Introduction engagement beyond Ma and Bourdieu. Candidates in the global bibliography, not yet cited: `peterson1996changing-967`, `warde2007understanding-43f`, and `lizardo2014omnivorousness-3f3`. Check each before citing.
 - Limitations lacks the evaluation-coding robustness sentence (decision 12). Rerun the earlier codings from git history to get the numbers.
 - The split-sample check for the transposed tD4 result is suggested in the text but has not been run.
 - `ma2026deep` (Socius) disambiguates the `ma2026tastes` citations as "Ma 2026b." Flagged to author. The `ma2026deep-fb3` bib entry is uncited and kept.
-- ~~Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.~~ Done 2026-10-17 evening (Overleaf commit 681d1c1; main.pdf rebuilt, 40 pp.). Superseded 2026-10-17 late evening by Overleaf commit dadf250 (42 pp.; see the status line at the top).
+- ~~Overleaf sync of all 2026-10-16 and 2026-10-17 changes, and a rebuild of `main.pdf`.~~ Done 2026-10-17 evening (Overleaf commit 681d1c1; main.pdf rebuilt, 40 pp.). Superseded 2026-10-17 late evening by Overleaf commits dadf250 and 460d224 (43 pp.; see the status line at the top).
 
 Working files: `manuscript/to-do.md` lists only open items as of 2026-10-17. `manuscript-audit.md` (2026-10-13) predates the restructure; do not use it as a to-do list.
 
