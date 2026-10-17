@@ -1,12 +1,12 @@
 # 01-prepare-mfa-data.R
-# Build the 60-column MFA input: 20 genres x 3 taste modalities
+# Build the 60-column MFA input: 20 genres x 3 taste aspects
 # (preference = like, consumption = listened past month,
 #  evaluation = typical fan perceived as high status)
 #
 # Coding decisions (per author):
 #   preference : like = 1; dislike / neither / not familiar = 0
 #   consumption: listened = 1 (as collected)
-#   evaluation : typical fan is college grad OR middle class OR upper class = 1
+#   evaluation : typical fan is college grad AND (middle OR upper class) = 1
 # Sample: complete cases on all 60 variables ("valid respondents")
 
 library(dplyr)
@@ -30,11 +30,20 @@ lis_raw <- paste0(genres, "lis")
 cons <- setNames(as.data.frame(lapply(df[lis_raw], function(x) as.integer(x))),
                  paste0("cons_", genres))
 
-# --- evaluation: typical fan is high status ---------------------------------
-# high status = college graduate OR middle class OR upper class
-status_raw <- paste0(rep(genres, each = 3), rep(c("grad", "mc", "uc"), times = 20))
+# --- evaluation: typical fan is unambiguously high status --------------------
+# The fan-perception items are check-all-that-apply, so categories are not
+# mutually exclusive: respondents can tick both "college graduate" and "did
+# not attend college", or both "working" and "upper" class. The conjunctive
+# coding (grad & (mc|uc)) therefore passes check-everything respondents.
+# Coding (author decision 2026-10-09): the genre is evaluated highly if the
+# respondent gives an UNAMBIGUOUS high-status signal in either domain:
+#   (grad AND NOT nocol) OR ((mc OR uc) AND NOT (lc OR wc))
 eval_high <- lapply(genres, function(g) {
-  as.integer(rowSums(df[, paste0(g, c("grad", "mc", "uc"))], na.rm = TRUE) > 0)
+  grad <- df[[paste0(g, "grad")]] == 1
+  nocol <- df[[paste0(g, "nocol")]] == 1
+  hicls <- rowSums(df[, paste0(g, c("mc", "uc"))], na.rm = TRUE) > 0
+  locls <- rowSums(df[, paste0(g, c("lc", "wc"))], na.rm = TRUE) > 0
+  as.integer((grad & !nocol) | (hicls & !locls))
 })
 eval_high <- setNames(as.data.frame(eval_high), paste0("eval_", genres))
 # propagate item-level missingness (fan vars share the same 2 missing rows)
@@ -52,7 +61,7 @@ saveRDS(mfa_dat, "data/mfa_input.rds")
 
 cat(sprintf("rows: %d -> %d complete cases\n", n_before, n_after))
 cat(sprintf("columns: %d (3 groups x 20)\n", ncol(mfa_dat)))
-cat("\nOverall yes-rates by modality:\n")
+cat("\nOverall yes-rates by aspect:\n")
 data.frame(
   preference = mean(as.matrix(mfa_dat[, paste0("pref_", genres)])),
   consumption = mean(as.matrix(mfa_dat[, paste0("cons_", genres)])),

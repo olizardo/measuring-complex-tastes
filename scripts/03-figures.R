@@ -1,0 +1,237 @@
+# 03-figures.R
+# Publication figures for the complex-tastes manuscript.
+# Writes PDFs to manuscript/figures/.
+
+library(ggplot2)
+library(ggrepel)
+
+res <- readRDS("output/mfa_results.rds")
+dir.create("manuscript/figures", showWarnings = FALSE, recursive = TRUE)
+
+theme_set(theme_minimal(base_size = 10))
+
+# genre stem -> readable name (used in figures and tables)
+gshort <- c("classical", "opera", "jazz", "bwayst", "moodez", "bband", "crold",
+            "country", "blueg", "folk", "hymgos", "latspsal", "raphiphop",
+            "blurb", "reggae", "toppop", "controck", "indalt", "danclub", "hvymtl")
+genres <- c("Classical", "Opera", "Jazz", "Broadway/Show", "Mood/Easy",
+            "Big Band", "Classic Rock/Oldies", "Country", "Bluegrass", "Folk",
+            "Hymns/Gospel", "Latin/Spanish/Salsa", "Rap/Hip-Hop", "Blues/R&B",
+            "Reggae", "Top 40/Pop", "Contemporary Rock", "Indie/Alt Rock",
+            "Dance/Club", "Heavy Metal")
+
+# --- Figure 1: scree plot ----------------------------------------------------
+eig <- as.data.frame(res$eig[, ])
+names(eig) <- c("lambda", "pct", "cum")
+eig$dim <- seq_len(nrow(eig))
+p1 <- ggplot(eig, aes(factor(dim), lambda, group = 1)) +
+  geom_col(fill = "grey75", color = "grey40", linewidth = 0.2) +
+  geom_line(linewidth = 0.4) +
+  geom_point(size = 1.6) +
+  geom_text(aes(label = sprintf("%.1f%%", pct)), vjust = -0.7, size = 2.6) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(x = "Dimension", y = "Eigenvalue",
+       title = "Scree plot: eigenvalues of the MFA",
+       subtitle = "Labels: percentage of variance explained") +
+  theme(panel.grid.minor = element_blank())
+ggsave("manuscript/figures/fig-scree.pdf", p1, width = 5, height = 3.4)
+
+# --- Individual factor map (dims 1-2), colored by age (UNREFERENCED) ----------
+ind <- as.data.frame(res$ind$coord[, 1:2])
+names(ind) <- c("dim1", "dim2")
+mfa_dat <- readRDS("data/mfa_input.rds")
+df0 <- readRDS("data/ssi2012_cleaned.rds")
+df0[] <- lapply(df0, function(x) if (haven::is.labelled(x)) haven::zap_labels(x) else x)
+d0 <- df0[as.integer(rownames(res$ind$coord)), ]  # active individuals only
+age6 <- cut(d0$age, breaks = c(-Inf, 4, 6, 8, 10, 12, Inf),
+            labels = c("18-29", "30-39", "40-49", "50-59", "60-69", "70+"))
+ind$age6 <- factor(age6, levels = c("18-29", "30-39", "40-49", "50-59",
+                                    "60-69", "70+"))
+ind <- ind[!is.na(ind$age6), ]  # drop single missing-age respondent
+p2 <- ggplot(ind, aes(dim1, dim2, color = age6)) +
+  geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+  geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+  geom_point(alpha = 0.4, size = 0.75) +
+  # sequential dark-blue ramp: age is ordinal, ramp makes the dim-1 gradient visible
+  scale_color_manual(values = setNames(
+    colorRampPalette(c("#6BAED6", "#08306B"))(6), levels(ind$age6))) +
+  labs(x = "Dimension 1", y = "Dimension 2", color = "Age group",
+       title = "Individual factor map (dimensions 1-2)",
+       subtitle = "Points: respondents, colored by age group") +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.minor = element_blank(), legend.position = "right")
+ggsave("manuscript/figures/fig-individuals.pdf", p2, width = 5.5, height = 4)
+
+# --- Category maps, one figure per dimension pair ------------------------------
+# Planes under the 4-dimension passive-individuals fit (author request,
+# 2026-10-16): (D1, D2) = highbrow x volume, and (D3, D4) = engagement divide x
+# status valuation -- the two positioning dimensions pair with each other.
+# Axis titles name the dimensions explicitly (with their readings).
+mk_cc <- function(dims, xl, yl, nudge = NULL) {
+  d <- as.data.frame(res$quali.var$coord[, dims])
+  names(d) <- c("x", "y")
+  d$name <- rownames(d)
+  d$aspect <- ifelse(grepl("^pref_", d$name), "Preference",
+               ifelse(grepl("^cons_", d$name), "Consumption", "Evaluation"))
+  d$yes <- grepl("_1$", d$name)
+  d$genre <- genres[match(sub("_1$", "", sub("^(pref|cons|eval)_", "", d$name)),
+                          gshort)]
+  # optional per-label nudges (data units) for near-coincident category pairs
+  # that the repel algorithm cannot separate once the markers are gone
+  d$nx <- 0; d$ny <- 0
+  if (!is.null(nudge)) {
+    d$nx <- ifelse(is.na(nudge$nx[match(d$name, nudge$name)]), 0,
+                   nudge$nx[match(d$name, nudge$name)])
+    d$ny <- ifelse(is.na(nudge$ny[match(d$name, nudge$name)]), 0,
+                   nudge$ny[match(d$name, nudge$name)])
+  }
+  # "no" categories shown as small grey dots for reference; labeled "yes"
+  # categories are drawn as text only (no markers), labels repelled apart
+  ggplot(d, aes(x, y)) +
+    geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
+    geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
+    geom_point(data = subset(d, !yes), color = "grey65", size = 1) +
+    geom_text_repel(data = subset(d, yes),
+                    aes(label = genre, color = aspect), size = 2.5,
+                    fontface = "bold", segment.color = NA,
+                    min.segment.length = Inf, max.overlaps = Inf,
+                    force = 6, force_pull = 0.7, box.padding = 0.4,
+                    max.iter = 50000,
+                    nudge_x = d$nx, nudge_y = d$ny,
+                    show.legend = FALSE, seed = 5) +
+    scale_color_manual(values = c(Preference = "#08519C",
+                                  Consumption = "#A63603",
+                                  Evaluation = "#006D2C")) +
+    labs(x = xl, y = yl, color = "Aspect") +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid.minor = element_blank(), legend.position = "bottom")
+}
+ggsave("manuscript/figures/fig-categories-d12.pdf",
+       mk_cc(c(1, 2), "Dimension 1 (highbrow vs popular)",
+             "Dimension 2 (volume)"),
+       width = 6.5, height = 6.0)
+ggsave("manuscript/figures/fig-categories-d34.pdf",
+       mk_cc(c(3, 4), "Dimension 3 (engagement divide)",
+             "Dimension 4 (status valuation)",
+             nudge = data.frame(
+               name = c("cons_bwayst_1", "cons_bband_1"),
+               nx = c(0.14, -0.14), ny = c(-0.10, 0.02))),
+       width = 6.5, height = 6.0)
+# the old dims 1-4 and dims 2-3 plane figures are stale under the new fit
+unlink("manuscript/figures/fig-categories-d14.pdf")
+unlink("manuscript/figures/fig-categories-d23.pdf")
+unlink("manuscript/figures/fig-categories.pdf")
+
+# --- Figure 5: RV coefficient heatmap (3x3) ------------------------------------
+rv <- res$group$RV
+rv <- rv[c("Preference", "Consumption", "Evaluation"),
+         c("Preference", "Consumption", "Evaluation")]
+rvdf <- data.frame(
+  g1 = rep(rownames(rv), 3),
+  g2 = rep(colnames(rv), each = 3),
+  rv = as.vector(rv))
+rvdf$g1 <- factor(rvdf$g1, levels = c("Preference", "Consumption", "Evaluation"))
+rvdf$g2 <- factor(rvdf$g2, levels = rev(c("Preference", "Consumption", "Evaluation")))
+rvdf <- rvdf[rvdf$g1 != rvdf$g2, ]  # omit the unit diagonal
+p5 <- ggplot(rvdf, aes(g1, g2, fill = rv)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = sprintf("%.2f", rv)), size = 3.2) +
+  scale_fill_gradient(low = "#F5F5F5", high = "#2166AC", limits = c(0, 1)) +
+  coord_fixed() +
+  labs(x = NULL, y = NULL, fill = "RV",
+       title = "RV coefficients between taste aspects") +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1))
+ggsave("manuscript/figures/fig-rv.pdf", p5, width = 4, height = 3.6)
+
+# --- LaTeX tables -------------------------------------------------------------
+dir.create("manuscript/tables", showWarnings = FALSE, recursive = TRUE)
+
+# eigenvalues
+eig5 <- res$eig[1:5, ]
+tab <- cbind(
+  Dimension = sprintf("$%d$", 1:5),
+  Eigenvalue = sprintf("%.3f", eig5[, 1]),
+  Pct = sprintf("%.1f", eig5[, 2]),
+  Cum = sprintf("%.1f", eig5[, 3]))
+writeLines(c(
+  "\\begin{tabular}{lccc}", "\\toprule",
+  "Dimension & Eigenvalue & \\% variance & Cumulative \\% \\\\", "\\midrule",
+  paste0(apply(tab, 1, paste, collapse = " & "), " \\\\"), "\\bottomrule", "\\end{tabular}"),
+  "manuscript/tables/tab-eigen.tex")
+
+# RV coefficients
+rvm <- res$group$RV[c("Preference", "Consumption", "Evaluation", "MFA"),
+                    c("Preference", "Consumption", "Evaluation", "MFA")]
+rlines <- c(
+  "\\begin{tabular}{lcccc}", "\\toprule",
+  " & Preference & Consumption & Evaluation & MFA \\\\", "\\midrule")
+for (i in seq_len(nrow(rvm))) {
+  rlines <- c(rlines, paste0(rownames(rvm)[i], " & ",
+    paste(sprintf("%.3f", rvm[i, ]), collapse = " & "), " \\\\"))
+}
+rlines <- c(rlines, "\\bottomrule", "\\end{tabular}")
+writeLines(rlines, "manuscript/tables/tab-rv.tex")
+
+# group structure: separate first eigenvalue, balancing weight, contributions, Lg with MFA
+lam1g <- sapply(res$separate.analyses, function(a) a$eig[1, 1])
+w <- 1 / lam1g
+gcont <- res$group$contrib[1:3, 1:4]
+gLg <- res$group$Lg[1:3, "MFA"]
+gnames <- c("Preference", "Consumption", "Evaluation")
+glines <- c(
+  "\\begin{tabular}{lccccccc}", "\\toprule",
+  " & & & \\multicolumn{4}{c}{Contributions (\\%)} & \\\\",
+  "\\cmidrule(lr){4-7}",
+  "Aspect & $\\lambda_1$ & Weight ($1/\\lambda_1$) & Dim 1 & Dim 2 & Dim 3 & Dim 4 & $Lg$ with MFA \\\\",
+  "\\midrule")
+for (i in 1:3) {
+  glines <- c(glines, paste0(gnames[i], " & ",
+    sprintf("%.4f", lam1g[i]), " & ", sprintf("%.3f", w[i]), " & ",
+    paste(sprintf("%.1f", gcont[i, ]), collapse = " & "), " & ",
+    sprintf("%.2f", gLg[i]), " \\\\"))
+}
+glines <- c(glines, "\\bottomrule", "\\end{tabular}")
+writeLines(glines, "manuscript/tables/tab-groups.tex")
+
+# partial axes: correlations between each group's separate-analysis axes
+# and the global dimensions (cor of individual coordinates on the two axes)
+global <- res$ind$coord[, 1:4, drop = FALSE]
+plines <- c(
+  "\\begin{tabular}{lcccc}", "\\toprule",
+  "Partial axis & Dim 1 & Dim 2 & Dim 3 & Dim 4 \\\\", "\\midrule")
+for (h in 1:3) {
+  sep <- res$separate.analyses[[h]]$ind$coord[, 1:4, drop = FALSE]
+  pcax <- cor(sep, global)
+  for (s in 1:4) {
+    plines <- c(plines, paste0(gnames[h], " axis ", s, " & ",
+      paste(sprintf("%.2f", pcax[s, ]), collapse = " & "), " \\\\"))
+  }
+  if (h < 3) plines <- c(plines, "\\addlinespace")
+}
+plines <- c(plines, "\\bottomrule", "\\end{tabular}")
+writeLines(plines, "manuscript/tables/tab-partial-axes.tex")
+
+# genre-level yes rates
+md <- mfa_dat_raw <- readRDS("data/mfa_input.rds")
+rates <- sapply(gshort, function(g) c(
+  pref = mean(md[[paste0("pref_", g)]]),
+  cons = mean(md[[paste0("cons_", g)]]),
+  eval = mean(md[[paste0("eval_", g)]])))
+rl2 <- c(
+  "\\begin{tabular}{lccc}", "\\toprule",
+  "Genre & Preference & Consumption & Evaluation \\\\", "\\midrule")
+for (i in seq_along(gshort)) {
+  gname <- gsub("&", "\\\\&", genres[i])
+  rl2 <- c(rl2, paste0(gname, " & ",
+    paste(sprintf("%.1f", rates[, i] * 100), collapse = " & "), " \\\\"))
+}
+rl2 <- c(rl2, "\\midrule",
+  paste0("Overall & ", paste(sprintf("%.1f", rowMeans(rates) * 100), collapse = " & "),
+         " \\\\"), "\\bottomrule", "\\end{tabular}")
+writeLines(rl2, "manuscript/tables/tab-genre-rates.tex")
+
+cat("figures written:\n")
+cat(paste(" ", list.files("manuscript/figures", full.names = TRUE)), sep = "\n")
+cat("tables written:\n")
+cat(paste(" ", list.files("manuscript/tables", full.names = TRUE)), sep = "\n")
