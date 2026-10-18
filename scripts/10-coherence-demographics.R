@@ -9,9 +9,7 @@
 # (ref. Northeast).
 #
 # Outputs:
-#   manuscript/tables/tab-coherence-eta.tex        (bivariate eta^2, gamma_1-3)
 #   manuscript/tables/tab-coherence-regression.tex (OLS, gamma_1-3)
-#   output/coherence_eta_squared.csv
 #   output/coherence_demographics.rds
 
 library(tidyverse)
@@ -61,9 +59,8 @@ print(desc, digits = 3)
 cat("\nN =", nrow(dat), "\n")
 
 # =============================================================================
-# 2. Bivariate eta^2: demographics with coherence (same machinery as script 07)
+# 2. Predictors (same encoding as script 07)
 # =============================================================================
-cat("\n===== BIVARIATE ETA-SQUARED: DEMOGRAPHICS vs COHERENCE =====\n")
 
 preds <- c("gender", "race", "age6",
            "educ_somecol", "educ_bach", "educ_postgrad",
@@ -71,46 +68,6 @@ preds <- c("gender", "race", "age6",
            "sclass_working", "sclass_middle", "sclass_upper",
            "region")
 
-eta2_one <- function(y, g) {
-  g <- droplevels(factor(g))
-  keep <- !is.na(g) & g != "Missing" & !is.na(y)
-  g <- droplevels(g[keep]); y <- y[keep]
-  m <- tapply(y, g, mean); nh <- table(g)
-  mu <- sum(nh * m) / sum(nh)
-  sum(nh * (m - mu)^2) / sum((y - mu)^2)
-}
-
-eta2_list <- list()
-for (v in preds) {
-  if (v %in% c("educ_somecol", "educ_bach", "educ_postgrad")) next
-  if (v %in% c("sclass_working", "sclass_middle", "sclass_upper")) next
-  eta2_list[[v]] <- sapply(c("coh1", "coh2", "coh3", "coh4"),
-                           function(t) eta2_one(dat[[t]], dat[[v]]))
-}
-
-# Education and class at the block level (factors reconstructed from indicators)
-educ_fac <- factor(
-  ifelse(dat$educ_hsless == 1, "HS or less",
-  ifelse(dat$educ_somecol == 1, "Some college",
-  ifelse(dat$educ_bach == 1, "Bachelor's",
-  ifelse(dat$educ_postgrad == 1, "Postgraduate", NA)))),
-  levels = c("HS or less", "Some college", "Bachelor's", "Postgraduate"))
-eta2_list$educ <- sapply(c("coh1", "coh2", "coh3", "coh4"),
-                         function(t) eta2_one(dat[[t]], educ_fac))
-
-sclass_fac <- factor(
-  ifelse(dat$sclass_lower == 1, "Lower",
-  ifelse(dat$sclass_working == 1, "Working",
-  ifelse(dat$sclass_middle == 1, "Middle",
-  ifelse(dat$sclass_upper == 1, "Upper", NA)))),
-  levels = c("Lower", "Working", "Middle", "Upper"))
-eta2_list$sclass <- sapply(c("coh1", "coh2", "coh3", "coh4"),
-                           function(t) eta2_one(dat[[t]], sclass_fac))
-
-eta2 <- t(do.call(cbind, eta2_list))
-colnames(eta2) <- c("coh1", "coh2", "coh3", "coh4")
-cat("\n== Correlation ratios (eta^2) with coherence scores ==\n")
-print(round(eta2, 3))
 
 # =============================================================================
 # 3. OLS regressions: coherence on demographics (same predictors as script 07)
@@ -162,20 +119,6 @@ for (i in seq_along(ys_coh)) {
 # 4. LaTeX tables
 # =============================================================================
 
-# --- tab-coherence-eta.tex (mirrors tab-w-eta) ---------------------------------
-elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
-          educ = "Education", parentba = "Parents' BA",
-          income4 = "Household income", sclass = "Subjective class",
-          region = "Census region")
-te <- c("\\begin{tabular}{lcccc}", "\\toprule",
-        " & $\\gamma_1$ & $\\gamma_2$ & $\\gamma_3$ & $\\gamma_4$ \\\\", "\\midrule")
-for (v in names(eta2_list)) {
-  te <- c(te, paste0(elab[v], " & ",
-                     paste(sprintf("%.3f", eta2[v, ]), collapse = " & "),
-                     " \\\\"))
-}
-te <- c(te, "\\bottomrule", "\\end{tabular}")
-writeLines(te, "manuscript/tables/tab-coherence-eta.tex")
 
 # --- tab-coherence-regression.tex (mirrors tab-regression) ---------------------
 stars <- function(p) cut(p, c(-Inf, 0.001, 0.01, 0.05, Inf),
@@ -277,19 +220,13 @@ writeLines(tl, "manuscript/tables/tab-coherence-regression.tex")
 # =============================================================================
 # 5. Save results
 # =============================================================================
-eta_df <- as.data.frame(eta2) |>
-  rownames_to_column("Demographic") |>
-  mutate(across(where(is.numeric), ~ round(.x, 4)))
-write_csv(eta_df, "output/coherence_eta_squared.csv")
 
 saveRDS(list(
   fits_coh = fits_coh, fits_w = fits_w, fits_loc = fits_loc,
-  eta2 = eta2, desc = desc,
+  desc = desc,
   dat = dat_cc, preds = preds
 ), file = "output/coherence_demographics.rds")
 
-cat("\nSaved: manuscript/tables/tab-coherence-eta.tex\n")
 cat("Saved: manuscript/tables/tab-coherence-regression.tex\n")
-cat("Saved: output/coherence_eta_squared.csv\n")
 cat("Saved: output/coherence_demographics.rds\n")
 cat("\n===== SCRIPT 10 COMPLETE =====\n")

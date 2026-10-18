@@ -5,7 +5,7 @@
 # and robustness checks (log outcomes; pairwise disagreement components on
 # dimension 3; genre-based components; cross-genre coherence components).
 # Writes manuscript/tables/tab-regression.tex (partial effects) and
-# manuscript/tables/tab-w-eta.tex (bivariate correlation ratios).
+# manuscript/tables/tab-omega-regression.tex (genre-based components).
 
 library(tidyverse)
 
@@ -60,17 +60,6 @@ blocks <- list(
        "Subjective class (ref.~lower)"),
   c("region", "Census region (ref.~Northeast)"))
 
-cf <- lapply(fits, function(m) {
-  s <- summary(m)$coefficients
-  data.frame(term = rownames(s), b = s[, 1], se = s[, 2], p = s[, 4])
-})
-names(cf) <- ys
-
-# Holm correction across every non-intercept coefficient shown in the table
-nonint <- cf[[1]]$term != "(Intercept)"
-pm <- sapply(cf, function(dd) dd$p[nonint])
-holm_m <- matrix(p.adjust(as.vector(pm), "holm"), nrow = nrow(pm))
-
 # LaTeX-escape $ and use en-dashes in range labels
 nice <- function(x) gsub("-", "--", gsub("\\$", "\\\\$", x))
 
@@ -105,8 +94,18 @@ var_labels <- c(
   regionWest = "West"
 )
 
+# Writes one coefficient table with a column per fitted model. Holm correction
+# runs across every non-intercept coefficient in the table (96 for four models).
+write_coef_table <- function(fits, col_labels, path) {
+cf <- lapply(fits, function(m) {
+  s <- summary(m)$coefficients
+  data.frame(term = rownames(s), b = s[, 1], se = s[, 2], p = s[, 4])
+})
+nonint <- cf[[1]]$term != "(Intercept)"
+pm <- sapply(cf, function(dd) dd$p[nonint])
+holm_m <- matrix(p.adjust(as.vector(pm), "holm"), nrow = nrow(pm))
 tl <- c("\\begin{tabular}{lcccc}", "\\toprule",
-        " & $W_1$ & $W_2$ & $W_3$ & $W_4$ \\\\", "\\midrule")
+        paste0(" & ", paste(col_labels, collapse = " & "), " \\\\"), "\\midrule")
 for (bk in blocks) {
   # list blocks carry a vector of indicator terms + a header; plain blocks are
   # c(term, header) character vectors
@@ -151,88 +150,14 @@ r2row <- sprintf("%.3f", sapply(fits, function(m) summary(m)$r.squared))
 nrow_lab <- format(nrow(dat), big.mark = ",")
 tl <- c(tl,
         paste0("R$^2$ & ", paste(r2row, collapse = " & "), " \\\\"),
-        paste0("$N$ & ", paste(rep(nrow_lab, length(ys)), collapse = " & "), " \\\\"),
+        paste0("$N$ & ", paste(rep(nrow_lab, length(fits)), collapse = " & "), " \\\\"),
         "\\bottomrule", "\\end{tabular}")
-writeLines(tl, "manuscript/tables/tab-regression.tex")
-
-# --- bivariate association: correlation ratios (eta^2) of each demographic
-# with the aspect-disagreement scores — the direct social-sources question
-# (positions in the space are anchored, e.g. age eta^2 = 0.33 on dim 2,
-# but W is a within-respondent quantity, so these are near zero)
-# For categorical indicators (education, class), compute eta^2 at the block level
-# by reconstructing the factors from indicators
-
-eta2_list <- list()
-
-for (v in preds) {
-  if (v %in% c("educ_somecol", "educ_bach", "educ_postgrad")) {
-    # Skip individual education indicators; handle as a block below
-    next
-  } else if (v %in% c("sclass_working", "sclass_middle", "sclass_upper")) {
-    # Skip individual class indicators; handle as a block below
-    next
-  } else {
-    # Compute eta^2 for single-indicator variables
-    eta2_list[[v]] <- sapply(ys, function(t) {
-      g <- droplevels(factor(dat[[v]]))
-      keep <- !is.na(g) & g != "Missing"
-      g <- droplevels(g[keep]); y <- dat[[t]][keep]
-      m <- tapply(y, g, mean); nh <- table(g)
-      mu <- sum(nh * m) / sum(nh)
-      sum(nh * (m - mu)^2) / sum((y - mu)^2)
-    })
-  }
+writeLines(tl, path)
+invisible(cf)
 }
 
-# For education: reconstruct the 4-category factor from indicators
-educ_fac <- factor(
-  ifelse(dat$educ_hsless == 1, "HS or less",
-  ifelse(dat$educ_somecol == 1, "Some college",
-  ifelse(dat$educ_bach == 1, "Bachelor's",
-  ifelse(dat$educ_postgrad == 1, "Postgraduate", NA)))),
-  levels = c("HS or less", "Some college", "Bachelor's", "Postgraduate"))
-eta2_list$educ <- sapply(ys, function(t) {
-  g <- droplevels(educ_fac)
-  keep <- !is.na(g)
-  g <- droplevels(g[keep]); y <- dat[[t]][keep]
-  m <- tapply(y, g, mean); nh <- table(g)
-  mu <- sum(nh * m) / sum(nh)
-  sum(nh * (m - mu)^2) / sum((y - mu)^2)
-})
+write_coef_table(fits, paste0("$W_", 1:4, "$"), "manuscript/tables/tab-regression.tex")
 
-# For class: reconstruct the 4-category factor from indicators
-sclass_fac <- factor(
-  ifelse(dat$sclass_lower == 1, "Lower",
-  ifelse(dat$sclass_working == 1, "Working",
-  ifelse(dat$sclass_middle == 1, "Middle",
-  ifelse(dat$sclass_upper == 1, "Upper", NA)))),
-  levels = c("Lower", "Working", "Middle", "Upper"))
-eta2_list$sclass <- sapply(ys, function(t) {
-  g <- droplevels(sclass_fac)
-  keep <- !is.na(g)
-  g <- droplevels(g[keep]); y <- dat[[t]][keep]
-  m <- tapply(y, g, mean); nh <- table(g)
-  mu <- sum(nh * m) / sum(nh)
-  sum(nh * (m - mu)^2) / sum((y - mu)^2)
-})
-
-eta2 <- do.call(cbind, eta2_list)
-cat("\n== Correlation ratios (eta^2) with W scores ==\n")
-print(round(eta2, 3))
-
-elab <- c(gender = "Gender", race = "Race/ethnicity", age6 = "Age",
-          educ = "Education", parentba = "Parents' BA",
-          income4 = "Household income", sclass = "Subjective class",
-          region = "Census region")
-te <- c("\\begin{tabular}{lcccc}", "\\toprule",
-        " & $W_1$ & $W_2$ & $W_3$ & $W_4$ \\\\", "\\midrule")
-for (v in names(eta2_list)) {
-  te <- c(te, paste0(elab[v], " & ",
-                     paste(sprintf("%.3f", eta2[, v]), collapse = " & "),
-                     " \\\\"))
-}
-te <- c(te, "\\bottomrule", "\\end{tabular}")
-writeLines(te, "manuscript/tables/tab-w-eta.tex")
 
 # --- robustness 1: log-transformed outcomes -------------------------------------
 cat("\n== Robustness: log outcomes ==\n")
@@ -297,6 +222,9 @@ for (i in seq_along(fits_loc)) {
   sel <- grep("age6|parentba|sclass", rownames(s))
   print(round(s[sel, c(1, 2, 4)], 3))
 }
+
+write_coef_table(fits_loc, paste0("$\\omega_", 1:4, "$"),
+                 "manuscript/tables/tab-omega-regression.tex")
 
 # --- robustness 4: cross-genre coherence components (Equation eq:genre) -----------
 # eq:genre is an identity, so coherence = W_s - Wloc_s exactly, and with the
