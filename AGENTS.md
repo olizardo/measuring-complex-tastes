@@ -2,7 +2,7 @@
 
 Project: measuring "complex tastes" (Ma Xiangyu 2026, *Cultural Sociology*) geometrically, using Multiple Factor Analysis (MFA) on 20 musical genres from the SSI-2012 survey. The manuscript draft is synced to Overleaf.
 
-Status (2026-10-18): `manuscript/main.tex` compiles in a scratch copy (42 pp., no undefined references or citations). Overleaf is synced through commit 79d2378. In the outer repo, `manuscript/main.tex` and this file are modified and uncommitted, and the `overleaf` gitlink is staged. The workspace `manuscript/main.pdf` is stale (it predates the 2026-10-18 edits). The Overleaf web edits 63652b6 and 0dc8a1b were handled on 2026-10-18 (see Paper state).
+Status (2026-10-18): `manuscript/main.tex` compiles in a scratch copy (43 pp., no undefined references or citations). Overleaf is synced through the 2026-10-18 sync commit that followed web edit f9fb449 (the earlier web edits 63652b6, 0dc8a1b, and f9fb449 are all merged; see Paper state). The workspace `manuscript/main.pdf` is stale and predates these edits.
 
 ## Conceptual frame
 
@@ -117,6 +117,7 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 - Worked examples: **362** (likes 15; listens 9; grants 18/20; W4 155.7 = 11.2 ω + 144.4 γ, 93% coherence; W1 7.0; W2 0.1). **1881** (likes 14; listens 13; grants 0/20; supplementary individual; W2 36.29 = 5.3 ω + 31.0 γ, above the 99th percentile, so complex on D2 alone).
 - Old all-active fit, for the script-11 footnote only: yes-rates 41.7 / 22.9 / 20.7%; eigenvalues 1.509 / 1.178 / 0.982; RV 0.321 / 0.013 / 0.014.
 - Eigenvalue shares (verified 2026-10-17, `tab-eigen` and prose): 8.23 / 7.24 / 5.39 / 5.11%, first five 30.35%. Dimension 2 is 7.2448%, so the prose says 7.24%, not 7.25%.
+- Yes-rate vs category-coordinate Spearman correlations (verified 2026-10-18): Dimension 2 is −0.47 across the 40 preference and consumption yes categories (moderate, not monotone); Dimension 4 is −0.96 across the 20 evaluation yes categories. Nine of 60 genre-aspect pairs have a yes rate above one half.
 - Constant respondents: 2,259 − 1,847 = 412 are constant in at least one block. All 321 respondents with no evaluations are inside the 412.
 - Yes is the rarer answer for 51 of 60 genre-aspect pairs. For nine pairs the yes rate exceeds 0.5, so the no category contributes more: preference classical 0.551, jazz 0.509, moodez 0.578, crold 0.731, blurb 0.530, toppop 0.568, controck 0.510; evaluation classical 0.668, opera 0.744. Do not claim that yes categories always contribute more.
 
@@ -141,7 +142,9 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 
 Status (2026-10-17): the manuscript is edited for structure and style. The abstract and a Limitations subsection were added, the Introduction gained research questions and a roadmap, Appendix B has a configuration table, all colons in prose were removed, and hyperbole was removed.
 
-Status (2026-10-18): Section 3.2 defines category coordinates as barycentres and gives their relation to standard coordinates. Section 3.3 notation follows decision 32. Symbols and coordinate terms were audited (decisions 31 and 32). The Equation 7 explanation was shortened, and the Dimension 4 example and the following paragraph were trimmed. Overleaf is synced to 79d2378.
+Status (2026-10-18): Section 3.2 defines category coordinates as barycentres and gives their relation to standard coordinates. Section 3.3 notation follows decision 32. Symbols and coordinate terms were audited (decisions 31 and 32). The Equation 7 explanation was shortened, and the Dimension 4 example and the following paragraph were trimmed. Overleaf is synced through the 2026-10-18 sync that followed web edit f9fb449.
+
+Web edit f9fb449 (2026-10-18, author, made in Overleaf) was reviewed and merged. Fixes applied: three new colons removed; "as defined earlier" (inertia) replaced with an inline definition; the Section 5 pointer after the age-generation sentence now says Section 5 examines demographic characteristics rather than reporting position results; the Lg sentence now describes the similarity-matrix formula instead of an inner product with the MFA; the W paragraph's "geometric signature" claim reworded (decision 13); "cleanly" removed; "reflects" softened to "is consistent with"; the Dimension 2 rarity claim softened to "tends to." Open for the author: the jæger2023what-0c6 citation on the prestige-hierarchy sentence (its title questions the hierarchy); the changed `100 \times \, p_j` in the category-contribution equation (renders a visible ×); Lg described as "contributes" (rank-order reading pending, decision 20-era note); the RV footnote's "weighted overlap" wording.
 
 Title (2026-10-17): "Measuring Complex Tastes." The author shortened the long title in Overleaf (commit 0ba9397), and the change was pulled into the workspace.
 
@@ -178,8 +181,8 @@ Awaiting author approval (assistant-drafted):
 Structure and content still open:
 - Figure 3–4 now sits before the Dimension 2–4 text. Move it after the Dimension 4 paragraph, or keep it as the author's choice.
 - The Dimension 3 paragraph no longer links to the race and ethnicity results (`sec:social`). Decide whether to restore the link.
-- The workspace `manuscript/main.pdf` needs a rebuild (42 pp. in the 2026-10-18 scratch build).
-- This file (2026-10-18 edits) is uncommitted in the outer repo and not yet copied to Overleaf.
+- The workspace `manuscript/main.pdf` is stale; rebuild it (43 pp. in the 2026-10-18 scratch build).
+- Resolved 2026-10-18: this file and `manuscript/main.tex` were committed in the outer repo and copied to Overleaf.
 - Resolved 2026-10-18: the book's normalization of $u$ (see the MFA weights gotcha) and the $V$–$f$ relation. The relation was checked on the saved object and on a fresh simulated MFA (FactoMineR 2.16, agreement to about $10^{-6}$ or better). `scripts/mfa-coordinate-checks.R` now runs inside script 02. Script 02 itself has not been rerun since the check was added.
 - Introduction engagement beyond Ma and Bourdieu. Candidates in the global bibliography, not yet cited: `peterson1996changing-967`, `warde2007understanding-43f`, and `lizardo2014omnivorousness-3f3`. Check each before citing.
 - Limitations lacks the evaluation-coding robustness sentence (decision 12). Rerun the earlier codings from git history to get the numbers.
