@@ -266,6 +266,37 @@ The second respondent's partial points ($-0.47$, $-2.35$, and $-2.65$) sit $+1.3
 
 A total alone does not reveal which pattern produced it. The first respondent's large total comes from a consistent evaluation pattern across most genres, while the second respondent's small total comes from small preference and evaluation deviations pulling in opposite directions. This is why the decomposition is reported alongside $W_s(i)$.\footnote{Appendix~\ref{app:comparison} compares the geometric and configuration-count measures of complex tastes.}
 
+\subsection{Where Ma's Configurations Sit in the Genre Space}
+\label{sec:config-cloud}
+
+Ma's categorical complex taste configurations can also be placed in the common space. For genre $g$ and complex configuration $c$, the configuration barycentre is the average global position of the respondents who hold $c$ for $g$, given by
+$$B_{gcs} = \frac{1}{n_{gc}} \sum_{i \in \mathcal{I}_{gc}} F_s(i),$$
+where $\mathcal{I}_{gc}$ collects the $n_{gc}$ respondents with that configuration. This is the operation that defines a category coordinate in Section~\ref{sec:contrib}, applied to a combination of three answers rather than one. For each genre, the eight configurations partition the sample, so the count-weighted barycentres average back to the centre of the space.
+
+Figures~\ref{fig:config-barycentre-d12} and \ref{fig:config-barycentre-d34} show the cells with at least 30 respondents, in configurations with at least five such cells. This leaves 91 of the 120 complex cells in five configurations. Pre-acquired taste drops out entirely, because its cells range from 2 to 41 respondents.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig-config-barycentre-d12}
+\caption{Configuration barycentres on dimensions 1 and 2. Each point is the mean global position of the respondents who hold a complex configuration for the genre named. Only cells with at least 30 respondents are shown, in configurations with at least five such cells, so pre-acquired taste is omitted. Dashed lines mark the centre of the space. The points carry no uncertainty intervals.}
+\label{fig:config-barycentre-d12}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig-config-barycentre-d34}
+\caption{Configuration barycentres on dimensions 3 and 4, using the same cells as the previous figure. Dashed lines mark the centre of the space. The points carry no uncertainty intervals.}
+\label{fig:config-barycentre-d34}
+\end{figure}
+
+The cells differ mostly on dimensions 2 and 4. Guilty pleasures sit above zero on volume in all 20 cells, with a mean of 0.87, and justified abstentions sit above zero in 17 of 20 cells, with a mean of 0.29. Taste poses and distant praise sit above zero on status valuation in 16 of 17 and 20 of 20 cells, with means of 1.06 and 1.09. Guilty pleasures, distanced consumption, and justified abstentions sit below zero on status valuation in every plotted cell, with means of $-0.54$, $-0.33$, and $-0.39$. Dimension 1 is less consistent. Taste poses (mean 0.19) and distant praise (0.23) lean toward the highbrow side, while guilty pleasures ($-0.46$) and distanced consumption ($-0.28$) lean toward the popular side. The dimension 3 means lie between $-0.06$ and $0.15$, and we do not interpret them.
+
+Because a cell's position also reflects the other genres its members answer, we counted how many of the other 19 genres each cell's respondents like, listen to, and grant high status, and compared each count with the sample baseline for the same genre. The averages below are means of the cell means, so each cell counts equally. Guilty-pleasure respondents like 9.7 and listen to 6.2 other genres on average, against baselines of 7.9 and 4.4, and both counts are above baseline in every cell. Taste-pose and justified-abstention respondents like more genres than baseline (9.8 and 10.1 against 7.9), while their listening counts are close to baseline (4.2 and 4.1 against 4.4). Distanced-consumption respondents show the reverse pattern, with fewer genres liked (6.5 against 7.9) and more listened to (5.7 against 4.3). Distant-praise respondents like fewer genres (7.1 against 7.9), and their listening counts overlap baseline in 15 of 20 cells. Taste-pose and distant-praise respondents grant high status to more other genres than baseline (7.1 and 6.7 against 3.9), in every cell of both configurations. Guilty-pleasure and justified-abstention respondents grant fewer (3.3 and 3.1), in 17 and 20 cells respectively.
+
+Read at the group level, the counts agree with the positions. Guilty-pleasure cells sit on the high-volume side where their respondents also like and listen to more of the other genres than the sample does. Taste-pose and distant-praise cells sit on the status-valuation side where their respondents grant high status to more of the other genres. The agreement is partly built in. Dimension 2 is computed from the same liking and listening answers, and evaluation accounts for 91\% of the contributions to dimension 4 (Table~\ref{tab:groups}). Across all 20 genres, the individual correlation is 0.84 between dimension 2 and the number of genres liked, and 0.80 between dimension 4 and the number of genres granted high status (Spearman, $N = 2{,}259$). These correlations show how the axes are built, so they do not serve as an independent check on what the axes mean.
+
+These are group averages, not individual measures. Membership in a cell fixes the genre's own contribution, which varies across cells by 0.15 to 0.20 standard deviations on each dimension. Most of the spread between cells comes from the other genres, with standard deviations of 0.37, 0.41, 0.19, and 0.67 on dimensions 1 to 4. A person can hold different configurations in different genres, so cells overlap in respondents. The bootstrap intervals describe sampling variation within each cell but do not account for that overlap or for the number of cells, so counts of cells above baseline are descriptive. Claims about what individual respondents choose need respondent-level analysis of the counts themselves.
+
 \subsection{The Socio-Demographic Correlates of Complex Tastes}
 \label{sec:social}
 
@@ -288,12 +319,12 @@ The dimension-specific models check where the aggregate effects come from. Becau
 
 Section~\ref{sec:social} found that demographics account for $9.9\%$ of the variation in the genre-based aggregate $\Omega$. That result does not show where among the twenty genres the patterning sits. We split $\Omega$ by genre. For each genre $g$, we fit an OLS model of $\Omega_g(i) = \sum_{s=1}^{4} \omega_s(i;g)/\mathrm{SD}_s$, the genre's part of the aggregate on the same scale. The models use the covariates of Table~\ref{tab:aggregate-regression} and the same 2,258 respondents. The genre contributions sum to $\Omega$, and OLS is linear in the outcome, so the twenty coefficients for any covariate sum exactly to its coefficient in the aggregate model. Each genre coefficient is therefore that genre's part of the aggregate association, and the parts can have mixed signs.
 
-Figure~\ref{fig:genre-omega-forest} shows the fourteen covariates with at least one genre coefficient that survives a Holm correction across all 480 genre coefficients. Genres are ordered by their share of mean $\Omega$, from rap/hip-hop ($8.2\%$) to opera ($2.6\%$). Filled markers indicate corrected coefficients.
+Figure~\ref{fig:genre-omega-forest} shows the fourteen covariates with at least one genre coefficient that survives a Holm correction across all 480 genre coefficients. Genres are ordered by their position on Dimension 3 (the engagement divide), running from reggae and rap/hip-hop at the top to heavy metal and indie rock at the bottom. Each genre's position is its mean category coordinate on that dimension across the three aspects. Filled markers indicate corrected coefficients.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig-genre-omega-forest}
-\caption{Genre-specific aggregate disagreement. Each point is the coefficient from a separate OLS model of $\Omega_g(i)$, the genre's part of the SD-weighted aggregate, on the covariates of Table~\ref{tab:aggregate-regression} ($N = 2{,}258$). Bars show 95\% confidence intervals. Filled markers indicate Holm-adjusted $p < .05$ across all 480 genre coefficients. Panels show only covariates with at least one corrected coefficient. Omitted covariates are other race, income (\$25--49k, \$50--74k, \$75k+), working, middle, and upper class, and Midwest, South, and West. Upper class is omitted even though its aggregate coefficient survives correction in Table~\ref{tab:aggregate-regression}, because no genre coefficient does. Genres are ordered by share of mean $\Omega$.}
+\caption{Genre-specific aggregate disagreement. Each point is the coefficient from a separate OLS model of $\Omega_g(i)$, the genre's part of the SD-weighted aggregate, on the covariates of Table~\ref{tab:aggregate-regression} ($N = 2{,}258$). Bars show 95\% confidence intervals. Filled markers indicate Holm-adjusted $p < .05$ across all 480 genre coefficients. Panels show only covariates with at least one corrected coefficient. Omitted covariates are other race, income (\$25--49k, \$50--74k, \$75k+), working, middle, and upper class, and Midwest, South, and West. Upper class is omitted even though its aggregate coefficient survives correction in Table~\ref{tab:aggregate-regression}, because no genre coefficient does. Genres are ordered by their position on Dimension 3, from the most positive at the top to the most negative at the bottom.}
 \label{fig:genre-omega-forest}
 \end{figure}
 
@@ -549,6 +580,29 @@ This appendix reports the aggregate and dimension-level socio-demographic models
 \par\smallskip
 {\footnotesize Notes. $\Omega_i$ and $\Gamma_i$ sum the genre-based and coherence components over dimensions 1--4, each dimension divided by the sample standard deviation of its genre-based component (0.709, 0.742, 0.664, and 1.753), so $\Omega_i + \Gamma_i$ is the sum of the standardized aspect-disagreement scores. Coefficients are unstandardized. Standard errors in parentheses; 95\% confidence intervals in brackets (normal approximation). Stars give unadjusted $p$-values ($^{*}p<.05$, $^{**}p<.01$, $^{***}p<.001$). $^{\dagger}$ marks coefficients with $p<.05$ after a Holm correction across all 48 coefficients in the table, both columns together. The upper-class coefficient on $\Omega$ survives that correction, but it does not survive a log-outcome check (log coefficient 0.13, 95\% CI [0.02, 0.23], Holm $p = .25$ across that model's 24 coefficients), so it should be read as sensitive to the right tail of the distribution. Reference categories are shown in each row header.}
 \end{table}
+
+\section{Genre-Specific Contributions to Configuration Positions}
+\label{app:config-own}
+
+Each configuration barycentre in Section~\ref{sec:config-cloud} averages whole respondent profiles, so it includes the contributions of the other genres. This appendix isolates the part of each position that comes from the genre itself. For genre $g$ and configuration $c$, let
+$$O_{gcs} = \sum_{h=1}^{3} (z_{c,h} - p_{gh})\,\Delta_{ghs},$$
+where $z_{c,h}$ is 1 if the configuration answers yes in aspect $h$ and 0 otherwise, and $p_{gh}$ and $\Delta_{ghs}$ are defined in Section~\ref{sec:disagreement}. The term $O_{gcs}$ is the genre's contribution to the global position on dimension $s$ for any respondent who holds $c$ for $g$. Because it depends on the configuration alone, no averaging across respondents is involved. Summing it over the twenty genres gives each respondent's global position exactly, so $\sum_{g} O_{g,c_{ig},s} = F_s(i)$, where $c_{ig}$ is respondent $i$'s configuration for genre $g$.
+
+Figures~\ref{fig:config-own-d12} and \ref{fig:config-own-d34} show these positions for the same 91 cells as the main text. Within a panel, differences between genres come from each genre's standard coordinates and yes rates, not from who holds the configuration. The figures therefore map the genre-by-aspect geometry. They describe a genre's own contribution to a configuration and do not show where the people who hold it sit. Across the 160 genre-configuration cells, the own contributions and the barycentres correlate at 0.84 to 0.95 on each dimension, so the two versions order the cells similarly. The barycentres spread more widely, because the other genres add most of the variation between cells (Section~\ref{sec:config-cloud}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig-config-own-d12}
+\caption{Genre-specific contributions to configuration positions on dimensions 1 and 2. Each point is the genre's own contribution to the global position of the respondents who hold the configuration, using the same cells as Figure~\ref{fig:config-barycentre-d12}. Dashed lines mark the centre of the space.}
+\label{fig:config-own-d12}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig-config-own-d34}
+\caption{Genre-specific contributions to configuration positions on dimensions 3 and 4, using the same cells as Figure~\ref{fig:config-own-d12}. Dashed lines mark the centre of the space.}
+\label{fig:config-own-d34}
+\end{figure}
 
 \newpage
 \bibliographystyle{plainnat}

@@ -113,7 +113,13 @@ term_labels <- c(
   regionMidwest = "Midwest", regionSouth = "South", regionWest = "West")
 stopifnot(all(res$term %in% names(term_labels)))
 
-genre_levels <- unname(genre_display[genre_share$genre[order(genre_share$share)]])
+# Genre order follows Dimension 3 of the main MFA: each genre's mean yes-category
+# coordinate across the three aspects (the same barycentres used for sign anchoring
+# in script 06). Factor levels run bottom to top, so the most positive genre is at the top.
+mfa <- readRDS("output/mfa_results.rds")
+d3_yes <- sapply(genres, function(g)
+  mean(mfa$quali.var$coord[paste0(c("pref", "cons", "eval"), "_", g, "_1"), 3]))
+genre_levels <- unname(genre_display[names(sort(d3_yes))])
 # Panels only for terms with at least one Holm-adjusted genre coefficient;
 # the full 480-row table is in output/genre-omega-regression.csv
 survivor_terms <- unique(res$term[res$holm_p < .05])
