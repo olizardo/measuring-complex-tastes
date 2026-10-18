@@ -95,6 +95,10 @@ apply_flip <- function(res, f) {
 }
 res <- apply_flip(res, flip)
 
+# coordinate relations (category barycentres, standard vectors, individuals)
+source("scripts/mfa-coordinate-checks.R")
+invisible(check_mfa_coordinates(res))
+
 # orientation checks (fail loudly if the anchor rule breaks)
 cc <- res$quali.var$coord
 stopifnot(
