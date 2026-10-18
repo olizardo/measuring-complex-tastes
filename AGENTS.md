@@ -2,13 +2,14 @@
 
 Project: measuring "complex tastes" (Ma Xiangyu 2026, *Cultural Sociology*) geometrically, using Multiple Factor Analysis (MFA) on 20 musical genres from the SSI-2012 survey. The manuscript draft is synced to Overleaf.
 
-Status (2026-10-17, late evening): `manuscript/main.tex` compiles (43 pp., no undefined references or citation warnings). Overleaf is synced through commit 460d224, and GitHub through outer commit f28cd68. Those commits carry the review fixes to Sections 3.1 to 3.3, the rewritten genre-based decomposition paragraph in Section 3.3, and this file, applied on top of the Overleaf web edits from d8890b4 (pulled into the workspace first). The workspace `manuscript/main.pdf` has not been rebuilt since these edits, so it still shows the pre-edit build.
+Status (2026-10-18): `manuscript/main.tex` compiles in a scratch copy (42 pp., no undefined references or citations). Overleaf is synced through commit 79d2378. In the outer repo, `manuscript/main.tex` and this file are modified and uncommitted, and the `overleaf` gitlink is staged. The workspace `manuscript/main.pdf` is stale (it predates the 2026-10-18 edits). The Overleaf web edits 63652b6 and 0dc8a1b were handled on 2026-10-18 (see Paper state).
 
 ## Conceptual frame
 
 - Ma (2026) distinguishes three modalities of taste: preference, consumption, and valuation. Complex tastes are configurations in which these disagree (guilty pleasure, pre-acquired taste, taste pose, distanced consumption, justified abstention, distant praise). The manuscript calls the three **aspects**.
 - Method: MFA (Pagès 2014; Abdi et al. 2013) as geometric data analysis. Three groups of 20 binary variables (one per genre per aspect), balanced by inverse first-eigenvalue weights.
 - Each respondent has one partial point per aspect, and the global point is their mean. Per dimension $s$: $\sum_h F_{sh}^2 = H F_s^2 + W_s$, where $W_s$ is the aspect-disagreement score (decision 13). Pairwise squared partial-point distances sum to $H W_s$.
+- Coordinates are named by role (decision 31): partial point $F_{sh}(i)$, global position $F_s(i)$, category coordinate $f_{js}$, and standard coordinate $V_{js}$.
 
 ## Data
 
@@ -50,6 +51,10 @@ Numbers 3, 6, 7, 16–18, and 20 were retired. The remaining numbers are kept so
 28. **Regression tables in Appendix D** (`app:regression`, author request, 2026-10-17): `tab:regression`, `tab:coherence-regression`, `tab:w-eta`, `tab:coherence-eta`, `tab:pairs-social`. Coefficient cells show b (SE), stars (unadjusted), a Holm dagger, and a 95% CI. Holm correction runs across all 96 coefficients in each table. Coefficient tables are wrapped in `{\scriptsize\input{…}}`; `\resizebox` overflows the page.
 29. **Abstract and Limitations** (added 2026-10-17, awaiting approval). The abstract states only verified numbers: RV 0.35 and 0.01, disagreement shares of 49–66%, demographics explaining at most 10% of total disagreement, and 12 of 96 coefficients surviving Holm. Transposed genre-level results are excluded from the abstract. Discussion §4.1 (Limitations) covers the online survey, the unweighted analysis, unfamiliarity coded as non-liking, the 412 supplementary respondents, the 20-genre transposed results, and the cross-sectional regressions.
 30. **Introduction and structure** (2026-10-17). The Introduction has four research questions and a roadmap; Section 2 carries `sec:data`. Appendix B has `tab:configurations`, whose triples match script 04 (lines 18–20): guilty ++-, pre-acquired -++, taste pose +-+, distanced consumption -+-, justified abstention +--, distant praise --+. Mean genres per respondent: simple taste 0.85, simple non-taste 8.92, guilty pleasure 3.22, pre-acquired 0.10, taste pose 0.96, distanced 0.41, justified 3.31, distant 2.22; 12 respondents hold no complex configuration. `tab:rv`, `tab:partial-axes`, and all six listed equations are cited in the text.
+31. **Coordinate terms** (2026-10-18). Use a role name with every coordinate. Partial point $F_{sh}(i)$ is person $i$'s position on dimension $s$ in aspect $h$. Global position $F_s(i)$ is the mean of the three partial points. Category coordinate $f_{js}$ is the mean global position of the respondents who give category $j$, and equals $\lambda_s V_{js}\sqrt{(1-p_j)/p_j}$ (verified on the saved object for all 120 categories, residual SD about $10^{-13}$, with the dimension-1 sign reversed in the stored output). Standard coordinate $V_{js}$ is the MFA column vector, normalized so that $\sum_j w_j V_{js}^2 = 1$ over 120 columns, and signed to match the reported coordinates. Do not use bare "coordinate" for these four. The transposed (genre-level) section uses "position."
+32. **Genre decomposition notation** (2026-10-18). $a_{ighs} = (z_{igh}-p_{gh})\,\Delta_{ghs}$ is genre $g$'s contribution, through aspect $h$, to the global position on dimension $s$. So $\sum_g\sum_h a_{ighs} = F_s(i)$ and $F_{sh}(i) = H\sum_g a_{ighs}$. The deviation is $d_{ighs} = a_{ighs} - \frac{1}{H}\sum_{h'} a_{igh's}$, written inline with no $\bar a$ symbol. $\gamma_s(i) = 2H^2\sum_{g<g'}\sum_h d_{ighs}d_{ig'hs}$ is stated explicitly. $J$ and $\lambda_{1,h}$ are defined once in Section 3.1, and $\lambda_s$ is the global eigenvalue on dimension $s$. Retired symbols: $c_{ihs}$, $\bar a_{igs}$, $T_s(i)$, $m_c$ (now $p_j$), and $G$ (now $J$).
+
+## Statistical caution
 
 ## Statistical caution
 
@@ -77,7 +82,8 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 ## R and LaTeX gotchas
 
 - Data: RDS columns are `haven_labelled`. Call `haven::zap_labels()` on load.
-- FactoMineR: `type="n"` needs actual `factor()` columns. Supplementary columns must sit in a declared supplementary group (`num.group.sup`). Supplementary category coordinates are not stored; compute barycenters manually. `res$eig` has five dimensions. Use `res$group$contrib`. `res$group$Lg` is group × group, not group × dimension.
+- FactoMineR: `type="n"` needs actual `factor()` columns. Supplementary columns must sit in a declared supplementary group (`num.group.sup`). `res$quali.var$coord` holds the active categories' barycentres (the mean global position of their respondents), verified on FactoMineR 2.16. FactoMineR does not apply the book's $1/\sqrt{\lambda_s}$ scaling (Pagès pp. 52, 71–72). The relation $f_{js} = \lambda_s V_{js}\sqrt{(1-p_j)/p_j}$ holds with `res$global.pca$svd$V`, but the dimension-1 sign is reversed in the stored output. Compute supplementary categories' barycentres manually.
+- `res$global.pca$call$X` has 180 columns: the 120 numeric indicators (`_0`/`_1`, stored as text) and 60 raw factor columns (labels such as `pref_classical_1`). Select the 120 by name and call `as.numeric`. `res$global.pca$svd$V` is normalized in the column metric, $\sum_j w_j V_{js}^2 = 1$ with `w = res$global.pca$call$col.w`, not in the Euclidean metric. `res$eig` has five dimensions. Use `res$group$contrib`. `res$group$Lg` is group × group, not group × dimension.
 - `res$ind$coord` holds only the 1,847 active rows. Use `res$ind.sup$coord`, or `ant$F1`–`ant$F4`, for all 2,259.
 - `ant` and `type_counts` inherit rownames from `res$ind$coord` (original df indices, not positions). Index them consistently.
 - `blk` holds each aspect's additive contribution to the global coordinate ($F_{sh}/3$), not its partial point. True partial points are $3 \times$ `blk`.
@@ -86,8 +92,8 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 - In R, `gcont / 100 * l3` recycles across rows. Use `sweep(gcont, 2, l3, "*")`.
 - Eigenvalues: report separate λ1 to four decimals. Consumption is 0.1265, which gives weight 7.904; the three-decimal 0.127 gives 7.87.
 - MFA weights: global column weight $(1-p_j)/(J\lambda_{1g})$; group balancing $1/\lambda_{1g}$. The λ1s are not the weights. Verified 2026-10-17 against `res$global.pca$call$col.w`: yes columns equal $(1-p)/(J\lambda_{1,h})$ and no columns equal $p/(J\lambda_{1,h})$, with ratios within 0.0002 of 1, using the separate λ1s 0.1550, 0.1265, and 0.1942.
-- Genre-aspect contributions (script 04, section 3b; manuscript Section 3.3): $a_{ighs} = (z_{igh} - p_{gh})\,\Delta_{ghs}$, with $\Delta_{ghs} = [(1-p_{gh})V_{\text{yes},s} - p_{gh}V_{\text{no},s}]/(J\lambda_{1,h}\sqrt{p_{gh}(1-p_{gh})})$. The partial point is $c_{ihs} = H\sum_g a_{ighs}$, the deviation is $d = a - \bar a$ over the three aspects, and $\omega_s(i;g) = H^2\sum_h d^2$. The genre-level identity is exact (checked in R on random data, and script 04 checks it by brute force). Do not sum over the 120 columns. The yes and no columns of one genre-aspect form a single term.
-- Contributions (FactoMineR): a group's contribution is the sum of its 40 yes and no category contributions. Yes-only sums are about 60% of that. Category contribution is $100\, p_j f_{js}^2 / (J \lambda_{1h} \lambda_s^2)$.
+- Genre-aspect contributions (script 04, section 3b; manuscript Section 3.3): $a_{ighs} = (z_{igh} - p_{gh})\,\Delta_{ghs}$, with $\Delta_{ghs} = [(1-p_{gh})V_{\text{yes},s} - p_{gh}V_{\text{no},s}]/(J\lambda_{1,h}\sqrt{p_{gh}(1-p_{gh})})$. Summing over genres and multiplying by $H$ gives the partial point $F_{sh}(i)$. The deviation is $d = a - \frac{1}{H}\sum_{h'} a$ over the three aspects, and $\omega_s(i;g) = H^2\sum_h d^2$. Also $\gamma_s(i) = 2H^2\sum_{g<g'}\sum_h d_{ighs}d_{ig'hs}$. The genre-level identity is exact (checked in R on random data, and script 04 checks it by brute force). Do not sum over the 120 columns. The yes and no columns of one genre-aspect form a single term.
+- Contributions (FactoMineR): a group's contribution is the sum of its 40 yes and no category contributions. Yes-only sums are about 60% of that. Category contribution is $100\, p_j f_{js}^2 / (J \lambda_{1h} \lambda_s^2)$, where $f_{js}$ is the category coordinate (a barycentre).
 - $\mathrm{Lg}(h,k) = \mathrm{tr}(S_h S_k)/N^2$, where $S_h$ includes the $1/\lambda_{1h}$ weight. $\mathrm{Lg}(h,\mathrm{MFA}) = \sum_k \mathrm{Lg}(h,k)/\lambda_1^{\mathrm{MFA}}$. Read Lg as presence and rank order, not degree (floor ≈ 0.66). Verified 2026-10-17: the MFA column of `res$group$Lg` equals the row sum of the three block Lg values divided by λ₁ (preference: 4.3782 / 1.605 = 2.7279).
 - $S_h = X_h D_h X_h^\mathsf{T}$ is N × N (respondent similarity). RV compares similarity matrices and is not a rank statistic. $S_{ij}$ is a centered, rarity-weighted inner product, not a match count. Agreement on a genre adds to $S_{ij}$, disagreement subtracts, and rare answers carry the most weight. Do not describe it as counting matching answers or as disjointness.
 - Disagreement shares in the manuscript are means of individual ratios (49/55/52/66). Aggregate ratios are 42/49/43/66. Do not mix them.
@@ -128,10 +134,13 @@ Table generation is done by scripts 03, 04, 06, 07, and 10. Never edit numbers i
 - Script reruns rewrite every PDF, including unreferenced ones, with timestamp-only byte changes. Revert those and keep only intended changes.
 - `manuscript/.gitignore` paths are relative to its own directory.
 - Workspace-only files (not mirrored to Overleaf): `notes-passive-refit.md`, `agents-archive-2026-10-16.md`, `mfa-book-crosscheck.md`.
+- 2026-10-18: Overleaf 0dc8a1b changed the partial-point sentence, and that change was merged into the workspace. Overleaf 63652b6 changed the Section 3.3 paragraph that the workspace later rewrote. The rewrite supersedes it, so its paragraph break before the $\Delta$ display and its capitalised "Where" were not restored. Before copying `main.tex`, check `git -C overleaf log HEAD..origin/main` and reapply any new web edits.
 
 ## Paper state and open items
 
 Status (2026-10-17): the manuscript is edited for structure and style. The abstract and a Limitations subsection were added, the Introduction gained research questions and a roadmap, Appendix B has a configuration table, all colons in prose were removed, and hyperbole was removed.
+
+Status (2026-10-18): Section 3.2 defines category coordinates as barycentres and gives their relation to standard coordinates. Section 3.3 notation follows decision 32. Symbols and coordinate terms were audited (decisions 31 and 32). The Equation 7 explanation was shortened, and the Dimension 4 example and the following paragraph were trimmed. Overleaf is synced to 79d2378.
 
 Title (2026-10-17): "Measuring Complex Tastes." The author shortened the long title in Overleaf (commit 0ba9397), and the change was pulled into the workspace.
 
@@ -168,8 +177,9 @@ Awaiting author approval (assistant-drafted):
 Structure and content still open:
 - Figure 3–4 now sits before the Dimension 2–4 text. Move it after the Dimension 4 paragraph, or keep it as the author's choice.
 - The Dimension 3 paragraph no longer links to the race and ethnicity results (`sec:social`). Decide whether to restore the link.
-- The workspace `manuscript/main.pdf` needs a rebuild (43 pp.).
-- The `AGENTS.md` edits of 2026-10-17 late evening are in the workspace only until they are committed and copied to Overleaf.
+- The workspace `manuscript/main.pdf` needs a rebuild (42 pp. in the 2026-10-18 scratch build).
+- This file (2026-10-18 edits) is uncommitted in the outer repo and not yet copied to Overleaf.
+- The Pagès p. 72 remark gives $\lambda_s$ for centres of gravity, but the book's normalization of $u$ has not been checked. The $V$–$f$ relation was verified on the saved object only. Add a pipeline check so it is rerun with each MFA fit.
 - Introduction engagement beyond Ma and Bourdieu. Candidates in the global bibliography, not yet cited: `peterson1996changing-967`, `warde2007understanding-43f`, and `lizardo2014omnivorousness-3f3`. Check each before citing.
 - Limitations lacks the evaluation-coding robustness sentence (decision 12). Rerun the earlier codings from git history to get the numbers.
 - The split-sample check for the transposed tD4 result is suggested in the text but has not been run.
