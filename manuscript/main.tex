@@ -256,6 +256,8 @@ So the genre terms decompose the partial points that define $W_s(i)$. The deviat
 
 The second term of Equation~\ref{eq:genre}, $\gamma_s(i)$, captures \emph{cross-genre coherence}, or whether a respondent's disagreements repeat across genres. Formally, $\gamma_s(i) = 2H^2\sum_{g<g'}\sum_h d_{ighs}\,d_{ig'hs}$, which sums the products of deviations for each pair of genres within each aspect. A positive value means the deviations point the same way and reinforce each other, while a negative value means they point in opposite directions and cancel.
 
+\subsubsection{Example of Genre and Coherence Scores on Two Individuals}
+
 Returning to our first respondent from the highbrow--popular example, the contrast is on the \emph{status-valuation axis} (vertical, Dimension 4). Their preference and consumption partial points sit on the withholding side ($-0.76$ and $-0.96$), while the evaluation partial point lies far out on the generous side ($+14.42$), since they credit the fans of 18 of the 20 genres with high status. Their global position is $+4.24$. Each partial point is $H$ times the sum of its aspect's genre contributions, so the distance of a partial point from the global position is $H$ times the sum, over genres, of the deviations $d_{igh4}$ for that aspect. Here the genre deviations sum to $-1.66$ for preference, $-1.73$ for consumption, and $+3.40$ for evaluation. Multiplied by $H = 3$, these distances are $-4.99$, $-5.19$, and $+10.19$, and squaring and adding them gives $W_4 = 155.7$.
 
 The genre-based component $\omega_4$ adds up each genre's own squared deviations, scaled by $H^2$. For this respondent it equals $11.2$, and no single genre contributes more than $1.43$ (Latin/salsa). The coherence component $\gamma_4 = 144.4$ is the rest, or 93\% of $W_4$. It is large because the same pattern repeats across genres. Nineteen of the twenty evaluation deviations are positive. Each is at most $0.32$, yet together they total $3.40$, while their squares total only $0.81$. Equation~\ref{eq:genre} makes this explicit, since the coherence term is the sum of cross-genre products of deviations, and these products are positive when the deviations point the same way.
@@ -483,14 +485,15 @@ The matrices show which genres carry the demographic patterning. On the highbrow
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig-omega-demographics-genres-d4}
-\caption{Genre-specific disagreement across all twenty genres, Dimension 4 (status valuation). Pearson correlations between demographic variables and the genre-based component $\omega_4(i;g)$; encoding as in Section~\ref{sec:genre-specificity}. Cells with $|r| \ge 0.15$ are outlined.}
+\caption{Genre-specific disagreement across all twenty genres, Dimension 4 (status valuation). Pearson correlations between demographic variables and the genre-based component $\omega_4(i;g)$; encoding as in Section~\ref{sec:genre-specificity}. We outline cells with $|r| \ge 0.15$.}
 \label{fig:omega-genres-d4}
 \end{figure}
 
+\newpage
 \section{Socio-Demographic Regression Models}
 \label{app:regression}
 
-This appendix reports every socio-demographic model and association table from the analysis. Table~\ref{tab:aggregate-regression} gives the aggregate models that the main text reports, and Tables~\ref{tab:regression}, \ref{tab:omega-regression}, and \ref{tab:coherence-regression} give the dimension-level models for the aspect-disagreement scores, the genre-based components, and the coherence components, which serve as a robustness check. All models use the same predictors and the same complete-case sample ($N = 2{,}258$), and each cell reports the unstandardized coefficient, its standard error, and a 95\% confidence interval. Table~\ref{tab:pairs-social} gives the model fit for each pairwise distance component. The aggregate scores are each summed across dimensions 1--4 on the original scale, and the SD weighting gives each dimension equal variance. It was selected after the unweighted and eigenvalue-scaled aggregates had been compared on their correlations with configuration counts, so the aggregate results are exploratory.so the aggregate results are exploratory.
+This appendix reports all socio-demographic models and association tables from the analysis. Table~\ref{tab:aggregate-regression} gives the aggregate models that the main text reports, and Tables~\ref{tab:regression}, \ref{tab:omega-regression}, and \ref{tab:coherence-regression} give the dimension-level models for the aspect-disagreement scores, the genre-based components, and the coherence components, which serve as a robustness check. All models use the same predictors and the same complete-case sample ($N = 2{,}258$), and each cell reports the unstandardized coefficient, its standard error, and a 95\% confidence interval. Table~\ref{tab:pairs-social} gives the model fit for each pairwise distance component. The aggregate scores are each summed across dimensions 1--4 on the original scale, and the SD weighting gives each dimension equal variance. It was selected after the unweighted and eigenvalue-scaled aggregates had been compared on their correlations with configuration counts, so the aggregate results are exploratory.so the aggregate results are exploratory.
 
 \begin{table}[htbp]
 \centering
