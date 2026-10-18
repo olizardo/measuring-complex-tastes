@@ -484,7 +484,7 @@ The matrices show which genres carry the demographic patterning. On the highbrow
 \section{Socio-Demographic Regression Models}
 \label{app:regression}
 
-This appendix reports every socio-demographic model and association table from the analysis. Table~\ref{tab:regression} gives the coefficient models for the aspect-disagreement scores, and Table~\ref{tab:coherence-regression} gives them for the coherence components. Both use the same predictors and the same complete-case sample ($N = 2{,}258$), and each cell reports the unstandardized coefficient, its standard error, and a 95\% confidence interval. Tables~\ref{tab:w-eta} and \ref{tab:coherence-eta} give the bivariate correlation ratios ($\eta^2$) for the two sets of scores, and Table~\ref{tab:pairs-social} gives the model fit for each pairwise distance component.
+This appendix reports every socio-demographic model and association table from the analysis. Table~\ref{tab:regression} gives the coefficient models for the aspect-disagreement scores, and Table~\ref{tab:coherence-regression} gives them for the coherence components. Both use the same predictors and the same complete-case sample ($N = 2{,}258$), and each cell reports the unstandardized coefficient, its standard error, and a 95\% confidence interval. Tables~\ref{tab:w-eta} and \ref{tab:coherence-eta} give the bivariate correlation ratios ($\eta^2$) for the two sets of scores, and Table~\ref{tab:pairs-social} gives the model fit for each pairwise distance component. Table~\ref{tab:aggregate-regression} gives the same demographic models for the aggregate genre-based component and the aggregate coherence component, each summed across dimensions 1--4 on the original scale.
 
 \begin{table}[htbp]
 \centering
@@ -534,6 +534,16 @@ This appendix reports every socio-demographic model and association table from t
 \input{tables/tab-pairs-social}
 \par\smallskip
 {\footnotesize Notes. Each entry is the $R^2$ from an OLS model of the stated quantity on the full set of demographic indicators. The first row repeats the total-score models from Table~\ref{tab:regression}.}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Socio-demographic OLS models of the aggregate genre-based component ($\Omega$) and aggregate coherence component ($\Gamma$)}
+\label{tab:aggregate-regression}
+{\scriptsize\input{tables/tab-aggregate-regression}}
+\par\smallskip
+{\footnotesize Notes. $\Omega_i$ and $\Gamma_i$ sum the genre-based and coherence components over dimensions 1--4, each dimension divided by the sample standard deviation of its genre-based component (0.709, 0.742, 0.664, and 1.753), so $\Omega_i + \Gamma_i$ is the sum of the standardized aspect-disagreement scores. Coefficients are unstandardized. Standard errors in parentheses; 95\% confidence intervals in brackets (normal approximation). Stars give unadjusted $p$-values ($^{*}p<.05$, $^{**}p<.01$, $^{***}p<.001$). $^{\dagger}$ marks coefficients with $p<.05$ after a Holm correction across all 48 coefficients in the table, both columns together. Reference categories are shown in each row header.}
 \end{table}
 
 \newpage
