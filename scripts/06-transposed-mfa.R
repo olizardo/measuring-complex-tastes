@@ -218,39 +218,43 @@ mk <- function(panel, xg, yg, xp, yp) data.frame(
   modality = part$modality, xp = part[[xp]], yp = part[[yp]])
 # Split into two per-dimension figures (2026-10-14, author request) with
 # larger points and labels for readability.
-mk_gm <- function(xg, yg, xp, yp, ttl, xl, yl) {
+mk_gm <- function(xg, yg, xp, yp, xl, yl) {
   dfp <- data.frame(genre = glob$genre, xg = glob[[xg]], yg = glob[[yg]],
                     modality = part$modality, xp = part[[xp]], yp = part[[yp]])
   dfg <- data.frame(genre = glob$genre, x = glob[[xg]], y = glob[[yg]])
   ggplot() +
     geom_segment(data = dfp, aes(x = xg, y = yg, xend = xp, yend = yp,
                                  color = modality),
-                 linewidth = 0.45, alpha = 0.75, show.legend = FALSE) +
-    geom_point(data = dfp, aes(xp, yp, color = modality), size = 2.4) +
-    geom_point(data = dfg, aes(x, y), size = 2.6, color = "black") +
+                 linewidth = 0.35, alpha = 0.5, show.legend = FALSE) +
+    geom_point(data = dfp, aes(xp, yp, color = modality), size = 1.8,
+               alpha = 0.85) +
+    geom_point(data = dfg, aes(x, y), size = 2.8, shape = 21,
+               fill = "black", color = "white", stroke = 0.6) +
     ggrepel::geom_text_repel(data = dfg, aes(x, y, label = genre),
-                             size = 3.1, segment.color = NA, max.overlaps = 30,
-                             seed = 11) +
+                             size = 3.0, fontface = "bold", seed = 11,
+                             max.iter = 20000,
+                             min.segment.length = 0,
+                             segment.color = "grey55", segment.size = 0.25,
+                             box.padding = 0.6, point.padding = 0.3,
+                             force = 2) +
     geom_hline(yintercept = 0, linetype = 2, color = "grey60") +
     geom_vline(xintercept = 0, linetype = 2, color = "grey60") +
     scale_color_manual(values = c(Preference = "#0072B2",
                                   Consumption = "#D55E00",
                                   Evaluation = "#009E73"), name = "Aspect") +
-    ggtitle(ttl) +
     labs(x = xl, y = yl) +
     theme_minimal(base_size = 11) +
     theme(panel.grid.minor = element_blank(),
-          plot.title = element_text(face = "bold", hjust = 0.5),
           legend.position = "bottom")
 }
 ggsave("manuscript/figures/fig-genre-map-d12.pdf",
-       mk_gm("d1", "d2", "d1", "d2", "Dimensions 1-2",
+       mk_gm("d1", "d2", "d1", "d2",
              "Dimension 1 (highbrow vs popular)", "Dimension 2 (volume)"),
-       width = 5.2, height = 4.6)
+       width = 6.5, height = 5.4)
 ggsave("manuscript/figures/fig-genre-map-d14.pdf",
-       mk_gm("d1", "d4", "d1", "d4", "Dimensions 1-4",
+       mk_gm("d1", "d4", "d1", "d4",
              "Dimension 1 (highbrow vs popular)", "Dimension 4 (status valuation)"),
-       width = 5.2, height = 4.6)
+       width = 6.5, height = 5.4)
 # the old dims 1-3 plane figure is stale under the 4-dimension fit
 unlink("manuscript/figures/fig-genre-map-d13.pdf")
 unlink("manuscript/figures/fig-genre-map.pdf")
